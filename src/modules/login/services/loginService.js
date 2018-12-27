@@ -1,5 +1,5 @@
 import axios from 'axios';
-import TfUrlSearchParams from 'common/factories/TfUrlSearchParams';
+// import TfUrlSearchParams from 'common/factories/TfUrlSearchParams';
 
 export default {
   /**
