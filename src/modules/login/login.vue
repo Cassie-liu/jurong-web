@@ -93,7 +93,7 @@
         if (event.keyCode === 13) {
           this.login();
         }
-      },
+      }
     }
   };
 </script>
