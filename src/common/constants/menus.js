@@ -90,7 +90,7 @@ module.exports = [
     ]
   },
   {
-    url: 'announce',
+    url: 'announcement',
     title: '通知公告',
     // icon: 'icon-menu-5.png',
     requirePermissions: []

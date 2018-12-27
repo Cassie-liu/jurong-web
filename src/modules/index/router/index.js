@@ -81,7 +81,7 @@ export default new Router({
           component: VolunteerServiceTeam
         },
         {
-          path: 'announce',     // 通知公告
+          path: 'announcement',     // 通知公告
           name: 'Announce',
           component: Announce
         },
