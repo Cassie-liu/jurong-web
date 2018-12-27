@@ -1,43 +1,112 @@
 <template>
     <div class="base-data">
-      <ul class="tabs">
-        <li :class="{'active': tab === 'office'}" @click="switchTab('office')">办公室</li>
-        <li :class="{'active': tab === 'leading'}" @click="switchTab('leading')">领导机构</li>
-      </ul>
-      <div v-if="tab === 'office'">
-       <div class="item-wrap">
-         <button class="btn btn-primary" @click="addOfficeModal">新增</button>
-       </div>
-        <div class="container-wrap">
-          <div class="table-wrap">
-            <table>
-              <thead>
-              <tr>
-                <th>序号</th>
-                <th>编码</th>
-                <th>办公室名称</th>
-                <th>概况</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(list, $index) in officeList">
-                <td>{{$index+1}}</td>
-                <td>{{list.code}}</td>
-                <td>{{list.officeName}}</td>
-                <td>{{list.detail}}</td>
-                <td>
-                  <a>详情</a>
-                  <a @click="deleteOffice($index)">删除</a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+      <el-tabs v-model="tab" @tab-click="handleClick">
+        <el-tab-pane label="办公室" name="first">
+          <div v-show="showDetailInfo">
+            <el-row>
+              <el-button type="primary" size="small" @click="addOfficeModal">新增</el-button>
+            </el-row>
+            <el-table :data="officeList" tripe style="width: 100%">
+              <el-table-column type="index" width="300" label="序号"></el-table-column>
+              <el-table-column prop="code" label="编码"></el-table-column>
+              <el-table-column prop="officeName" label="办公室名称"></el-table-column>
+              <el-table-column label="概况">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="handleDetail(scope.$index, scope.row)">查看</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="deleteOffice(scope.$index, scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="row">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="400">
+              </el-pagination>
+            </div>
           </div>
-          <pagination v-if="totalPage" :pages="totalPage" @query="query"></pagination>
+          <div v-show="!showDetailInfo">
+            <el-tabs type="border-card" v-model="subTab">
+              <el-tab-pane label="办公室信息" name="first">
+                <div class="office-info">
+                  <el-form :model="detailInfo" width="300" size="mini" label-width="200">
+                    <el-form-item label="办公室编码" prop="code" label-width="100px">
+                      <el-input v-model="detailInfo.code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="办公室名称" prop="officeName" label-width="100px">
+                      <el-input v-model="detailInfo.officeName"></el-input>
+                    </el-form-item>
+                    <div class="row">
+                      <el-button type="primary" size="small">保存</el-button>
+                    </div>
+                  </el-form>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="人员管理" name="second">
+
+              </el-tab-pane>
+              <el-tab-pane label="组织架构" name="third">
+
+              </el-tab-pane>
+              <el-tab-pane label="概况" name="fourth">
+
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="配置管理" name="second">
+
+        </el-tab-pane>
+      </el-tabs>
+
+      <!--新增界面-->
+      <el-dialog title="新增" :visible.sync="addFormVisible"  width="30%">
+        <el-form :model="addOffice" >
+          <el-form-item label="办公室编码" prop="code" label-width="100px">
+            <el-input v-model="addOffice.code"></el-input>
+          </el-form-item>
+          <el-form-item label="办公室名称" prop="officeName" label-width="100px">
+            <el-input v-model="addOffice.officeName" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addFormVisible = false" size="small">取 消</el-button>
+          <el-button type="primary" @click="handleOffice" size="small">确 定</el-button>
         </div>
-      </div>
-      <add-office v-if="showAddOfficeModal" @close="closeAddOfficeModal"></add-office>
+      </el-dialog>
+
+      <!--查看界面-->
+      <el-dialog title="查看" :visible.sync="editFormVisible"  width="30%">
+        <el-form :model="addOffice" >
+          <el-form-item label="办公室编码" prop="code" label-width="100px">
+            <el-input v-model="addOffice.code"></el-input>
+          </el-form-item>
+          <el-form-item label="办公室名称" prop="officeName" label-width="100px">
+            <el-input v-model="addOffice.officeName" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editFormVisible = false" size="small">取 消</el-button>
+          <el-button type="primary" @click="handleOffice" size="small">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
 </template>
 
@@ -53,15 +122,22 @@
       props: [],
         data () {
           return {
-            tab: 'office',
-            officeList: [],
+            tab: 'first',      // tab默认为office
+            subTab: 'first',
+            officeList: [],   // 办公室list
+            data: {},   // 一条数据
             params: {
               pageNum: 1,
               pageSize: 10
-            },
-            totalCount: 0,
-            totalPage: 0,
-            showAddOfficeModal: false
+            },  // 所需的参数
+            totalCount: 0,    // 总条数
+            totalPage: 0,     // 总页数
+            currentPage: 1,     // 当前页
+            addOffice: {},
+            addFormVisible: false,   // 是否显示办公室弹框
+            editFormVisible: false,
+            showDetailInfo: true,   // 编辑显示具体信息
+            detailInfo: {}
           };
         },
         mounted () {
@@ -71,9 +147,10 @@
           Pagination
         },
         methods: {
-          // 切换tab
-          switchTab (tab) {
-            this.tab = tab;
+          handleClick (tab, event) {
+            if (tab.name === 'first') {
+              this.showDetailInfo = true;
+            }
           },
           // 查询
           query (pageNum) {
@@ -92,22 +169,69 @@
           // 删除
           deleteOffice (id) {
           //  需要弹出框
+            this.$confirm('此操作将永久删除该文件，是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              console.log(id);
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
           },
           // 显示新增弹框框
           addOfficeModal () {
-            this.showAddOfficeModal = true;
+            this.addFormVisible = true;
+            this.addOffice = {
+              code: '',
+              officeName: ''
+            };
           },
-          // 关闭新增弹出框
-          closeAddOfficeModal (flag) {
-            if (flag) {
-              this.query();
-            }
-            this.showAddOfficeModal = false;
+          // 处理概况查看
+          handleDetail (index, row) {
+            this.editFormVisible = true;
+            this.addOffice = row;
+          },
+          handleEdit (index, row) {
+            this.showDetailInfo = false;
+            this.detailInfo = row;
+            this.subTab = 'first';
+          },
+          /**
+           * 关闭新增弹框
+           * */
+          handleOffice (done) {
+            this.addFormVisible = false;
+            console.log(this.addOffice);
+          },
+          /**
+           * 分页 每页显示多少条
+           * */
+          handleSizeChange (val) {
+            console.log(`每页 ${val} 条`);
+          },
+          handleCurrentChange (val) {
+            console.log(`当前页: ${val}`);
           }
         }
     };
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.base-data{
+  .row{
+    text-align: right;
+    margin-top: 20px;
+  }
+  .office-info{
+    width: 40%;
+  }
+}
 </style>

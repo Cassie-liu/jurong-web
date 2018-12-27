@@ -1,10 +1,12 @@
 import Vue from 'vue';
+import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
 import Index from './Index.vue';
 import router from './router';
 import Modals from 'common/components/modals/index';
 import DateFilter from './filters/dateFilter';
 
-
+Vue.use(ElementUI);
 // 全局引用jquery
 window.$ = require('jquery');
 new Vue({
