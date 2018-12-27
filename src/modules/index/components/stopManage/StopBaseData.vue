@@ -13,7 +13,7 @@
                 <CommonCRUD v-if="activeName === 'org'"  :columns="columns" api-root="center" :form-columns="formColumns"></CommonCRUD>
             </el-tab-pane>
             <el-tab-pane label="功能室建设" name="power">
-                <CommonCRUD v-if="activeName === 'power'"  :columns="columns" api-root="center" :form-columns="formColumns"></CommonCRUD>
+                <CommonCRUD v-if="activeName === 'power'"  :columns="powerColumns" api-root="center" :form-columns="powerFormColumns"></CommonCRUD>
             </el-tab-pane>
             <el-tab-pane label="文明实践点" name="point">
                 <CommonCRUD v-if="activeName === 'point'"  :columns="columns" api-root="center" :form-columns="formColumns"></CommonCRUD>
@@ -103,24 +103,53 @@
                 personFormColumns: [
                     {
                         type: 'text',
-                        key: 'coding',
-                        label: '编码'
+                        key: 'jobNumber',
+                        label: '工号'
                     }, {
                         type: 'text',
                         key: 'name',
-                        label: '镇所名称'
+                        label: '姓名'
                     }, {
                         type: 'text',
-                        key: 'longitude',
-                        label: '经度'
+                        key: 'gender',
+                        label: '性别'
                     }, {
                         type: 'text',
-                        key: 'latitude',
-                        label: '纬度'
+                        key: 'position',
+                        label: '职位'
                     }, {
                         type: 'text',
                         key: 'remark',
                         label: '备注'
+                    }
+                ],
+                powerColumns: [
+                    {
+                        prop: 'jobNumber',
+                        label: '编码'
+                    },
+                    {
+                        prop: 'name',
+                        label: '名称'
+                    },
+                    {
+                        prop: 'culturalCategory',
+                        label: '文化类别'
+                    }
+                ],
+                powerFormColumns: [
+                    {
+                        type: 'text',
+                        key: 'jobNumber',
+                        label: '编码'
+                    }, {
+                        type: 'text',
+                        key: 'name',
+                        label: '名称'
+                    }, {
+                        type: 'text',
+                        key: 'culturalCategory',
+                        label: '文化类别'
                     }
                 ]
             };
