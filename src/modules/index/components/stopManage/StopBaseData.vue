@@ -47,23 +47,23 @@
                         type: 'text',
                         key: 'coding',
                         label: '编码'
-                    },{
+                    }, {
                         type: 'text',
                         key: 'name',
                         label: '分中心'
-                    },{
+                    }, {
                         type: 'text',
                         key: 'culturalType',
                         label: '文化类别'
-                    },{
+                    }, {
                         type: 'text',
                         key: 'longitude',
                         label: '经度'
-                    },{
+                    }, {
                         type: 'text',
                         key: 'latitude',
                         label: '纬度'
-                    },{
+                    }, {
                         type: 'text',
                         key: 'remark',
                         label: '备注'

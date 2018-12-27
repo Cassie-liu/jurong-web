@@ -43,7 +43,7 @@
 <script>
     import reqType from '@/api/reqType';
     export default {
-        name: "CommonCRUD",
+        name: 'CommonCRUD',
         props: {
             // 表格字段显示配置
             columns: Array,
@@ -52,7 +52,7 @@
             // 表单字段
             formColumns: Array
         },
-        data() {
+        data () {
             return {
                 // 表格数据
                 tableData: [],
@@ -66,11 +66,11 @@
                 dialogVisible: false,
                 form: {},
                 imgUrl: ''
-            }
+            };
         },
         methods: {
             // 获取表格数据
-            loadTableData() {
+            loadTableData () {
                 this.loading = true;
                 this.$http(reqType.POST, `${this.apiRoot}/page?page=${this.pageable.currentPage}&size=${this.pageable.pageSize}`).then(
                     data => {
@@ -78,26 +78,26 @@
                         this.pageable.total = data.totalElements;
                         this.loading = false;
                     }
-                )
+                );
             },
-            submit() {
-                console.log()
+            submit () {
+                console.log();
             },
-            handleClose(done) {
+            handleClose (done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
                         done();
                     })
                     .catch(_ => {});
             },
-            handleAvatarSuccess(res, file) {
+            handleAvatarSuccess (res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
             }
         },
-        created() {
+        created () {
             this.loadTableData();
         }
-    }
+    };
 </script>
 
 <style scoped>

@@ -73,7 +73,7 @@
              * 登录方法
              */
             login () {
-                sessionStorage.setItem('token', "sdfsdfdsf");
+                sessionStorage.setItem('token', 'sdfsdfdsf');
                 location.href = '/#/center-management/base-data';
 
                 loginService.authenticate(this.auth)
