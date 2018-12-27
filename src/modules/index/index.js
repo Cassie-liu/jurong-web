@@ -3,7 +3,12 @@ import Index from './Index.vue';
 import router from './router';
 import Modals from 'common/components/modals/index';
 import DateFilter from './filters/dateFilter';
+import ElementUI from 'element-ui';
+import { generate, common } from '@/api';
 
+Vue.use(ElementUI, { size: 'small' });
+Vue.prototype.$http = common.http;
+Vue.prototype.$genHttp = generate;
 
 // 全局引用jquery
 window.$ = require('jquery');

@@ -6,13 +6,8 @@ export default {
    * 登录认证
    */
   authenticate (auth) {
-    var params = new TfUrlSearchParams(),
-      i;
-    for (i in auth) {
-      params.append(i, auth[i]);
-    }
     return new Promise((resolve, reject) => {
-      axios.post('http://47.254.44.188:8088/userLogin?' + params.toString())
+      axios.post('http://192.168.43.75:8762/api/identity/principal/login', auth, {headers: {'Content-Type': 'application/json;charset=UTF-8', post: {'Content-Type': 'application/json;charset=UTF-8'}}})
       .then((res) => {
         resolve(res);
       })
