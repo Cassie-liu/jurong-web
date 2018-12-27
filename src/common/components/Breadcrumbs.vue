@@ -5,7 +5,6 @@
     <ul>
       <li v-for="(nav, index) in navigators" :class="{'icon-angle-right': index > 0}">
         <a :href="'#/' + nav.url">{{nav.title}}</a>
-        <!--<a @click="directTo(nav.url)">{{nav.title}}</a>-->
       </li>
     </ul>
   </div>
@@ -31,7 +30,6 @@
     mounted () {
       this.paths = this.$route.path.substring(1).split('/');
       this._initBreadcrumbs(allMenus);
-      // this.navigators.unshift({title: '', url: 'center-build'});
     },
 
     methods: {
@@ -57,10 +55,8 @@
       '$route' (to, from) {
         this.i = 0;
         this.navigators.length = 0;
-//        this.navigators.push({title: '首页', url: 'home'});
         this.paths = to.path.substring(1).split('/');
         this._initBreadcrumbs(allMenus);
-        // this.navigators.unshift({title: '分中心管理', url: 'center-management/center-build'});
         scrollTo(0, 0);     // 切换路由，滚动条滚动到顶端
       }
     }

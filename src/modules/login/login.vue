@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <!--<hd></hd>-->
     <div class="body">
       <div id="wrap" class="wrap" style="margin-top:-60px">
         <canvas id="canvas"></canvas>
@@ -15,11 +14,7 @@
           </div>
           <div class="error" v-if="authError">{{errorMessage}}</div>
           <input type="button" class="login-btn" value="登录" @click="login"/>
-          <!--<hr>-->
           <div class="option-wrap">
-            <!--<input type="checkbox" id="remember-me" class="pointer" v-model="rememberMe"/>-->
-            <!--<label for="remember-me" class="pointer">记住我</label>-->
-            <!--<a class="fr pointer">注册新账号</a>-->
           </div>
         </div>
       </div>
@@ -33,7 +28,6 @@
   import interceptors from 'common/factories/interceptors';
   import loginService from './services/loginService';
   import animateFactory from './factories/animateFactory';
-  // import CONFIG from 'common/constants/config';
 
   export default {
     data () {
@@ -42,12 +36,8 @@
         auth: {
           userId: '',     // 用户名
           userPwd: ''      // 密码，写死方便测试
-          // client_id: 'webapp',
-          // client_secret: 'webapp',
-          // grant_type: 'password'
         },
         verifyCode: '',     // 验证码
-        // verifyCodeUrl: CONFIG.baseUrl + '/xuan/verifyCode',
         timestamp: (new Date()).getTime(),
         rememberMe: false, // 记住我
         authError: false,  // 用户名、密码错误
@@ -77,22 +67,11 @@
         interceptors.init();
         // 清除缓存的token
         sessionStorage.removeItem('token');
-        // this.auth.userId = localStorage.getItem('user_name');
-        // this.rememberMe = JSON.parse(localStorage.getItem('remember_me'));
       },
       /**
        * 登录方法
        */
       login () {
-        // if (!this._validate()) {
-        //   return;
-        // }
-        // 验证验证码
-        // TODO 暂时注释验证码逻辑
-//        loginService.verifyCode(this.verifyCode)
-//        .then((res) => {
-//          if (res.status === 200 && res.data === '验证码正确') {
-            // 登录请求
             loginService.authenticate(this.auth)
             .then((res) => {
               if (res && res.status === 200 && res.data.success) {
@@ -115,36 +94,6 @@
           this.login();
         }
       },
-      /**
-       * 刷新验证码
-       */
-      refreshVerifyCode () {
-        this.timestamp = (new Date()).getTime();
-      }
-      /**
-       * 记住我
-       */
-//      rememberMeFun () {
-//        this.rememberMe = !this.rememberMe;
-//      },
-      /**
-       * 验证表单
-       */
-//       _validate () {
-//         this.authError = false;
-//         this.codeError = false;
-//         var result = true;
-//         if (!this.auth.username || !this.auth.password) {
-//           this.authError = true;
-//           result = false;
-//         }
-//         // TODO 暂时注释验证码逻辑
-// //        if (!this.verifyCode) {
-// //          this.codeError = true;
-// //          result = false;
-// //        }
-//         return result;
-//       }
     }
   };
 </script>

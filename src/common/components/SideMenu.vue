@@ -2,19 +2,15 @@
   <ul class="side-menu" style="height: calc(100% - 60px);">
     <li v-for="menu in menus" :class="{'active': menu === currentMenu}" @click="changeMenu(menu)">
       <div class="title">
-        <!--<img class="fl" :src="'/static/img/menu/' + menu.icon">-->
-        <!--<img class="fl" :src="'/static/img/menu/icon-menu-4.png'">-->
         <span>{{menu.title}}</span>
         <i :class="{'icon-angle-right': menu !== currentMenu, 'icon-angle-down': menu === currentMenu}" v-show="menu.children"></i>
       </div>
-      <!--<ul class="sub-menus" :style="{'max-height': menu === currentMenu ? ((menu.children && menu.children.length) * 37 - 1 + 'px') : 0}">-->
       <ul class="sub-menus" :style="{'height': menu === currentMenu ? 'initial' : 0}">
         <li v-for="subMenu in menu.children"
             v-if="userfactory.checkUserPermission(subMenu.requiredPermissions)"
             :class="{'active': subMenu === currentSubMenu}"
             @click="changeSubMenu(subMenu)">{{subMenu.title}}</li>
       </ul>
-      <!--<div class="separate"></div>-->
     </li>
   </ul>
 </template>

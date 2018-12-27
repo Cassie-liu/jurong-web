@@ -2,7 +2,6 @@
   <div class="main">
     <side-menu></side-menu>
     <breadcrumbs></breadcrumbs>
-    <!--<top-title></top-title>-->
     <div class="wrap">
       <router-view></router-view>
     </div>
@@ -12,7 +11,6 @@
 <script type="text/javascript">
   import Breadcrumbs from 'common/components/Breadcrumbs';
   import SideMenu from 'common/components/SideMenu';
-  import TopTitle from 'common/components/TopTitle';
 
   export default {
     name: 'tf-main',
@@ -24,7 +22,6 @@
     },
 
     components: {
-      TopTitle,
       Breadcrumbs,
       SideMenu
     }
