@@ -17,7 +17,7 @@ const service = axios.create({
     timeout: 50000 // 超时时间
 });
 
-//接受router对象
+// 接受router对象
 let router = null;
 
 // 请求拦截器
@@ -54,13 +54,13 @@ service.interceptors.response.use(
     error => {
         // 处理HTTP请求错误
         Message.error('HTTP请求错误！');
-        this.router.push({path:'/login'});
+        this.router.push({path: '/login'});
         return Promise.reject(error);
     }
 );
 
 export const getRouter = (router) => {
-    this.router = router
+    this.router = router;
 };
 
 /* 动态代理 根据函数名动态生成请求

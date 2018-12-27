@@ -4,6 +4,13 @@
         <el-table :data="tableData" v-loading="loading" size="small">
             <el-table-column v-for="item in columns" :key="item.prop" :prop="item.prop" :label="item.label"
                              :width="item.width || ''"></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                    <slot></slot>
+                    <el-button type="text" @click="deleteRow(scope.row.id)">删除</el-button>
+                </template>
+            </el-table-column>
         </el-table>
         <el-pagination style="text-align: right;margin-top: 20px;"
                        :total="pageable.total" :current-page.sync="pageable.currentPage" :page-size.sync="pageable.pageSize"
@@ -14,7 +21,7 @@
             :visible.sync="dialogVisible"
             width="30%"
             :before-close="handleClose">
-            <el-form :inline="true" :model="form" class="demo-form-inline" label-width="100px">
+            <el-form :inline="true" :model="form" ref="form" class="demo-form-inline" label-width="100px">
                 <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label">
                     <el-input v-model="form[item.key]" v-if="item.type === 'text'"></el-input>
                     <el-select v-model="form[item.key]" v-else-if="item.type === 'select'">
@@ -43,7 +50,7 @@
 <script>
     import reqType from '@/api/reqType';
     export default {
-        name: "CommonCRUD",
+        name: 'CommonCRUD',
         props: {
             // 表格字段显示配置
             columns: Array,
@@ -52,7 +59,7 @@
             // 表单字段
             formColumns: Array
         },
-        data() {
+        data () {
             return {
                 // 表格数据
                 tableData: [],
@@ -66,38 +73,55 @@
                 dialogVisible: false,
                 form: {},
                 imgUrl: ''
-            }
+            };
         },
         methods: {
             // 获取表格数据
-            loadTableData() {
+            loadTableData () {
                 this.loading = true;
-                this.$http(reqType.POST, `${this.apiRoot}/page?page=${this.pageable.currentPage}&size=${this.pageable.pageSize}`).then(
+                this.$http(reqType.POST, `${this.apiRoot}/page?page=${this.pageable.currentPage - 1}&size=${this.pageable.pageSize}`, false).then(
                     data => {
                         this.tableData = data.content;
                         this.pageable.total = data.totalElements;
                         this.loading = false;
                     }
-                )
+                );
             },
-            submit() {
-                console.log()
+            edit (row) {
+                this.form = Object.assign({}, row);
+                this.dialogVisible = true;
             },
-            handleClose(done) {
+            deleteRow (id) {
+                this.$confirm('确认删除？')
+                    .then(_ => {
+                        this.$http(reqType.DELETE, `${this.apiRoot}/${id}`).then(_ => {
+                            this.loadTableData();
+                        });
+                    })
+                    .catch(_ => {});
+            },
+            submit () {
+                this.$http(reqType.POST, `${this.apiRoot}/`, Object.assign({}, this.form)).then(() => {
+                    this.dialogVisible = false;
+                    this.loadTableData();
+                });
+            },
+            handleClose (done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
+                        this.from = {};
                         done();
                     })
                     .catch(_ => {});
             },
-            handleAvatarSuccess(res, file) {
+            handleAvatarSuccess (res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
             }
         },
-        created() {
+        created () {
             this.loadTableData();
         }
-    }
+    };
 </script>
 
 <style scoped>
