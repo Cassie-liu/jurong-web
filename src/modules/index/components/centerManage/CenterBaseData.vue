@@ -75,7 +75,7 @@
                       <el-button
                         type="text"
                         size="mini"
-                        @click="handleDetail(scope.$index, scope.row)">编辑</el-button>
+                        @click="">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
