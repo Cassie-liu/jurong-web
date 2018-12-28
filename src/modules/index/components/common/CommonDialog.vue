@@ -8,7 +8,7 @@
       :before-close="handleClose">
       <el-form :inline="true" :model="form" ref="form"  :label-position="'left'">
         <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label" label-width="100px">
-            <el-input v-model="form[item.key]" v-if="item.type === 'text'"></el-input>
+            <el-input v-model="form[item.key]" v-if="item.type !== 'select'" :type="item.type"></el-input>
             <el-select v-model="form[item.key]" v-else-if="item.type === 'select'">
               <el-option v-for="opItem in item.options" :value="opItem.value" :label="opItem.label" :key="opItem.value"></el-option>
             </el-select>
