@@ -14,7 +14,8 @@
         <commonTable  :api-root="'center'" :columns="personColumns" ref="brotherPersonDialog"></commonTable>
       </el-tab-pane>
       <el-tab-pane label="文明实践点" name="point">
-
+        <CommonDialog ref="pointDialog" :form-columns="pointFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+        <commonTable  :api-root="'center'" :columns="pointColumns" ref="brotherPointDialog"></commonTable>
       </el-tab-pane>
 
     </el-tabs>
@@ -186,7 +187,7 @@
             label: '编号'
           },
           {
-            props: 'name',
+            prop: 'name',
             label: '实践点名称'
           },
           {
@@ -196,6 +197,22 @@
           {
             prop: 'latitude',
             label: '纬度'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '编辑',
+                func: this.personEdit
+              },
+              {
+                type: 'text',
+                label: '删除',
+                func: this.deleteRow
+              }
+            ]
           }
         ],
         pointFormColumns: [
@@ -219,33 +236,28 @@
           {
             type: 'text',
             key: 'coding',
-            label: '分中心编码',
-            width: '100'
+            label: '分中心编码'
           },
           {
             type: 'text',
             key: 'name',
-            label: '分中心名称',
-            width: '100'
+            label: '分中心名称'
           },
          {
             type: 'text',
             key: 'longitude',
-            label: '经度',
-            width: '100'
+            label: '经度'
          },
           {
             type: 'text',
             key: 'latitude',
-            label: '纬度',
-            width: '100'
+            label: '纬度'
           },
           {
             type: 'select',
             key: 'culturalCategory',
             label: '文化类别',
-            width: '100',
-            options: [
+            option: [
               {
                 value: 'health',
                 label: '健康'
@@ -358,7 +370,33 @@
             };
           }
         } else if (this.activeName === 'point') {
-
+          this.$refs.brotherPointDialog.tableData = [
+            {
+              name:'11111111111',
+              longitude:'11111111111',
+              latitude:'11111111111'
+            },
+            {
+              name:'11111111111',
+              longitude:'11111111111',
+              latitude:'11111111111'
+            },
+            {
+              name:'11111111111',
+              longitude:'11111111111',
+              latitude:'11111111111'
+            },
+            {
+              name:'11111111111',
+              longitude:'11111111111',
+              latitude:'11111111111'
+            }
+          ];
+          this.$refs.brotherPointDialog.pageable = {
+            total: 4,
+            currentPage: 1,
+            pageSize: 10
+          };
         }
       },
       traggerBrotherEvent(){
@@ -384,7 +422,7 @@
        */
       edit (index, row) {
         this.showDetail = true;
-        if (this.$refs.brotherStableSearch){
+        if (this.$refs.brotherStableSearch) {
           this.$refs.brotherStableSearch.form = row;
         }
       },
@@ -392,11 +430,20 @@
        * 人员管理编辑
        * */
       personEdit (index, row) {
-        if (this.$refs.personDialog) {
-          this.$refs.personDialog.title = '编辑';
-          this.$refs.personDialog.dialogVisible = true;
-          this.$refs.personDialog.form = row;
+        if (this.activeName === 'person') {
+          if (this.$refs.personDialog) {
+            this.$refs.personDialog.title = '编辑';
+            this.$refs.personDialog.dialogVisible = true;
+            this.$refs.personDialog.form = row;
+          }
+        } else if(this.activeName === 'point') {
+          if (this.$refs.pointDialog) {
+            this.$refs.pointDialog.title = '编辑';
+            this.$refs.pointDialog.dialogVisible = true;
+            this.$refs.pointDialog.form = row;
+          }
         }
+
       },
       /**
        * 返回

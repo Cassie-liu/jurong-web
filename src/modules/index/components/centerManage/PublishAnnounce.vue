@@ -1,6 +1,6 @@
 <template>
     <div class="base-data">
-      <CommonDialog ref="publishDialog" :form-columns="formColumns" @submit="traggerBrotherEvent"></CommonDialog>
+      <CommonDialog ref="publishDialog" :form-columns="formColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
       <commonTable  :api-root="'center'" :columns="columns" ref="brother"></commonTable>
     </div>
 </template>

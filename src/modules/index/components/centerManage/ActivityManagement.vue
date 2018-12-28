@@ -113,7 +113,7 @@
                 ]
               },
               {
-                type: 'text',
+                type: 'textarea',
                 key: 'activityName',
                 label: '活动名称',
               },

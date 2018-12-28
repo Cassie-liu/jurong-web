@@ -15,14 +15,6 @@
       <li>
         <img class="fl avatar" src="/static/img/avatar.png">
         <span class="fl name">admin</span>
-        <ul class="hide">
-          <li>
-            <span>最近登录</span>
-          </li>
-          <li>
-            <span>2018-11-11</span>
-          </li>
-        </ul>
       </li>
     </ul>
   </div>
