@@ -319,6 +319,7 @@
       switchTab () {
         if (this.activeName === 'center') {
         } else if (this.activeName === 'person') {
+          this.$refs.brotherPersonDialog && this.$refs.brotherPersonDialog.loadTableData();
           if(this.$refs.brotherPersonDialog) {
             this.$refs.brotherPersonDialog.tableData = [
               {
@@ -391,10 +392,10 @@
        * 人员管理编辑
        * */
       personEdit (index, row) {
-        if (this.$refs.brotherPersonDialog) {
-          this.$refs.brotherDialog.title = '编辑';
-          this.$refs.brotherDialog.dialogVisible = true;
-          this.$refs.brotherDialog.form = row;
+        if (this.$refs.personDialog) {
+          this.$refs.personDialog.title = '编辑';
+          this.$refs.personDialog.dialogVisible = true;
+          this.$refs.personDialog.form = row;
         }
       },
       /**
