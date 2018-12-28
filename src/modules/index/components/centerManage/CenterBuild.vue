@@ -1,29 +1,20 @@
 <template>
   <div class="base-data">
-    <CommonCRUD v-if="!showDetail" :columns="columns" api-root="center" :form-columns="formColumns">
-      <el-button type="text" @click="showDetail = true">内容录入</el-button>
-    </CommonCRUD>
-    <el-tabs v-if="showDetail" v-model="activeName">
+    <div v-show="!showDetail">
+      <CommonDialog ref="brotherDialog" :form-columns="formColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+      <commonTable  :api-root="'center'" :columns="columns" ref="brother"></commonTable>
+    </div>
+    <el-button icon="el-icon-back" type="text" @click="back" v-if="showDetail">返回</el-button>
+    <el-tabs v-show="showDetail" v-model="activeName">
       <el-tab-pane label="分中心信息" name="center">
-        <div class="office-info">
-          <el-form :model="form" class="demo-form-inline" label-width="100px" :label-position="'left'">
-            <el-form-item v-for="(item,index) in formColumn" :key="item.label" :label="item.label" label-width="100px">
-              <el-input v-model="form[item.key]" v-if="item.type ==='text'" :key="index"></el-input>
-              <el-select v-model="form[item.key]" v-else-if="item.type === 'select'" style="width: 100%">
-                <el-option v-for="(opItem, index) in item.options" :value="opItem.value" :label="opItem.label" :key="opItem.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <div class="row-left">
-              <el-button type="primary" size="small">保存</el-button>
-            </div>
-          </el-form>
-        </div>
+        <CommonSearch :columns="formColumn"  @search="search" ref="brotherStableSearch" :title="'保存'"></CommonSearch>
       </el-tab-pane>
       <el-tab-pane label="人员管理" name="person">
-        <CommonCRUD v-if="activeName === 'person'" :columns="personColumns" api-root="townUser" :form-columns="personFormColumns"></CommonCRUD>
+        <CommonDialog ref="personDialog" :form-columns="personFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+        <commonTable  :api-root="'center'" :columns="personColumns" ref="brotherPersonDialog"></commonTable>
       </el-tab-pane>
       <el-tab-pane label="文明实践点" name="point">
-        <CommonCRUD v-if="activeName === 'point'" :columns="pointColumns" api-root="townUser" :form-columns="pointFormColumns"></CommonCRUD>
+
       </el-tab-pane>
 
     </el-tabs>
@@ -31,7 +22,9 @@
 </template>
 
 <script>
-  import CommonCRUD from '../common/CommonCRUD';
+  import CommonDialog from '../common/CommonDialog';
+  import CommonTable from '../common/CommonTable';
+  import CommonSearch from '../common/CommonSearch';
   export default {
     name: 'CenterBuild',
     props: [],
@@ -68,6 +61,22 @@
           {
             prop: 'remark',
             label: '备注'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '编辑',
+                func: this.edit
+              },
+              {
+                type: 'text',
+                label: '删除',
+                func: this.deleteRow
+              }
+            ]
           }
         ],
         formColumns: [
@@ -82,9 +91,19 @@
             label: '分中心名称'
           },
           {
-            type: 'text',
+            type: 'select',
             key: 'culturalCategory',
-            label: '文化类别'
+            label: '文化类别',
+            options: [
+              {
+                value: 'value1',
+                label: '文化类别1'
+              },
+              {
+                value: 'value2',
+                label: '文化类别2'
+              }
+            ]
           },
           {
             type: 'text',
@@ -103,24 +122,35 @@
           }],
         personColumns: [
           {
-            props: 'lob',
+            prop: 'lob',
             label: '工号'
           },
           {
-            props: 'name',
+            prop: 'name',
             label: '姓名'
           },
           {
-            props: 'sex',
+            prop: 'sex',
             label: '性别'
           },
           {
-            props: 'position',
+            prop: 'position',
             label: '职位'
           },
           {
-            props: 'remark',
+            prop: 'remark',
             label: '备注'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '编辑',
+                func: this.personEdit
+              }
+            ]
           }
         ],
         personFormColumns: [
@@ -185,17 +215,10 @@
             label: '纬度'
           }
         ],
-        form: {
-          code: '',
-          name: '',
-          longitude: '',
-          latitude: '',
-          culturalCategory: ''
-        },
         formColumn: [
           {
             type: 'text',
-            key: 'code',
+            key: 'coding',
             label: '分中心编码',
             width: '100'
           },
@@ -237,12 +260,212 @@
       };
     },
     mounted () {
-
+      if (this.$refs.brother) {
+        this.$refs.brother.tableData = [
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          }
+        ];
+        this.$refs.brother.pageable = {
+          total: 5,
+          currentPage: 1,
+          pageSize: 10
+        };
+      }
     },
     components: {
-      CommonCRUD
+      CommonDialog,
+      CommonTable,
+      CommonSearch
     },
-    methods: {}
+    methods: {
+      switchTab () {
+        if (this.activeName === 'center') {
+        } else if (this.activeName === 'person') {
+          if(this.$refs.brotherPersonDialog) {
+            this.$refs.brotherPersonDialog.tableData = [
+              {
+                lob:'11111111111',
+                name:'11111111111',
+                sex:'11111111111',
+                position:'11111111111',
+                remark:'11111111111'
+              },
+              {
+                lob:'11111111111',
+                name:'11111111111',
+                sex:'11111111111',
+                position:'11111111111',
+                remark:'11111111111'
+              },
+              {
+                lob:'11111111111',
+                name:'11111111111',
+                sex:'11111111111',
+                position:'11111111111',
+                remark:'11111111111'
+              },
+              {
+                lob:'11111111111',
+                name:'11111111111',
+                sex:'11111111111',
+                position:'11111111111',
+                remark:'11111111111'
+              }
+            ];
+            this.$refs.brotherPersonDialog.pageable = {
+              total: 5,
+              currentPage: 1,
+              pageSize: 10
+            };
+          }
+        } else if (this.activeName === 'point') {
+
+        }
+      },
+      traggerBrotherEvent(){
+        this.$refs.brother && this.$refs.brother.loadTableData();
+      },
+      /**
+       * 删除
+       * */
+      deleteRow (index,row) {
+        this.$confirm('确认删除？')
+          .then(_ => {
+            // this.$http(reqType.DELETE, `${this.apiRoot}/${id}`).then(_ => {
+            this.$alert('需要删除的接口', '提示', {
+              dangerouslyUseHTMLString: true
+            });
+            this.$refs.brother && this.$refs.brother.loadTableData();
+            // });
+          })
+          .catch(_ => {});
+      },
+      /**
+       * 编辑
+       */
+      edit (index, row) {
+        this.showDetail = true;
+        if (this.$refs.brotherStableSearch){
+          this.$refs.brotherStableSearch.form = row;
+        }
+      },
+      /**
+       * 人员管理编辑
+       * */
+      personEdit (index, row) {
+        if (this.$refs.brotherPersonDialog) {
+          this.$refs.brotherDialog.title = '编辑';
+          this.$refs.brotherDialog.dialogVisible = true;
+          this.$refs.brotherDialog.form = row;
+        }
+      },
+      /**
+       * 返回
+       */
+      back () {
+        this.showDetail = false;
+        this.$refs.brother && this.$refs.brother.loadTableData();
+        this.$refs.brother.tableData = [
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          },
+          {
+            coding: '111111',
+            name: '111111',
+            culturalCategory: '111111',
+            longitude: '111111',
+            latitude: '111111',
+            remark: '111111'
+          }
+        ];
+        this.$refs.brother.pageable = {
+          total: 5,
+          currentPage: 1,
+          pageSize: 10
+        };
+      },
+      // 保存
+      search () {
+        console.log(11111);
+        this.$alert('需要保存的接口', '提示', {
+          dangerouslyUseHTMLString: true
+        });
+      }
+    },
+    watch: {
+      activeName:{
+        handler () {
+          this.switchTab();
+        }
+      }
+    }
   };
 </script>
 
