@@ -25,7 +25,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="submit">确 定</el-button>
             </span>
     </el-dialog>
@@ -55,10 +55,12 @@
       },
       methods: {
         handleClose (done) {
-          this.$emit('submit');
+          // this.$emit('submit');
           this.$confirm('确认关闭？')
             .then(_ => {
-              this.from = {};
+              // this.from = {};
+              this.dialogVisible = false;
+              this.$emit('submit');
               done();
             })
             .catch(_ => {
@@ -78,8 +80,7 @@
         // 清空数据
         cancel () {
           this.dialogVisible = false;
-          this.title = '新增';
-          this.form ={};
+          this.$emit('submit');
         }
       }
     }
