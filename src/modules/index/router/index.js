@@ -14,7 +14,7 @@ import VolunteerBaseInfo from '../components/VolunteerService/VolunteerBaseInfo'
 import VolunteerServiceTeam from '../components/VolunteerService/VolunteerServiceTeam';
 import Announce from '../components/Announce';
 import SystemConfig from '../components/SystemConfig';
-import SystemOperation from '../components/SystemOperation';
+import SystemOperation from '../components/system/SystemOperation';
 Vue.use(Router);
 
 export default new Router({

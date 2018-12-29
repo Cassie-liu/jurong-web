@@ -14,7 +14,7 @@
             <CommonTable  :api-root="'center'" :columns="optionalActColumns" ref="brotherOptional" @search="searchBrother"></CommonTable>
         </el-tab-pane>
         <el-tab-pane label="活动统计" name="statistics">
-            <CommonSearch :columns="statisticsFormColumns"  @search="search" :inline="true" ref="brotherOptionalSearch" :title="'搜索'"></CommonSearch>
+            <CommonSearch :columns="statisticsFormColumns"  @search="search" :inline="true" ref="brotherStatisticsSearch" :title="'搜索'"></CommonSearch>
             <CommonTable  :api-root="'center'" :columns="statisticsColumns" ref="brotherStatistics" @search="searchBrother"></CommonTable>
         </el-tab-pane>
       </el-tabs>
@@ -591,6 +591,7 @@
               }
             } else if (this.activeName === 'stable') {
               this.$refs.brotherStable && this.$refs.brotherStable.loadTableData();
+              this.$refs.brotherStableSearch.form = {};
               // dummy数据
               if(this.$refs.brotherStable) {
                 this.$refs.brotherStable.tableData = [
@@ -645,6 +646,7 @@
               }
             } else if (this.activeName === 'optional') {
               this.$refs.brotherOptional && this.$refs.brotherOptional.loadTableData();
+              this.$refs.brotherOptionalSearch.form = {};
               // dummy数据
               if(this.$refs.brotherOptional) {
                 this.$refs.brotherOptional.tableData = [
@@ -696,6 +698,7 @@
                 };
               }
             } else if (this.activeName === 'statistics') {
+              this.$refs.brotherStatisticsSearch.form = {};
               this.$refs.brotherStatistics && this.$refs.brotherStatistics.loadTableData();
               if (this.$refs.brotherStatistics) {
                 this.$refs.brotherStatistics.tableData = [
@@ -807,6 +810,8 @@
           // 调用兄弟组件的方法
            traggerBrotherEvent () {
             if (this.activeName === 'publish') {
+              this.$refs.brotherDialog.title = '新增';
+              this.$refs.brotherDialog.form = {};
               this.$refs.brother && this.$refs.brother.loadTableData();
             }
           },

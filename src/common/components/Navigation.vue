@@ -124,6 +124,7 @@
         }
         .name {
           padding: 10px 0 0 10px;
+          color:#333;
         }
         .border-right {
           border-right: solid 1px #ccc;
