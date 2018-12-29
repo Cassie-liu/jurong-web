@@ -106,12 +106,17 @@ module.exports = [
     url: 'system-config',
     title: '系统配置',
     // icon: 'icon-menu-5.png',
-    requirePermissions: []
+    requirePermissions: [],
   },
   {
     url: 'system-operation',
     title: '系统运维',
     // icon: 'icon-menu-5.png',
     requirePermissions: []
-  }
+  },
+    {
+        title: '菜单配置',
+        url: 'system-menu',
+        requiredPermissions: []
+    }
 ];

@@ -101,9 +101,12 @@
                     .catch(_ => {});
             },
             submit () {
-                this.$http(reqType.POST, `${this.apiRoot}/`, Object.assign({}, this.form)).then(() => {
+                let type = this.form.id ? reqType.PUT : reqType.POST;
+                let path = `${this.apiRoot}/${this.form.id || ''}`;
+                this.$http(type, path, Object.assign({}, this.form)).then(() => {
                     this.dialogVisible = false;
                     this.loadTableData();
+                    this.from = {};
                 });
             },
             handleClose (done) {

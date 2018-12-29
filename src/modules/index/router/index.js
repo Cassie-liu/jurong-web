@@ -94,7 +94,12 @@ export default new Router({
           path: 'system-operation',     // 系统运维
           name: 'SystemOperation',
           component: SystemOperation
-        }
+        },
+          {
+              path: 'system-menu',
+              name: 'SystemMenu',
+              component: () => import('../components/system/MenuConfig')
+          }
       ]
     }
     // {
