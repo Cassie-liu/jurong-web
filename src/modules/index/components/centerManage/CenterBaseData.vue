@@ -62,7 +62,7 @@
             <el-tab-pane label="人员管理" name="person">
               <el-row>
                 <el-button size="mini" type="primary" @click="addOfficeModal('person')">新增</el-button>
-                <el-button size="mini" @click="switchSubTabs('organize')"  class="fr" plain>切换</el-button>
+                <el-button size="mini" @click="switchSubTabs('')"  class="fr" plain>切换</el-button>
               </el-row>
               <el-table :data="personList" tripe style="width: 100%">
                 <el-table-column prop="lob"  label="工号"></el-table-column>
@@ -213,14 +213,16 @@
 
 <script>
   import CommonCRUD from '../common/CommonCRUD';
-  import Pagination from '../../../../common/components/Pagination';
-  import AddOffice from './AddOffice';
+  import CommonSearch from '../common/CommonSearch';
+  import CommonTable from '../common/CommonTable';
+  import CommonDialog from '../common/CommonDialog';
   export default {
     name: 'CenterBaseData',
     components: {
       CommonCRUD,
-      Pagination,
-      AddOffice
+      CommonSearch,
+      CommonTable,
+      CommonDialog
     },
     props: [],
     data () {
@@ -251,6 +253,7 @@
         addPersonFormVisible: false,   // 新增人员管理信息
         editPersonFormVisible: false,   // 编辑人员管理信息
         detailInfo: {},
+        officeColumns: [],
         columns: [
           {
             type: 'index',
@@ -353,9 +356,6 @@
     },
     computed: {
     },
-    comments: {
-      Pagination
-    },
     methods: {
       handleClick (tab, event) {
         if (tab.name === 'first') {
@@ -449,7 +449,6 @@
        * 切换
        */
       switchSubTabs (type) {
-        this.subTab = type;
         console.log(type);
       },
       /**

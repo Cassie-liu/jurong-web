@@ -11,13 +11,12 @@
       </el-tab-pane>
       <el-tab-pane label="人员管理" name="person">
         <CommonDialog ref="personDialog" :form-columns="personFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-        <commonTable  :api-root="'center'" :columns="personColumns" ref="brotherPersonDialog"></commonTable>
+        <commonTable  :api-root="'center'" :columns="personColumns" ref="brotherPerson"></commonTable>
       </el-tab-pane>
       <el-tab-pane label="文明实践点" name="point">
         <CommonDialog ref="pointDialog" :form-columns="pointFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
         <commonTable  :api-root="'center'" :columns="pointColumns" ref="brotherPointDialog"></commonTable>
       </el-tab-pane>
-
     </el-tabs>
   </div>
 </template>
@@ -331,9 +330,9 @@
       switchTab () {
         if (this.activeName === 'center') {
         } else if (this.activeName === 'person') {
-          this.$refs.brotherPersonDialog && this.$refs.brotherPersonDialog.loadTableData();
-          if(this.$refs.brotherPersonDialog) {
-            this.$refs.brotherPersonDialog.tableData = [
+          if(this.$refs.brotherPerson) {
+            this.$refs.brotherPerson && this.$refs.brotherPerson.loadTableData();
+            this.$refs.brotherPerson.tableData = [
               {
                 lob:'11111111111',
                 name:'11111111111',
@@ -363,40 +362,43 @@
                 remark:'11111111111'
               }
             ];
-            this.$refs.brotherPersonDialog.pageable = {
+            this.$refs.brotherPerson.pageable = {
               total: 5,
               currentPage: 1,
               pageSize: 10
             };
           }
         } else if (this.activeName === 'point') {
-          this.$refs.brotherPointDialog.tableData = [
-            {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
-            },
-            {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
-            },
-            {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
-            },
-            {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
-            }
-          ];
-          this.$refs.brotherPointDialog.pageable = {
-            total: 4,
-            currentPage: 1,
-            pageSize: 10
-          };
+          if(this.$refs.brotherPointDialog){
+            this.$refs.brotherPointDialog && this.$refs.brotherPointDialog.loadTableData();
+            this.$refs.brotherPointDialog.tableData = [
+              {
+                name:'11111111111',
+                longitude:'11111111111',
+                latitude:'11111111111'
+              },
+              {
+                name:'11111111111',
+                longitude:'11111111111',
+                latitude:'11111111111'
+              },
+              {
+                name:'11111111111',
+                longitude:'11111111111',
+                latitude:'11111111111'
+              },
+              {
+                name:'11111111111',
+                longitude:'11111111111',
+                latitude:'11111111111'
+              }
+            ];
+            this.$refs.brotherPointDialog.pageable = {
+              total: 4,
+              currentPage: 1,
+              pageSize: 10
+            };
+          }
         }
       },
       traggerBrotherEvent(){
