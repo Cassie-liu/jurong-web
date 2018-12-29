@@ -1,0 +1,39 @@
+.mce-content-body,
+.mce-content-body td,
+.mce-content-body th,
+.rich-content,
+.rich-content td,
+.rich-content th {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 120%;
+    color: #333;
+}
+
+.mce-content-body ul,
+.rich-content ul {
+    display: block;
+    list-style-type: disc;
+    margin: 10px 0;
+    padding-left: 30px;
+}
+
+.mce-content-body ol,
+.rich-content ol {
+    display: block;
+    list-style-type: decimal;
+    margin: 10px 0;
+    padding-left: 30px;
+}
+
+.mce-content-body p,
+.rich-content p {
+    margin: 8px 0;
+    line-height: 1.3;
+}
+
+.mce-content-body a,
+.rich-content a {
+    text-decoration: underline;
+}
+
