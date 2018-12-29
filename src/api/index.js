@@ -28,7 +28,7 @@ export const getRouter = (router) => {
 service.interceptors.request.use(config => {
     // token可以存在浏览器端的sessionStorage中，也可以用Vuex管理
     // const token = sessionStorage.getItem('token');
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0ZjcyMmNiOS04NmZmLTQ5OWQtODNlZi1jNjkxZDA0NDExMDQiLCJpYXQiOjE1NDU5MTEzNjQsImlzcyI6Ind3dy5jbG91ZGtlZXBlci5jb20iLCJzdWIiOiJzZXJ2aWNlQGNsb3Vka2VlcGVyLmNuIiwiZXhwIjoxNTQ1OTQ3MzY0fQ.Wp506pyNcOFLokacX2haIgCb_p8dpzzOQUqx7xp5Auk';
+    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwZDc2NmQ3NC0wYjExLTExZTktOWY4NS01MjU0MDBjOGY4ZmQiLCJpYXQiOjE1NDYwNTk3NTQsImlzcyI6Ind3dy5jbG91ZGtlZXBlci5jb20iLCJzdWIiOiJzZXJ2aWNlQGNsb3Vka2VlcGVyLmNuIiwiZXhwIjoxNTQ2MDk1NzU0fQ.tf38MR5LeicQGsx3lK4g-HFNV7Oi3l2G8iZLX15nOyA';
     // 如果当前有token，则请求头加上token
     if (token) {
         config.headers['authorization'] = token;
