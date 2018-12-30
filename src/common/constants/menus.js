@@ -1,5 +1,11 @@
 module.exports = [
-  // 分中心管理
+  // 概览
+  {
+    url: 'center-management/overview',
+    title: '概览',
+    // icon: 'icon-menu-5.png',
+    requirePermissions: []
+  },
   {
     url: 'center-management',
     title: '分中心管理',
