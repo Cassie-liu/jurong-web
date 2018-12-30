@@ -1,7 +1,7 @@
 <template>
   <div class="editor" :id="elementContainerId">
     <textarea class="form-control input-sm" :id="elementId" rows="5"
-              v-model.trim="value" maxlength="20000"></textarea>
+              v-model.trim="value" maxlength="20000" :disabled="disabled"></textarea>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import $ from 'jquery';
 
 export default {
   name: 'editor',
-  props: ['elementId', 'value', 'width'],
+  props: ['elementId', 'value', 'width', 'disabled'],
   data () {
     return {
       valuePopulated: false,
@@ -37,7 +37,9 @@ export default {
           let editor = tinymce.get(this.elementId)
           // Prevent setting content to null dom
           if (editor.dom) {
-            editor.setContent(this.value, { format: 'raw' });
+            if(this.value) {
+              editor.setContent(this.value, { format: 'raw' });
+            }
           }
         }
       }, 200);

@@ -44,19 +44,6 @@
       },
       methods: {
         loadTableData () {
-          // this.tableData= [
-          //   {
-          //     coding: '1111111111',
-          //     publishIssued: '1111111111',
-          //     culturalCategory: '1111111111',
-          //     activityName: '1111111111',
-          //     activityContent: '1111111111',
-          //     activityName: '1111111111',
-          //     activityContent: '1111111111',
-          //     targetScore: '111111111111111111',
-          //     deadline: '111111111111111111'
-          //   }
-          // ];
           this.$emit('search');
           this.loading = true;
           this.$http(reqType.POST, `${this.apiRoot}/page?page=${this.pageable.currentPage - 1}&size=${this.pageable.pageSize}`, false)

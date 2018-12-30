@@ -162,7 +162,7 @@
           },
           {
             prop: 'executionStation',
-            label: '执行所站',
+            label: '执行镇所',
           },
           {
             prop: 'executionVillageStation',
