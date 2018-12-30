@@ -50,6 +50,7 @@
 
 <style src="assets/less/font-icons/style.css"></style>
 <style src="assets/less/style.less"></style>
+<style src="assets/less/public.less"></style>
 <style lang="less">
   .api-menus {
     overflow: hidden;
