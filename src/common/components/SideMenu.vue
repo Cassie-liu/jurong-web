@@ -81,11 +81,11 @@
 
 <style lang="less">
   .side-menu {
-    width: 230px;
+    width: 14%;
     position: fixed;
     top: 100px;
     /*background: #333;*/
-    background: #BACAFA;
+    background: #EFF1F0;
     margin: 0;
     overflow-y: auto;
     /*滚动条样式*/
@@ -96,33 +96,34 @@
       border-radius: 9px;
     }
     &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-      background-color: #9fb6e9;
+      background-color: #FDFDFD;
       border-radius: 9px;
       background-clip: content-box;
       border: 5px solid transparent;
     }
     >li {
       /*background: #333333;*/
-      background: #BACAFA;
-      color: #fff;
+      background: #FDFDFD;
+      color: #A7A7A7;
       cursor: pointer;
       position: relative;
       /*border-bottom: solid 1px #263844;*/
       &.active {
+        border-left: 3px solid #F08643;
         .title {
-          background: #A9B9ED;
-          color: #5D81D2;
+          background: #F1F3F1;
+          color: #F08643;
           span {
             /*color: #0FB9EF;*/
           }
         }
       }
       .title {
-        font-size: 14px;
-        font-weight: bold;
+        font-size: 16px;
+        font-weight: 600;
         padding: 20px 20px;
         &:hover {
-          background: #7993DB;
+          background: #F1F3F1;
         }
         img {
           margin: -5px 10px 0 0;
@@ -140,19 +141,19 @@
         li {
           padding: 10px 0 10px 40px;
           position: relative;
-          background: #A9B9ED;
+          background: #F1F3F1;
           /*background: #283946;*/
-          border-bottom: solid 1px #BACAFA;
+          /*border-bottom: solid 1px #F08643;*/
 
           &:last-child {
             border-bottom: none;
           }
           &:hover {
-            background: #7993DB;
+            color: #F08643;
           }
           &:before {
             content: '';
-            background-color: #fff;
+            background-color: #A7A7A7;
             width: 3px;
             height: 3px;
             border-radius: 10px;
@@ -161,9 +162,9 @@
             vertical-align: middle;
           }
           &.active {
-            color: #5D81D2;
+            color: #F08643;
             &:before {
-              background: #5D81D2;
+              background: #A7A7A7;
             }
           }
         }

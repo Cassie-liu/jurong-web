@@ -53,74 +53,74 @@
         activeName: 'survey', // 默认tab
         graphic: {
           img: [
-            {path: '/static/img/test.jpeg',pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg',pathB: '2b'},
-            {path: '/static/img/test.jpeg',pathB: '3b'},
-            {path: '/static/img/test.jpeg',pathB: '4b'}
+            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
+            {path: '/static/img/test.jpeg', pathB: '2b'},
+            {path: '/static/img/test.jpeg', pathB: '3b'},
+            {path: '/static/img/test.jpeg', pathB: '4b'}
           ],
           text: 'asdasd'
         },
         organization: [{
-          "name": "戴裔",
-          "id": "4",
-          "children": [
+          'name': '戴裔',
+          'id': '4',
+          'children': [
             {
-              "name": "糜静娟",
-              "id": "5",
-              "children": [
+              'name': '糜静娟',
+              'id': '5',
+              'children': [
                 {
-                  "name": "董爱梅",
-                  "id": "6",
-                  "children": [],
-                  "depName": "人社"
+                  'name': '董爱梅',
+                  'id': '6',
+                  'children': [],
+                  'depName': '人社'
                 },
                 {
-                  "name": "徐圆",
-                  "id": "7",
-                  "children": [],
-                  "depName": "计生"
+                  'name': '徐圆',
+                  'id': '7',
+                  'children': [],
+                  'depName': '计生'
                 },
                 {
-                  "name": "朱瑞",
-                  "id": "8",
-                  "children": [],
-                  "depName": "民政"
+                  'name': '朱瑞',
+                  'id': '8',
+                  'children': [],
+                  'depName': '民政'
                 },
                 {
-                  "name": "吴世玲",
-                  "id": "9",
-                  "children": [],
-                  "depName": "农服"
+                  'name': '吴世玲',
+                  'id': '9',
+                  'children': [],
+                  'depName': '农服'
                 },
                 {
-                  "name": "张远华",
-                  "id": "10",
-                  "children": [],
-                  "depName": "村镇"
+                  'name': '张远华',
+                  'id': '10',
+                  'children': [],
+                  'depName': '村镇'
                 },
                 {
-                  "name": "金鑫",
-                  "id": "11",
-                  "children": [],
-                  "depName": "司法"
+                  'name': '金鑫',
+                  'id': '11',
+                  'children': [],
+                  'depName': '司法'
                 },
                 {
-                  "name": "巫君",
-                  "id": "12",
-                  "children": [],
-                  "depName": "信访"
+                  'name': '巫君',
+                  'id': '12',
+                  'children': [],
+                  'depName': '信访'
                 },
                 {
-                  "name": "陈叶",
-                  "id": "13",
-                  "children": [],
-                  "depName": "全科综合"
+                  'name': '陈叶',
+                  'id': '13',
+                  'children': [],
+                  'depName': '全科综合'
                 }
               ],
-              "depName": "为人民服务中心1"
+              'depName': '为人民服务中心1'
             }
           ],
-          "depName": "政府"
+          'depName': '政府'
         }], // 模拟领带机构图数据
         organizationColumns: [
           {
@@ -189,10 +189,10 @@
             label: '办公室1',
             name: 'office1',
             img: [
-              {path: '/static/img/test.jpeg',pathB: '/static/img/test.jpeg'},
-              {path: '/static/img/bj.jpg',pathB: '2b'},
-              {path: '/static/img/test.jpeg',pathB: '3b'},
-              {path: '/static/img/bj.jpg',pathB: '4b'}
+              {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'},
+              {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'},
+              {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'},
+              {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'}
             ],
             text: '1111111111dadadadadadadada'
           },
@@ -201,10 +201,10 @@
             label: '办公室2',
             name: 'office2',
             img: [
-              {path: '/static/img/bj.jpg',pathB: '/static/img/test.jpeg'},
-              {path: '/static/img/bj.jpg',pathB: '2b'},
-              {path: '/static/img/bj.jpg',pathB: '3b'},
-              {path: '/static/img/bj.jpg',pathB: '4b'}
+              {path: '/static/img/bj.jpg', pathB: '/static/img/test.jpeg'},
+              {path: '/static/img/bj.jpg', pathB: '2b'},
+              {path: '/static/img/bj.jpg', pathB: '3b'},
+              {path: '/static/img/bj.jpg', pathB: '4b'}
             ],
             text: 'dadada12da'
           },
@@ -213,10 +213,10 @@
             label: '办公室3',
             name: 'office3',
             img: [
-              {path: '/static/img/bj.jpg',pathB: '/static/img/test.jpeg'},
-              {path: '/static/img/bj.jpg',pathB: '2b'},
-              {path: '/static/img/bj.jpg',pathB: '3b'},
-              {path: '/static/img/bj.jpg',pathB: '4b'}
+              {path: '/static/img/bj.jpg', pathB: '/static/img/test.jpeg'},
+              {path: '/static/img/bj.jpg', pathB: '2b'},
+              {path: '/static/img/bj.jpg', pathB: '3b'},
+              {path: '/static/img/bj.jpg', pathB: '4b'}
             ],
             text: 'dad33333dada'
           }
@@ -226,14 +226,14 @@
     },
     mounted () {
       this.drawChart1();
-      this.officeName = this.officeTab && this.officeTab[0].name
+      this.officeName = this.officeTab && this.officeTab[0].name;
     },
     methods: {
       /**
        * 切换tab
        */
       switchTab () {
-        if(this.activeName === 'organization') {
+        if (this.activeName === 'organization') {
           this.showTable = false;
         }
       },
@@ -253,7 +253,7 @@
             trigger: 'item',
             triggerOn: 'mousemove'
           },
-          series:[
+          series: [
             {
               type: 'tree',
 
@@ -325,7 +325,7 @@
             total: 1,
             currentPage: 1,
             pageSize: 10
-          }
+          };
         }
       },
       /**
@@ -344,12 +344,12 @@
         handler (oldVal, curVal) {
           this.switchTab();
         }
+      },
+      officeName: {
+        handler (oldVal, curVal) {
+          this.switchTab();
+        }
       }
-      // officeName: {
-      //   handler (oldVal, curVal) {
-      //     this.switchTab();
-      //   }
-      // }
     }
   };
 </script>

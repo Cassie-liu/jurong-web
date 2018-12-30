@@ -9,12 +9,12 @@
           <!--</li>-->
         <!--</ul>-->
       <!--</li>-->
-      <li class="logout">
-        <img src="/static/img/header/login-out.png" alt="" @click="logout">
-      </li>
       <li>
         <img class="fl avatar" src="/static/img/avatar.png">
-        <span class="fl name">admin</span>
+        <span class="fl name">Admin</span>
+      </li>
+      <li class="logout">
+        <img src="/static/img/header/login-out.png" alt="" @click="logout">
       </li>
     </ul>
   </div>
@@ -100,7 +100,7 @@
         position: relative;
         display: table-cell;
         vertical-align: middle;
-        padding: 0 10px;
+        padding: 0 15px;
         .search {
           width: 220px;
           height: 32px;
@@ -120,11 +120,13 @@
           }
         }
         .avatar {
-          width: 32px;
+          width: 48px;
         }
         .name {
-          padding: 10px 0 0 10px;
-          color:#333;
+          padding: 25px 0 0 10px;
+          color:#EE8543;
+          font-size: 18px;
+          font-weight: 600;
         }
         .border-right {
           border-right: solid 1px #ccc;

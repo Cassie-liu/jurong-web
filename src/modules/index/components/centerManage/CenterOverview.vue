@@ -21,7 +21,7 @@
           {id: 3, path: '/static/img/bj.jpg', name: '分中心3'},
           {id: 4, path: '/static/img/bj.jpg', name: '分中心4'},
           {id: 5, path: '/static/img/bj.jpg', name: '分中心5'}
-        ],
+        ]
       };
     },
     mounted () {

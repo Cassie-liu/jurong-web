@@ -1,170 +1,79 @@
 <template>
+  <div class="stop-base">
     <div class="base-data">
-        <CommonCRUD v-if="!showDetail" :columns="columns" api-root="center" :form-columns="formColumns">
-            <el-button type="text" @click="showDetail = true">内容录入</el-button>
-        </CommonCRUD>
-
-        <!--镇所内容录入-->
-        <el-tabs v-if="showDetail" v-model="activeName">
-            <el-tab-pane label="人员管理" name="person">
-                <CommonCRUD v-if="activeName === 'person'" :columns="personColumns" api-root="townUser" :form-columns="personFormColumns"></CommonCRUD>
-            </el-tab-pane>
-            <el-tab-pane label="组织架构" name="org">
-                <CommonCRUD v-if="activeName === 'org'"  :columns="columns" api-root="center" :form-columns="formColumns"></CommonCRUD>
-            </el-tab-pane>
-            <el-tab-pane label="功能室建设" name="power">
-                <CommonCRUD v-if="activeName === 'power'"  :columns="powerColumns" api-root="center" :form-columns="powerFormColumns"></CommonCRUD>
-            </el-tab-pane>
-            <el-tab-pane label="文明实践点" name="point">
-                <CommonCRUD v-if="activeName === 'point'"  :columns="columns" api-root="center" :form-columns="formColumns"></CommonCRUD>
-            </el-tab-pane>
-        </el-tabs>
+      <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
+        <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+        <div class="text-center mt-15">{{item.name}}</div>
+      </div>
+      <div v-show="showManagement">
+        <common-graphic :data="graphic"></common-graphic>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    import CommonCRUD from '../common/CommonCRUD';
-    export default {
-        name: 'StopBaseData',
-        props: [],
-        data () {
-            return {
-                activeName: 'person',
-                showDetail: false,
-                // 表格字段显示配置
-                columns: [
-                    {
-                        prop: 'coding',
-                        label: '编码'
-                    },
-                    {
-                        prop: 'name',
-                        label: '镇所名称'
-                    },
-                    {
-                        prop: 'longitude',
-                        label: '经度'
-                    },
-                    {
-                        prop: 'latitude',
-                        label: '纬度'
-                    },
-                    {
-                        prop: 'remark',
-                        label: '备注'
-                    }
-                ],
-                // 表单字段
-                formColumns: [
-                    {
-                        type: 'text',
-                        key: 'coding',
-                        label: '编码'
-                    }, {
-                        type: 'text',
-                        key: 'name',
-                        label: '镇所名称'
-                    }, {
-                        type: 'text',
-                        key: 'longitude',
-                        label: '经度'
-                    }, {
-                        type: 'text',
-                        key: 'latitude',
-                        label: '纬度'
-                    }, {
-                        type: 'text',
-                        key: 'remark',
-                        label: '备注'
-                    }],
-                // 人员表格字段显示配置
-                personColumns: [
-                    {
-                        prop: 'jobNumber',
-                        label: '工号'
-                    },
-                    {
-                        prop: 'name',
-                        label: '姓名'
-                    },
-                    {
-                        prop: 'gender',
-                        label: '性别'
-                    },
-                    {
-                        prop: 'position',
-                        label: '职位'
-                    },
-                    {
-                        prop: 'remark',
-                        label: '备注'
-                    }
-                ],
-                personFormColumns: [
-                    {
-                        type: 'text',
-                        key: 'jobNumber',
-                        label: '工号'
-                    }, {
-                        type: 'text',
-                        key: 'name',
-                        label: '姓名'
-                    }, {
-                        type: 'text',
-                        key: 'gender',
-                        label: '性别'
-                    }, {
-                        type: 'text',
-                        key: 'position',
-                        label: '职位'
-                    }, {
-                        type: 'text',
-                        key: 'remark',
-                        label: '备注'
-                    }
-                ],
-                powerColumns: [
-                    {
-                        prop: 'jobNumber',
-                        label: '编码'
-                    },
-                    {
-                        prop: 'name',
-                        label: '名称'
-                    },
-                    {
-                        prop: 'culturalCategory',
-                        label: '文化类别'
-                    }
-                ],
-                powerFormColumns: [
-                    {
-                        type: 'text',
-                        key: 'jobNumber',
-                        label: '编码'
-                    }, {
-                        type: 'text',
-                        key: 'name',
-                        label: '名称'
-                    }, {
-                        type: 'text',
-                        key: 'culturalCategory',
-                        label: '文化类别'
-                    }
-                ]
-            };
-        },
-        methods: {
-            handleClick (tab, event) {
-                console.log(tab, event);
-            }
-        },
-        components: {
-            CommonCRUD
-        }
+  import CommonGraphic from '../common/CommonGraphic';
+  export default {
+    name: 'StopBaseData',
+    props: [],
+    data () {
+      return {
+        img: [
+          {id: 1, path: '/static/img/bj.jpg', name: '所站1'},
+          {id: 2, path: '/static/img/bj.jpg', name: '所站2'},
+          {id: 3, path: '/static/img/bj.jpg', name: '所站3'},
+          {id: 4, path: '/static/img/bj.jpg', name: '所站4'},
+          {id: 5, path: '/static/img/bj.jpg', name: '所站5'},
+          {id: 6, path: '/static/img/bj.jpg', name: '所站6'},
+          {id: 7, path: '/static/img/bj.jpg', name: '所站7'},
+          {id: 8, path: '/static/img/bj.jpg', name: '所站8'},
+          {id: 9, path: '/static/img/bj.jpg', name: '所站9'},
+          {id: 10, path: '/static/img/bj.jpg', name: '所站10'},
+          {id: 11, path: '/static/img/bj.jpg', name: '所站11'},
+          {id: 12, path: '/static/img/bj.jpg', name: '所站12'}
+        ],
+        showManagement: false,
+        graphic: {
+          img: [
+            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
+            {path: '/static/img/test.jpeg', pathB: '2b'},
+            {path: '/static/img/test.jpeg', pathB: '3b'},
+            {path: '/static/img/test.jpeg', pathB: '4b'}
+          ],
+          text: 'asdasd'
+        } // 村站详情
+      };
+    },
+    methods: {
+      /**
+       * 获取所站概况
+       */
+      getDetailManagement (id) {
+        this.showManagement = true;
+      }
+    },
+    components: {
+      CommonGraphic
+    }
     };
 </script>
 
 <style scoped>
-
+  .stop-base {
+    .base-data{
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      flex-wrap: wrap;
+      .content {
+        padding: 0 1% 40px 0;
+        width:15%;
+        img {
+          cursor: pointer;
+          width:100%;
+        }
+      }
+    }
+  }
 </style>

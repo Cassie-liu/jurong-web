@@ -62,10 +62,10 @@
 
 
 <script>
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import { swiper, swiperSlide } from 'vue-awesome-swiper';
 
   export default {
-    name: "graphicView",
+    name: 'graphicView',
     components: {
       swiper,
       swiperSlide
@@ -76,7 +76,7 @@
         require: true
       }
     },
-    data() {
+    data () {
       return {
         btnText: '编辑',
         textarea: '',
@@ -90,59 +90,58 @@
         swiperOption: {
           pagination: {
             el: '.swiper-pagination',
-            clickable :true
+            clickable: true
           },
           centeredSlides: true,
-          autoplay:true,
-          preventClicks : false,//默认true
-          /*navigation: {
+          autoplay: true,
+          preventClicks: false, // 默认true
+          /* navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
             hideOnClick: true
-          },*/
-          loop : true,
+          }, */
+          loop: true,
           on: {
-            doubleTap: ()=>{
+            doubleTap: () => {
               // 通过$refs获取对应的swiper对象
-              console.log('你点击了swiper')
-              this.scaleImg = !this.scaleImg
-              this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img
+              console.log('你点击了swiper');
+              this.scaleImg = !this.scaleImg;
+              this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img;
               let swiper = this.$refs.mySwiper.swiper;
-
-            }
+          }
           }
         }
-      }
+      };
     },
-    created() {
+    created () {
       this.data.img.forEach(v => {
-        let _img = {}
-        let _imgB = {}
-        _img.path = v.path
-        _imgB.path = v.pathB
-        this.imgList.img.push(_img)
-        this.imgList.imgB.push(_imgB)
-      })
-      this.imgData = this.imgList.img
-      this.textarea = this.data.text
+        let _img = {};
+        let _imgB = {};
+        _img.path = v.path;
+        _imgB.path = v.pathB;
+        this.imgList.img.push(_img);
+        this.imgList.imgB.push(_imgB);
+      });
+      this.imgData = this.imgList.img;
+      this.textarea = this.data.text;
     },
     methods: {
       switchEdit () {
         if (this.showEdit) {
-          console.log('点击了保存')
-          this.btnText = '编辑'
+          console.log('点击了保存');
+          this.btnText = '编辑';
         } else {
-          console.log('点击了编辑')
-          this.btnText = '保存'
+          console.log('点击了编辑');
+          this.btnText = '保存';
           // todo 调取保存接口然后重新load页面
         }
-        this.showEdit = !this.showEdit
+        this.showEdit = !this.showEdit;
       },
-      handleAvatarSuccess(res, file) {
+      handleAvatarSuccess (res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
-        console.log(file)
+      beforeAvatarUpload (file) {
+        console.log(file);
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -155,7 +154,7 @@
         return isJPG && isLt2M;
       }
     }
-  }
+  };
 </script>
 
 <style scoped lang="less">

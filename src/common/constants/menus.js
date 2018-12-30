@@ -13,7 +13,7 @@ module.exports = [
     requirePermissions: [],
     children: [
       {
-        title: '分中心概览',
+        title: '分中心概况',
         url: 'center-overview',
         requiredPermissions: []
       },
@@ -47,7 +47,7 @@ module.exports = [
     requirePermissions: [],
     children: [
       {
-        title: '所站基础数据',
+        title: '所站概况',
         url: 'base-data',
         requiredPermissions: []
       },
@@ -117,7 +117,7 @@ module.exports = [
     url: 'system-config',
     title: '系统配置',
     // icon: 'icon-menu-5.png',
-    requirePermissions: [],
+    requirePermissions: []
   },
   {
     url: 'system-operation',

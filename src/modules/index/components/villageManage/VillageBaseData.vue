@@ -289,35 +289,35 @@
         if (this.activeName === 'center') {
         } else if (this.activeName === 'person') {
           this.$refs.brotherPersonDialog && this.$refs.brotherPersonDialog.loadTableData();
-          if(this.$refs.brotherPersonDialog) {
+          if (this.$refs.brotherPersonDialog) {
             this.$refs.brotherPersonDialog.tableData = [
               {
-                lob:'11111111111',
-                name:'11111111111',
-                sex:'11111111111',
-                position:'11111111111',
-                remark:'11111111111'
+                lob: '11111111111',
+                name: '11111111111',
+                sex: '11111111111',
+                position: '11111111111',
+                remark: '11111111111'
               },
               {
-                lob:'11111111111',
-                name:'11111111111',
-                sex:'11111111111',
-                position:'11111111111',
-                remark:'11111111111'
+                lob: '11111111111',
+                name: '11111111111',
+                sex: '11111111111',
+                position: '11111111111',
+                remark: '11111111111'
               },
               {
-                lob:'11111111111',
-                name:'11111111111',
-                sex:'11111111111',
-                position:'11111111111',
-                remark:'11111111111'
+                lob: '11111111111',
+                name: '11111111111',
+                sex: '11111111111',
+                position: '11111111111',
+                remark: '11111111111'
               },
               {
-                lob:'11111111111',
-                name:'11111111111',
-                sex:'11111111111',
-                position:'11111111111',
-                remark:'11111111111'
+                lob: '11111111111',
+                name: '11111111111',
+                sex: '11111111111',
+                position: '11111111111',
+                remark: '11111111111'
               }
             ];
             this.$refs.brotherPersonDialog.pageable = {
@@ -329,24 +329,24 @@
         } else if (this.activeName === 'point') {
           this.$refs.brotherPointDialog.tableData = [
             {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
+              name: '11111111111',
+              longitude: '11111111111',
+              latitude: '11111111111'
             },
             {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
+              name: '11111111111',
+              longitude: '11111111111',
+              latitude: '11111111111'
             },
             {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
+              name: '11111111111',
+              longitude: '11111111111',
+              latitude: '11111111111'
             },
             {
-              name:'11111111111',
-              longitude:'11111111111',
-              latitude:'11111111111'
+              name: '11111111111',
+              longitude: '11111111111',
+              latitude: '11111111111'
             }
           ];
           this.$refs.brotherPointDialog.pageable = {
@@ -356,23 +356,23 @@
           };
         }
       },
-      traggerBrotherEvent(){
+      traggerBrotherEvent () {
         if (this.activeName === 'person') {
           if (this.$refs.personDialog) {
-            this.$refs.personDialog.form ={};
+            this.$refs.personDialog.form = {};
             this.$refs.personDialog.title = '新增';
           }
-        } else if (this.activeName === 'point'){
-          this.$refs.pointDialog.form ={};
+        } else if (this.activeName === 'point') {
+          this.$refs.pointDialog.form = {};
           this.$refs.pointDialog.title = '新增';
-        }else if(!this.showDetail){
+        } else if (!this.showDetail) {
           this.$refs.brother && this.$refs.brother.loadTableData();
         }
       },
       /**
        * 删除
        * */
-      deleteRow (index,row) {
+      deleteRow (index, row) {
         this.$confirm('确认删除？')
           .then(_ => {
             // this.$http(reqType.DELETE, `${this.apiRoot}/${id}`).then(_ => {
@@ -403,15 +403,14 @@
             this.$refs.personDialog.dialogVisible = true;
             this.$refs.personDialog.form = row;
           }
-        } else if(this.activeName === 'point') {
+        } else if (this.activeName === 'point') {
           if (this.$refs.pointDialog) {
             this.$refs.pointDialog.title = '编辑';
             this.$refs.pointDialog.dialogVisible = true;
             this.$refs.pointDialog.form = row;
           }
         }
-
-      },
+    },
       /**
        * 返回
        */
@@ -475,7 +474,7 @@
       }
     },
     watch: {
-      activeName:{
+      activeName: {
         handler () {
           this.switchTab();
         }
