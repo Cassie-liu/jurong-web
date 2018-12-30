@@ -5,11 +5,11 @@
             <CommonDialog ref="brotherDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
             <commonTable  :api-root="'center'" :columns="publishColumns" ref="brother"></commonTable>
         </el-tab-pane>
-        <el-tab-pane label="固选活动审核" name="stable">
+        <el-tab-pane label="计划审核" name="stable">
             <CommonSearch :columns="stableFormColumns"  @search="search" :inline="true" ref="brotherStableSearch" :title="'搜索'"></CommonSearch>
             <commonTable  :api-root="'center'" :columns="stableColumns" ref="brotherStable" @search="searchBrother"></commonTable>
         </el-tab-pane>
-        <el-tab-pane label="自选活动审核" name="optional">
+        <el-tab-pane label="活动审核" name="optional">
             <CommonSearch :columns="stableFormColumns"  @search="search" :inline="true" ref="brotherOptionalSearch" :title="'搜索'"></CommonSearch>
             <CommonTable  :api-root="'center'" :columns="optionalActColumns" ref="brotherOptional" @search="searchBrother"></CommonTable>
         </el-tab-pane>
@@ -118,7 +118,7 @@
                 label: '活动名称',
               },
               {
-                type: 'text',
+                type: 'editor',
                 key: 'activityContent',
                 label: '活动内容',
               },
@@ -152,7 +152,7 @@
               },
               {
                 prop: 'executionStation',
-                label: '执行所站',
+                label: '执行镇所',
               },
               {
                 prop: 'executionVillageStation',
@@ -202,19 +202,19 @@
               {
                 type: 'select',
                 key: 'executionVillageStation',
-                label: '选择所站',
+                label: '选择镇所',
                 options: [
                   {
-                    value: '所站1',
-                    key: '所站1'
+                    value: '镇所1',
+                    key: '镇所1'
                   },
                   {
-                    value: '所站2',
-                    key: '所站3'
+                    value: '镇所2',
+                    key: '镇所3'
                   },
                   {
-                    value: '所站4',
-                    key: '所站5'
+                    value: '镇所4',
+                    key: '镇所5'
                   }
                 ]
               },
@@ -315,7 +315,7 @@
               },
               {
                 prop: 'ownStation',
-                label: '所属所站',
+                label: '所属镇所',
               },
               {
                 prop: 'executionVillageStation',
@@ -364,7 +364,7 @@
               },
               {
                 prop: 'executionStation',
-                label: '执行所站',
+                label: '执行镇所',
               },
               {
                 prop: 'executionVillageStation',
@@ -398,19 +398,19 @@
               {
                 type: 'select',
                 key: 'executionVillageStation',
-                label: '选择所站',
+                label: '选择镇所',
                 options: [
                   {
-                    value: '所站1',
-                    key: '所站1'
+                    value: '镇所1',
+                    key: '镇所1'
                   },
                   {
-                    value: '所站2',
-                    key: '所站3'
+                    value: '镇所2',
+                    key: '镇所3'
                   },
                   {
-                    value: '所站4',
-                    key: '所站5'
+                    value: '镇所4',
+                    key: '镇所5'
                   }
                 ]
               },

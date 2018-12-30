@@ -47,19 +47,19 @@
           },
           {
             prop: 'coding',
-            label: '活动编码',
+            label: '活动编码'
           },
           {
             prop: 'culturalCategory',
-            label: '文化类别',
+            label: '文化类别'
           },
           {
             prop: 'activityName',
-            label: '活动名称',
+            label: '活动名称'
           },
           {
             prop: 'activityContent',
-            label: '执行村站',
+            label: '执行村站'
           },
           {
             prop: 'targetScore',
@@ -95,12 +95,12 @@
           {
             type: 'text',
             key: 'coding',
-            label: '活动编码',
+            label: '活动编码'
           },
           {
             type: 'text',
             key: 'publishIssued',
-            label: '发布单位',
+            label: '发布单位'
           },
           {
             type: 'select',
@@ -120,12 +120,12 @@
           {
             type: 'textarea',
             key: 'activityName',
-            label: '活动名称',
+            label: '活动名称'
           },
           {
             type: 'text',
             key: 'activityContent',
-            label: '活动内容',
+            label: '活动内容'
           },
           {
             type: 'text',
@@ -146,31 +146,31 @@
           },
           {
             prop: 'coding',
-            label: '活动编码',
+            label: '活动编码'
           },
           {
             prop: 'publishIssued',
-            label: '发布单位',
+            label: '发布单位'
           },
           {
             prop: 'culturalCategory',
-            label: '文化类别',
+            label: '文化类别'
           },
           {
             prop: 'activityName',
-            label: '活动名称',
+            label: '活动名称'
           },
           {
             prop: 'executionStation',
-            label: '执行所站',
+            label: '执行所站'
           },
           {
             prop: 'executionVillageStation',
-            label: '执行村站',
+            label: '执行村站'
           },
           {
             prop: 'practicePoint',
-            label: '执行实践点',
+            label: '执行实践点'
           },
           {
             prop: 'completeStatus',
@@ -178,7 +178,7 @@
           },
           {
             prop: 'isSpecialAActivity',
-            label: '是否为特色活动',
+            label: '是否为特色活动'
           },
           {
             type: 'function',
@@ -276,23 +276,23 @@
           },
           {
             prop: 'coding',
-            label: '活动编码',
+            label: '活动编码'
           },
           {
             prop: 'unit',
-            label: '发布单位',
+            label: '发布单位'
           },
           {
             prop: 'culturalCategory',
-            label: '文化类别',
+            label: '文化类别'
           },
           {
             prop: 'activityName',
-            label: '活动名称',
+            label: '活动名称'
           },
           {
             prop: 'activityContent',
-            label: '活动内容',
+            label: '活动内容'
           },
           {
             prop: 'deadline',
@@ -331,23 +331,23 @@
           },
           {
             prop: 'coding',
-            label: '活动编码',
+            label: '活动编码'
           },
           {
             prop: 'unit',
-            label: '发布单位',
+            label: '发布单位'
           },
           {
             prop: 'culturalCategory',
-            label: '文化类别',
+            label: '文化类别'
           },
           {
             prop: 'activityName',
-            label: '活动名称',
+            label: '活动名称'
           },
           {
             prop: 'activityContent',
-            label: '活动内容',
+            label: '活动内容'
           },
           {
             prop: 'deadline',
@@ -386,7 +386,7 @@
     },
     mounted () {
       if (this.activeName === 'publish') {
-        if (this.submitName === 'unSubmit'){
+        if (this.submitName === 'unSubmit') {
           this.$refs.unSubmitStatistics.tableData = [
             {
               coding: '111111',
@@ -426,7 +426,7 @@
             total: 3,
             currentPage: 1,
             pageSize: 10
-          }
+          };
         }
         if (this.submitName === 'submit') {
           this.$refs.submitActiveColumns.tableData = [
@@ -453,12 +453,12 @@
       /**
        *  切换tab
        * */
-      switchTab() {
+      switchTab () {
         if (this.activeName === 'stable') {
           this.$refs.brother && this.$refs.brother.loadTableData();
           // this.$refs.brotherStableSearch.form = {};
           // dummy数据
-          if(this.$refs.brother) {
+          if (this.$refs.brother) {
             this.$refs.brother.tableData = [
               {
                 publishIssued: '111111',
@@ -615,7 +615,7 @@
       /**
        * 附件下载
        * */
-      downLoad (index,row) {
+      downLoad (index, row) {
         console.log(index);
         console.log(row);
         this.$alert('需要附件下载的接口', '提示', {
@@ -662,7 +662,7 @@
       /**
        * 搜索获取值之后再赋值
        * */
-      search(formData){
+      search (formData) {
         console.log(formData);
         if (this.$refs.brother) {
           this.$refs.brother.tableData = formData;
@@ -670,15 +670,15 @@
       },
       searchBrother () {
         if (this.activeName === 'stable') {
-          if (this.$refs.brother && this.$refs.brotherStableSearch){
+          if (this.$refs.brother && this.$refs.brotherStableSearch) {
             this.$refs.brother.form = this.$refs.brotherStableSearch.form;
           }
         } else if (this.activeName === 'statistics') {
-          if (this.$refs.brotherStatistics && this.$refs.brotherStatisticsSearch){
+          if (this.$refs.brotherStatistics && this.$refs.brotherStatisticsSearch) {
             this.$refs.brotherStatistics.form = this.$refs.brotherStatisticsSearch.form;
           }
         } else if (this.activeName === 'unSubmit') {
-          if (this.$refs.unSubmitStatistics && this.$refs.brotherStatisticsSearch){
+          if (this.$refs.unSubmitStatistics && this.$refs.brotherStatisticsSearch) {
             this.$refs.unSubmitStatistics.form = this.$refs.brotherStatisticsSearch.form;
           }
         }

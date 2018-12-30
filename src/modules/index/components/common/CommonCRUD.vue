@@ -85,7 +85,9 @@
                         this.pageable.total = data.totalElements;
                         this.loading = false;
                     }
-                );
+                ).catch(res => {
+                  this.loading = false;
+                });
             },
             edit (row) {
                 this.form = Object.assign({}, row);

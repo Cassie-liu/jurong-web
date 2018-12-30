@@ -6,6 +6,7 @@ import CenterOverview from '../components/centerManage/CenterOverview';
 import Overview from '../components/overview/Overview';
 import CenterBuild from '../components/centerManage/CenterBuild';
 import ActivityManagement from '../components/centerManage/ActivityManagement';
+import CenterActivityManagement from '../components/centerManage/CenterActivityManagement';
 import PublishAnnounce from '../components/centerManage/PublishAnnounce';
 import StopBaseData from '../components/stopManage/StopBaseData';
 import FeatureBuild from '../components/stopManage/FeatureBuild';
@@ -49,8 +50,10 @@ export default new Router({
         },
         {
           path: 'center-management/activity-management',     // 分中心活动管理
-          name: 'ActivityManagement',
-          component: ActivityManagement
+          // name: 'ActivityManagement',
+          name: 'CenterActivityManagement',
+          // component: ActivityManagement,
+          component: CenterActivityManagement
         },
         {
           path: 'center-management/publish-announce',     // 发布公告
@@ -58,7 +61,7 @@ export default new Router({
           component: PublishAnnounce
         },
         {
-          path: 'stop-management/base-data',     // 所站基础数据
+          path: 'stop-management/base-data',     // 镇所基础数据
           name: 'StopBaseData',
           component: StopBaseData
         },
@@ -68,7 +71,7 @@ export default new Router({
           component: FeatureBuild
         },
         {
-          path: 'stop-management/activity-manage',     // 所站活动管理
+          path: 'stop-management/activity-manage',     // 镇所活动管理
           name: 'StopActManage',
           component: StopActManage
         },

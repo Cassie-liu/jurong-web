@@ -1,7 +1,8 @@
 <template>
-  <ul class="side-menu" style="height: calc(100% - 60px);">
+  <ul class="side-menu">
     <li v-for="menu in menus" :class="{'active': menu === currentMenu}" @click="changeMenu(menu)">
       <div class="title">
+        <img class="fl" :src="menu === currentMenu?'/static/img/menu/' + menu.iconHover:'/static/img/menu/' + menu.icon">
         <span>{{menu.title}}</span>
         <i :class="{'icon-angle-right': menu !== currentMenu, 'icon-angle-down': menu === currentMenu}" v-show="menu.children"></i>
       </div>
@@ -78,96 +79,3 @@
     }
   };
 </script>
-
-<style lang="less">
-  .side-menu {
-    width: 230px;
-    position: fixed;
-    top: 100px;
-    /*background: #333;*/
-    background: #BACAFA;
-    margin: 0;
-    overflow-y: auto;
-    /*滚动条样式*/
-    &::-webkit-scrollbar {
-      width: 17px;
-      height: 17px;
-      background-color: transparent;
-      border-radius: 9px;
-    }
-    &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-      background-color: #9fb6e9;
-      border-radius: 9px;
-      background-clip: content-box;
-      border: 5px solid transparent;
-    }
-    >li {
-      /*background: #333333;*/
-      background: #BACAFA;
-      color: #fff;
-      cursor: pointer;
-      position: relative;
-      /*border-bottom: solid 1px #263844;*/
-      &.active {
-        .title {
-          background: #A9B9ED;
-          color: #5D81D2;
-          span {
-            /*color: #0FB9EF;*/
-          }
-        }
-      }
-      .title {
-        font-size: 14px;
-        font-weight: bold;
-        padding: 20px 20px;
-        &:hover {
-          background: #7993DB;
-        }
-        img {
-          margin: -5px 10px 0 0;
-        }
-        i {
-          float: right;
-          margin-right: -5px;
-        }
-      }
-      .sub-menus {
-        padding: 0;
-        overflow: hidden;
-        /*height: 0;*/
-        transition: height 300ms;
-        li {
-          padding: 10px 0 10px 40px;
-          position: relative;
-          background: #A9B9ED;
-          /*background: #283946;*/
-          border-bottom: solid 1px #BACAFA;
-
-          &:last-child {
-            border-bottom: none;
-          }
-          &:hover {
-            background: #7993DB;
-          }
-          &:before {
-            content: '';
-            background-color: #fff;
-            width: 3px;
-            height: 3px;
-            border-radius: 10px;
-            margin-right: 10px;
-            display: inline-block;
-            vertical-align: middle;
-          }
-          &.active {
-            color: #5D81D2;
-            &:before {
-              background: #5D81D2;
-            }
-          }
-        }
-      }
-    }
-  }
-</style>

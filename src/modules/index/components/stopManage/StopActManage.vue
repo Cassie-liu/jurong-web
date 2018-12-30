@@ -1,6 +1,6 @@
 <template>
     <div class="base-data">
-      所站活动管理
+      镇所活动管理
     </div>
 </template>
 
