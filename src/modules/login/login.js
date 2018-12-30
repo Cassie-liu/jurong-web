@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Login from './Login.vue';
 import Modals from 'common/components/modals/index';
+import { common } from '@/api';
+Vue.prototype.$http = common.http;
 // import Resource from 'vue-resource'
 
 // Vue.use(Resource)

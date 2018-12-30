@@ -27,8 +27,8 @@
     import Header from 'common/components/Header';
     import Footer from 'common/components/Footer';
     import interceptors from 'common/factories/interceptors';
-    import loginService from './services/loginService';
     import animateFactory from './factories/animateFactory';
+    import reqType from '@/api/reqType';
 
     export default {
         data () {
@@ -73,22 +73,16 @@
              * 登录方法
              */
             login () {
-                sessionStorage.setItem('token', 'sdfsdfdsf');
-                location.href = '/#/center-management/base-data';
-
-                loginService.authenticate(this.auth)
-                    .then((res) => {
-                        if (res.data.code === 200) {
+                this.$http(reqType.POST, 'principal/login', this.auth).then(
+                    (data) => {
                             // 登录成功后保存token
                             this.authError = false;
-                            sessionStorage.setItem('token', res.data.content);
-                            // sessionStorage.setItem('userType', res.data && res.data.content && res.data.content.userType);
+                            sessionStorage.setItem('token', data);
                             location.href = '/#/center-management/base-data';
-                        } else {
+                        }).catch((msg) => {
                             this.authError = true;
-                            this.errorMessage = res.data.msg;
-                        }
-                    });
+                            this.errorMessage = msg;
+                        })
             },
             /**
              * 回车登录
