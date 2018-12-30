@@ -2,7 +2,7 @@ module.exports = [
   // 概览
   {
     url: 'center-management/overview',
-    title: '概览',
+    title: '实践中心概况',
     // icon: 'icon-menu-5.png',
     requirePermissions: []
   },
@@ -12,6 +12,11 @@ module.exports = [
     // icon: 'icon-menu-5.png',
     requirePermissions: [],
     children: [
+      {
+        title: '分中心概览',
+        url: 'center-overview',
+        requiredPermissions: []
+      },
       {
         title: '分中心基础数据',
         url: 'base-data',

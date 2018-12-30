@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '../components/Main';
 import CenterBaseData from '../components/centerManage/CenterBaseData';
+import CenterOverview from '../components/centerManage/CenterOverview';
 import Overview from '../components/overview/Overview';
 import CenterBuild from '../components/centerManage/CenterBuild';
 import ActivityManagement from '../components/centerManage/ActivityManagement';
@@ -24,10 +25,10 @@ export default new Router({
       path: '/',
       name: 'QueryMain',
       component: Main,
-      redirect: '/center-management/base-data', // 默认跳转到分中心基础数据
+      redirect: '/center-management/overview', // 默认跳转到分中心基础数据
       children: [
         {
-          path: 'center-management/overview',     // 概览
+          path: 'center-management/overview',     // 实践中心概览
           name: 'Overview',
           component: Overview
         },
@@ -35,6 +36,11 @@ export default new Router({
           path: 'center-management/base-data',     // 分中心基础数据
           name: 'CenterBaseData',
           component: CenterBaseData
+        },
+        {
+          path: 'center-management/center-overview',     // 分中心基础数据
+          name: 'CenterOverview',
+          component: CenterOverview
         },
         {
           path: 'center-management/center-build',     // 分中心建设
