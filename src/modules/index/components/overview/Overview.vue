@@ -9,8 +9,8 @@
       <el-tab-pane label="领导机构" name="organization">
         <el-button type="primary" class="right" @click="showOrganizationTable">切换</el-button>
         <div class="back"></div>
-        <div v-show="showTable === false" id="chartWrap1" class="chart-wrap"></div>
-        <div v-show="showTable === true">
+        <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
+        <div v-show="showTable">
           <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
           <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
         </div>
@@ -18,7 +18,9 @@
       <el-tab-pane label="办公室概况" name="office">
         <el-tabs v-model="officeName">
           <el-tab-pane v-for="(item,index) in officeTab" :key="index" :label="item.label" :name="item.name">
-            <div>{{item.detail && item.detail.content}}</div>
+            <div>
+              <common-graphic :data="item"></common-graphic>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
@@ -186,25 +188,37 @@
             id: 1,
             label: '办公室1',
             name: 'office1',
-            detail: {
-              content: '11111111111'
-            }
+            img: [
+              {path: '/static/img/test.jpeg',pathB: '/static/img/test.jpeg'},
+              {path: '/static/img/bj.jpg',pathB: '2b'},
+              {path: '/static/img/test.jpeg',pathB: '3b'},
+              {path: '/static/img/bj.jpg',pathB: '4b'}
+            ],
+            text: '1111111111dadadadadadadada'
           },
           {
             id: 2,
             label: '办公室2',
             name: 'office2',
-            detail: {
-              content: '22222222222222'
-            }
+            img: [
+              {path: '/static/img/bj.jpg',pathB: '/static/img/test.jpeg'},
+              {path: '/static/img/bj.jpg',pathB: '2b'},
+              {path: '/static/img/bj.jpg',pathB: '3b'},
+              {path: '/static/img/bj.jpg',pathB: '4b'}
+            ],
+            text: 'dadada12da'
           },
           {
             id: 3,
             label: '办公室3',
             name: 'office3',
-            detail: {
-              content: '33333333333333'
-            }
+            img: [
+              {path: '/static/img/bj.jpg',pathB: '/static/img/test.jpeg'},
+              {path: '/static/img/bj.jpg',pathB: '2b'},
+              {path: '/static/img/bj.jpg',pathB: '3b'},
+              {path: '/static/img/bj.jpg',pathB: '4b'}
+            ],
+            text: 'dad33333dada'
           }
         ],
         officeName: ''
