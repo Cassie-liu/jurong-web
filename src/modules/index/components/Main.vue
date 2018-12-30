@@ -1,9 +1,12 @@
 <template>
   <div class="main">
     <side-menu></side-menu>
-    <breadcrumbs></breadcrumbs>
-    <div class="wrap">
-      <router-view></router-view>
+
+    <div class="main-content">
+      <breadcrumbs></breadcrumbs>
+      <div class="wrap">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -28,15 +31,3 @@
   };
 </script>
 
-<style lang="less" scoped>
-  .main {
-    margin-top:20px;
-    .wrap {
-      padding: 70px 20px 20px 280px;
-      &>div {
-        background: #fff;
-        padding: 20px;
-      }
-    }
-  }
-</style>

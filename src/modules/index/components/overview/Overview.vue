@@ -362,6 +362,7 @@
 
 <style scoped lang="less">
   .overview {
+    padding: 0 15px 15px;
     .back {
       background: url("/static/img/jgbj.png");
     }
