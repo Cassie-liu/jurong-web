@@ -19,7 +19,7 @@
             <!--预留富文本编辑-->
             <div v-if="item.type === 'editor' && showEditor">
               <!--<editor width="100%" element-id="addEditor" v-model="form[item.key]"></editor>-->
-              <editor width="90%" element-id="addEditor" v-model="form[item.key]"></editor>
+              <editor width="90%" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
             </div>
             <div v-if="item.type === 'datePicker'">
               <el-col :span="12">
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+  import vue from 'vue';
   import Editor from '../../../../common/components/Editor';
     export default {
         name: 'CommonDialog',
@@ -81,9 +82,10 @@
       },
       methods: {
           add() {
+            this.title = '新增';
             this.dialogVisible = true;
-            debugger;
             this.form = {};
+            vue.set(this, 'form', {});
           },
         handleClose (done) {
           // this.$emit('submit');
