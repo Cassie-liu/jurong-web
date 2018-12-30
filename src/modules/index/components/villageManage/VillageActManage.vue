@@ -4,12 +4,12 @@
       <el-tab-pane label="固选活动上传" name="publish">
         <el-tabs v-model="submitName">
           <el-tab-pane label="未提交" name="unSubmit">
-            <CommonTable  :api-root="'center'" :columns="submitActiveColumns" ref="submitStatistics" @search="searchBrother"></CommonTable>
+            <CommonTable  :api-root="'center'" :columns="unSubmitActiveColumns" ref="unSubmitStatistics" @search="searchBrother"></CommonTable>
           </el-tab-pane>
-          <el-tab-pane label="已提交" name="submit"></el-tab-pane>
+          <el-tab-pane label="已提交" name="submit">
+            <commonTable  :api-root="'center'" :columns="submitActiveColumns" ref="submitStatistics" @search="searchBrother"></commonTable>
+          </el-tab-pane>
         </el-tabs>
-        <!--<CommonDialog ref="brotherDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>-->
-        <!--<commonTable  :api-root="'center'" :columns="publishColumns" ref="brother"></commonTable>-->
       </el-tab-pane>
       <el-tab-pane label="自选活动申报" name="stable">
         <CommonDialog ref="brotherDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
@@ -39,6 +39,7 @@
       return {
         activeName: 'publish',
         submitName: 'unSubmit',
+        // 自选活动申报表格数据
         publishColumns: [
           {
             type: 'index',
@@ -89,6 +90,7 @@
             ]
           }
         ],
+        // 自选活动申报弹框数据
         publishFormColumns: [
           {
             type: 'text',
@@ -136,165 +138,7 @@
             label: '截止时间'
           }
         ],
-        stableColumns: [
-          {
-            type: 'index',
-            label: '序号'
-          },
-          {
-            prop: 'publishIssued',
-            label: '发布单位',
-          },
-          {
-            prop: 'culturalCategory',
-            label: '文化类别',
-          },
-          {
-            prop: 'activityName',
-            label: '活动名称',
-          },
-          {
-            prop: 'executionStation',
-            label: '执行所站',
-          },
-          {
-            prop: 'executionVillageStation',
-            label: '执行村站',
-          },
-          {
-            prop: 'practicePoint',
-            label: '执行实践点',
-          },
-          {
-            prop: 'targetScore',
-            label: '目标分值'
-          },
-          {
-            prop: 'actualScore',
-            label: '实际分值'
-          },
-          {
-            prop: 'deadline',
-            label: '截止时间'
-          },
-          {
-            prop: 'completeTime',
-            label: '完成时间'
-          },
-          {
-            prop: 'approvalStatus',
-            label: '审核状态'
-          },
-          {
-            prop: 'approvalResult',
-            label: '审核结果'
-          },
-          {
-            type: 'function',
-            label: '操作',
-            functionOpt: [
-              {
-                type: 'text',
-                label: '审核',
-                func: this.approve
-              }
-            ]
-          }
-        ],
-        stableFormColumns: [
-          {
-            type: 'select',
-            key: 'executionVillageStation',
-            label: '选择所站',
-            options: [
-              {
-                value: '所站1',
-                key: '所站1'
-              },
-              {
-                value: '所站2',
-                key: '所站3'
-              },
-              {
-                value: '所站4',
-                key: '所站5'
-              }
-            ]
-          },
-          {
-            type: 'select',
-            key: 'executionStation',
-            label: '选择村站',
-            options: [
-              {
-                value: '村站1',
-                key: '村站1'
-              },
-              {
-                value: '村站2',
-                key: '村站2'
-              },
-              {
-                value: '村站3',
-                key: '村站3'
-              }
-            ]
-          },
-          {
-            type: 'select',
-            key: 'culturalCategory',
-            label: '文化类别',
-            options: [
-              {
-                value: '文化类别1',
-                key: '文化类别1'
-              },
-              {
-                value: '文化类别2',
-                key: '文化类别2'
-              },
-              {
-                value: '文化类别3',
-                key: '文化类别3'
-              }
-            ]
-          },
-          {
-            type: 'select',
-            key: 'approvalStatus',
-            label: '审核状态',
-            options: [
-              {
-                value: '已审核',
-                key: '已审核'
-              },
-              {
-                value: '未审核',
-                key: '未审核'
-              }
-            ]
-          },
-          {
-            type: 'text',
-            key: 'coding',
-            label: '活动编码',
-          },
-          {
-            type: 'select',
-            key: 'approvalResult',
-            label: '审核结果',
-            options: [
-              {
-                value: '拒绝',
-                key: 'reject'
-              },
-              {
-                value: '通过',
-                key: 'pass'
-              }
-            ]
-          }
-        ],
+        // 活动统计表数据格
         statisticsColumns: [
           {
             type: 'index',
@@ -348,6 +192,7 @@
             ]
           }
         ],
+        // 活动统计搜索数据
         statisticsFormColumns: [
           {
             type: 'select',
@@ -423,7 +268,8 @@
             ]
           }
         ],
-        submitActiveColumns: [
+        // 固选活动未提交表格数据
+        unSubmitActiveColumns: [
           {
             type: 'index',
             label: '序号'
@@ -476,17 +322,77 @@
               }
             ]
           }
+        ],
+        // 固选活动已提交表格数据
+        submitActiveColumns: [
+          {
+            type: 'index',
+            label: '序号'
+          },
+          {
+            prop: 'coding',
+            label: '活动编码',
+          },
+          {
+            prop: 'unit',
+            label: '发布单位',
+          },
+          {
+            prop: 'culturalCategory',
+            label: '文化类别',
+          },
+          {
+            prop: 'activityName',
+            label: '活动名称',
+          },
+          {
+            prop: 'activityContent',
+            label: '活动内容',
+          },
+          {
+            prop: 'deadline',
+            label: '目标分值'
+          },
+          {
+            prop: 'factLine',
+            label: '实际分值'
+          },
+          {
+            prop: 'targetScore',
+            label: '截止时间'
+          },
+          {
+            prop: 'status',
+            label: '审核状态'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '查看',
+                func: this.upLoad
+              },
+              {
+                type: 'text',
+                label: '重新提交',
+                func: this.upLoad
+              }
+            ]
+          }
         ]
       };
     },
     mounted () {
       if (this.activeName === 'publish') {
         if (this.submitName === 'unSubmit'){
-          this.$refs.submitStatistics.tableData = [
+          this.$refs.unSubmitStatistics.tableData = [
             {
               coding: '111111',
               publishIssued: '111111',
               culturalCategory: 'publish文化类别2222',
+              unit: '12',
               activityName: '111111',
               activityContent: '111111',
               targetScore: '111111',
@@ -497,6 +403,7 @@
               coding: '111111',
               publishIssued: '111111',
               culturalCategory: '文化类别1',
+              unit: '12',
               activityName: '111111',
               activityContent: '111111',
               targetScore: '111111',
@@ -507,6 +414,7 @@
               coding: '111111',
               publishIssued: '111111',
               culturalCategory: '文化类别1',
+              unit: '12',
               activityName: '111111',
               activityContent: '111111',
               targetScore: '111111',
@@ -514,13 +422,27 @@
               status: '已驳回'
             }
           ];
-          this.$refs.submitStatistics.pageable = {
+          this.$refs.unSubmitStatistics.pageable = {
             total: 3,
             currentPage: 1,
             pageSize: 10
           }
         }
         if (this.submitName === 'submit') {
+          this.$refs.submitActiveColumns.tableData = [
+            {
+              coding: '111111',
+              publishIssued: '111111',
+              culturalCategory: '文化类别1',
+              unit: '12',
+              activityName: '111111',
+              activityContent: '111111',
+              targetScore: '111111',
+              deadline: '111111',
+              factLine: '233',
+              status: '已驳回'
+            }
+          ];
         }
       }
     },
@@ -656,24 +578,23 @@
           }
         } else if (this.activeName === 'publish') {
           if (this.submitName === 'unSubmit') {
-            this.$refs.submitStatistics && this.$refs.submitStatistics.loadTableData();
-            if (this.$refs.submitStatistics) {
-              this.$refs.submitStatistics.tableData = [
+            this.$refs.unSubmitStatistics && this.$refs.unSubmitStatistics.loadTableData();
+            if (this.$refs.unSubmitStatistics) {
+              this.$refs.unSubmitStatistics.tableData = [
                 {
                   coding: '111111',
-                  unit: '222',
-                  publishIssued: 'unSubmit文化类别222222',
-                  culturalCategory: '111111',
-                  activityName: '11111111',
-                  executionStation: '11111111',
-                  executionVillageStation: '111111',
-                  practicePoint: '111111',
-                  completeStatus: '111111',
-                  isSpecialAActivity: '111111'
+                  publishIssued: '111111',
+                  culturalCategory: 'publish文化类别2222',
+                  unit: '12',
+                  activityName: '111111',
+                  activityContent: '111111',
+                  targetScore: '111111',
+                  deadline: '111111',
+                  status: '审核中'
                 }
               ];
-              this.$refs.submitStatistics.pageable = {
-                total: 5,
+              this.$refs.unSubmitStatistics.pageable = {
+                total: 1,
                 currentPage: 1,
                 pageSize: 10
               };
@@ -757,8 +678,8 @@
             this.$refs.brotherStatistics.form = this.$refs.brotherStatisticsSearch.form;
           }
         } else if (this.activeName === 'unSubmit') {
-          if (this.$refs.submitStatistics && this.$refs.brotherStatisticsSearch){
-            this.$refs.submitStatistics.form = this.$refs.brotherStatisticsSearch.form;
+          if (this.$refs.unSubmitStatistics && this.$refs.brotherStatisticsSearch){
+            this.$refs.unSubmitStatistics.form = this.$refs.brotherStatisticsSearch.form;
           }
         }
       }
