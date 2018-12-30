@@ -1,95 +1,65 @@
 <template>
-    <div>
-      权限设置
-      <!--<el-table-->
-        <!--:data="tableData6"-->
-        <!--:span-method="objectSpanMethod"-->
-        <!--border-->
-        <!--style="width: 100%; margin-top: 20px">-->
-        <!--<el-table-column-->
-          <!--prop="id"-->
-          <!--label="ID"-->
-          <!--width="180">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="name"-->
-          <!--label="姓名">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="amount1"-->
-          <!--label="数值 1（元）">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="amount2"-->
-          <!--label="数值 2（元）">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="amount3"-->
-          <!--label="数值 3（元）">-->
-        <!--</el-table-column>-->
-      <!--</el-table>-->
+    <div style="padding-left: 50px;">
+      <el-tree
+        :data="tree"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        ref="tree"
+        highlight-current
+        :props="defaultProps">
+      </el-tree>
+      <el-button @click="submit">保存</el-button>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'Authorise',
-        props: {
-
-        },
-      data () {
-          return {
-            tableData6: [{
-              id: '12987122',
-              name: '王小虎',
-              amount1: '234',
-              amount2: '3.2',
-              amount3: 10
-            }, {
-              id: '12987123',
-              name: '王小虎',
-              amount1: '165',
-              amount2: '4.43',
-              amount3: 12
-            }, {
-              id: '12987124',
-              name: '王小虎',
-              amount1: '324',
-              amount2: '1.9',
-              amount3: 9
-            }, {
-              id: '12987125',
-              name: '王小虎',
-              amount1: '621',
-              amount2: '2.2',
-              amount3: 17
-            }, {
-              id: '12987126',
-              name: '王小虎',
-              amount1: '539',
-              amount2: '4.1',
-              amount3: 15
-            }]
-          };
-      },
-      methods: {
-        objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-          if (columnIndex === 0) {
-            if (rowIndex % 2 === 0) {
-              return {
-                rowspan: 2,
-                colspan: 1
-              };
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              };
-            }
+  import reqType from '@/api/reqType';
+  export default {
+    name: 'Authorise',
+    props: {
+      roleId: String
+    },
+    data () {
+      return {
+        tree: [],
+        defaultProps: {
+          label: "name"
+        }
+      };
+    },
+    methods: {
+      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+          if (rowIndex % 2 === 0) {
+            return {
+              rowspan: 2,
+              colspan: 1
+            };
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            };
           }
         }
+      },
+      submit() {
+
       }
-    };
+    },
+    mounted() {
+        this.$http(reqType.POST, `menu/list`).then(
+          data => {
+            let tree = data.filter(item => item.parentId === null);
+            tree.map(item => {
+              item.children = data.filter(sub => sub.parentId === item.id);
+            });
+            this.tree = tree;
+          }
+        )
+    }
+  };
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
     <div class="common-crud">
-        <el-button @click="dialogVisible = true">新增</el-button>
+        <el-button class="btn-right" @click="dialogVisible = true">新增</el-button>
         <el-table :data="tableData" v-loading="loading" size="small">
             <el-table-column v-for="item in columns" :key="item.prop" :prop="item.prop" :label="item.label"
                              :width="item.width || ''"></el-table-column>
@@ -127,6 +127,6 @@
     };
 </script>
 
-<style scoped>
+<style>
 
 </style>

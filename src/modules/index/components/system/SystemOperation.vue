@@ -3,15 +3,15 @@
     <el-tabs v-model="activeName">
         <el-tab-pane label="账号管理" name="account">
           <CommonDialog ref="brotherDialog" :form-columns="accountFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-          <commonTable  :api-root="'center'" :columns="accountColumns" ref="brother"></commonTable>
+          <commonTable  api-root="principal" :columns="accountColumns" ref="brother"></commonTable>
         </el-tab-pane>
         <el-tab-pane label="角色管理" name="role">
           <div v-show="!showAuth">
             <CommonDialog ref="brotherRoleDialog" :form-columns="roleFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <commonTable  :api-root="'center'" :columns="roleColumns" ref="brotherRole"></commonTable>
+            <commonTable  api-root="role" :columns="roleColumns" ref="brotherRole"></commonTable>
           </div>
           <el-button icon="el-icon-back" type="text" @click="back" v-show="showAuth">返回</el-button>
-          <Authorise v-show="showAuth"></Authorise>
+          <Authorise v-show="showAuth" :roleId="roleId"></Authorise>
         </el-tab-pane>
     </el-tabs>
   </div>
@@ -22,6 +22,8 @@
   import CommonDialog from '../common/CommonDialog';
   import CommonSearch from '../common/CommonSearch';
   import Authorise from './Authorise';
+  import resType from '@/api/reqType';
+
   export default {
     name: 'SystemOperation',
 
@@ -31,24 +33,20 @@
         showAuth: false,
         accountColumns: [
           {
-            type: 'index',
-            label: '序号'
+            prop: 'code',
+            label: '登录名'
           },
           {
-            prop: 'accountName',
+            prop: 'name',
             label: '账号名称',
           },
           {
-            prop: 'associatedRole',
+            prop: 'roleName',
             label: '关联角色',
           },
           {
-            prop: 'createdBy',
-            label: '创建人',
-          },
-          {
-            prop: 'createdAt',
-            label: '创建时间',
+            prop: 'orgName',
+            label: '所属组织',
           },
           {
             type: 'function',
@@ -70,40 +68,51 @@
         accountFormColumns: [
           {
             type: 'text',
-            key: 'accountName',
+            key: 'code',
+            label: '登录名称'
+          },
+          {
+            type: 'text',
+            key: 'name',
             label: '账号名称'
           },
           {
             type: 'select',
-            key: 'associatedRole',
+            key: 'roleId',
             label: '关联角色',
-            option: [
-              {
-                value: '角色1',
-                label: '角色1'
-              },
-              {
-                value: '角色2',
-                label: '角色2'
-              },
-              {
-                value: '角色3',
-                label: '角色3'
-              }
-            ]
-          }
+            options: []
+          },
+          {
+            type: 'select',
+            key: 'orgId',
+            label: '所属组织',
+            options: []
+          },
+          {
+            type: 'select',
+            key: 'type',
+            label: '组织类型',
+            options: [{
+              value: 'ORG_CENTER',
+              label: '分中心类型'
+            },
+            {
+              value: 'ORG_ROOM',
+              label: '功能室类型'
+            },
+            {
+              value: 'ORG_COUNTRY',
+              label: '村站类型'
+            }]
+          },
         ],
         roleColumns: [
           {
-            type: 'index',
-            label: '序号'
-          },
-          {
-            prop: 'coding',
+            prop: 'code',
             label: '编码',
           },
           {
-            prop: 'roleName',
+            prop: 'name',
             label: '角色名称',
           },
           {
@@ -143,15 +152,16 @@
         roleFormColumns: [
           {
             type: 'text',
-            key: 'coding',
+            key: 'code',
             label: '编码'
           },
           {
             type: 'text',
-            key: 'roleName',
+            key: 'name',
             label: '角色名称'
           }
-        ]
+        ],
+        roleId: ''
       };
     },
     components: {
@@ -163,33 +173,34 @@
 
     mounted () {
       if (this.activeName === 'account') {
-        if(this.$refs.brother){
-          this.$refs.brother.tableData = [
-            {
-              accountName: '111111',
-              associatedRole: '111111',
-              createdBy: '111111',
-              createdAt: '111111'
-            },
-            {
-              accountName: '111111',
-              associatedRole: '111111',
-              createdBy: '111111',
-              createdAt: '111111'
-            },
-            {
-              accountName: '111111',
-              associatedRole: '111111',
-              createdBy: '111111',
-              createdAt: '111111'
-            }
-          ];
-          this.$refs.brother.pageable = {
-            total:3,
-            currentPage:1,
-            pageSize: 10
+        this.$http(resType.POST, `role/list`, false).then(
+          data => {
+            this.accountFormColumns[2].options = data.map(item => {
+              return { label: item.name, value: item.id }
+            });
           }
-        }
+        );
+        this.$http(resType.POST, `orgCenter/list`, false).then(
+          data => {
+            this.accountFormColumns[3].options = data.map(item => {
+              return { label: item.name, value: item.id }
+            });
+          }
+        );
+        this.$http(resType.POST, `orgRoom/list`, false).then(
+          data => {
+            this.accountFormColumns[3].options = this.accountFormColumns[3].options.concat(data.map(item => {
+              return { label: item.name, value: item.id }
+            }));
+          }
+        );
+        this.$http(resType.POST, `country/list`, false).then(
+          data => {
+            this.accountFormColumns[3].options = this.accountFormColumns[3].options.concat(data.map(item => {
+              return { label: item.name, value: item.id }
+            }));
+          }
+        );
       }
     },
 
@@ -240,7 +251,8 @@
       /**
       * 权限设置
       * **/
-      setAuthorise () {
+      setAuthorise (index, row) {
+        this.roleId = row.id;
         this.showAuth = true;
       },
       /**
