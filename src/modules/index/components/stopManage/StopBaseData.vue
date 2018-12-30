@@ -42,7 +42,7 @@
             {path: '/static/img/test.jpeg', pathB: '4b'}
           ],
           text: 'asdasd'
-        } // 村站详情
+        } // 镇所详情
       };
     },
     methods: {

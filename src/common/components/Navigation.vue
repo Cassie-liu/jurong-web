@@ -91,15 +91,16 @@
     .navigation {
       margin: 0;
       display: table;
-      height: 100px;
+      height: 80px;
       .logout{
         cursor: pointer;
       }
       &>li {
-        margin-left: 10px;
+        height: 100%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         position: relative;
-        display: table-cell;
-        vertical-align: middle;
         padding: 0 15px;
         .search {
           width: 220px;
@@ -119,11 +120,11 @@
             padding: 0 5px;
           }
         }
-        .avatar {
-          width: 48px;
+        img {
+          width: 40px;
         }
         .name {
-          padding: 25px 0 0 10px;
+          padding-left: 10px;
           color:#EE8543;
           font-size: 18px;
           font-weight: 600;
