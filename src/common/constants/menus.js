@@ -31,23 +31,18 @@ module.exports = [
         title: '分中心活动管理',
         url: 'activity-management',
         requiredPermissions: []
-      },
-      {
-        title: '发布公告',
-        url: 'publish-announce',
-        requiredPermissions: []
       }
     ]
   },
-  // 所站管理
+  // 镇所管理
   {
     url: 'stop-management',
-    title: '所站管理',
+    title: '镇所管理',
     // icon: 'icon-menu-5.png',
     requirePermissions: [],
     children: [
       {
-        title: '所站概况',
+        title: '镇所概况',
         url: 'base-data',
         requiredPermissions: []
       },
@@ -57,7 +52,7 @@ module.exports = [
         requiredPermissions: []
       },
       {
-        title: '所站活动管理',
+        title: '镇所活动管理',
         url: 'activity-manage',
         requiredPermissions: []
       }
@@ -71,7 +66,7 @@ module.exports = [
     requirePermissions: [],
     children: [
       {
-        title: '村站基础信息管理',
+        title: '村站概况',
         url: 'base-data',
         requiredPermissions: []
       },
@@ -89,7 +84,7 @@ module.exports = [
     requirePermissions: [],
     children: [
       {
-        title: '基础信息',
+        title: '志愿服务队概况',
         url: 'base-info',
         requiredPermissions: []
       },
