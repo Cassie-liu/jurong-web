@@ -1,4 +1,4 @@
-@import 'variables.less';
+@import 'variables';
 
 *{
   box-sizing: border-box;
@@ -7,6 +7,29 @@
 .index{
   height: 100%;
   overflow: hidden;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+  height: 80px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+  background: #fff;
+  background: url("/static/img/header/banner.png") center center no-repeat;
+  background-size: cover;
+  .logo {
+    height: 40px;
+    margin: 10px 20px;
+  }
+  .title {
+    display: inline-block;
+    border-left: solid 1px #cfcfcf;
+    font-size: 16px;
+    padding-left: 20px;
+    margin-top: 20px;
+  }
 }
 
 .api-menus {
@@ -71,8 +94,8 @@
 .main {
   width: 100%;
   height: 100%;
-  padding-top: 100px;
-  background: #EDF0FA;
+  padding-top: 80px;
+  background: #eee;
   display: flex;
 
   &-content{
@@ -84,7 +107,6 @@
   }
 
   .breadcrumbs {
-    background: #EDF0FA !important;
     width: 100%;
     line-height: 34px;
     img {
@@ -120,9 +142,10 @@
 }
 
 .side-menu {
+  padding: 0;
   height: 100%;
-  width: 230px;
-  background: #BACAFA;
+  width: 280px;
+  background: #fff;
   margin: 0;
   overflow-y: auto;
   /*滚动条样式*/
@@ -139,27 +162,23 @@
     border: 5px solid transparent;
   }
   >li {
-    /*background: #333333;*/
-    background: #BACAFA;
-    color: #fff;
+    color: #666;
     cursor: pointer;
     position: relative;
-    /*border-bottom: solid 1px #263844;*/
     &.active {
       .title {
-        background: #A9B9ED;
-        color: #5D81D2;
-        span {
-          /*color: #0FB9EF;*/
-        }
+        background: @bg-color;
+        color: @main-color;
       }
     }
     .title {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: bold;
-      padding: 20px 20px;
+      padding: 25px 20px;
+      letter-spacing:3px;
       &:hover {
-        background: #7993DB;
+        background: @bg-color;
+        color: @main-color;
       }
       img {
         margin: -5px 10px 0 0;
@@ -177,15 +196,14 @@
       li {
         padding: 10px 0 10px 40px;
         position: relative;
-        background: #A9B9ED;
-        /*background: #283946;*/
-        border-bottom: solid 1px #BACAFA;
+        background: @bg-color;
+        border-bottom: solid 1px #dedede;
 
         &:last-child {
           border-bottom: none;
         }
         &:hover {
-          background: #7993DB;
+          background: #dedede;
         }
         &:before {
           content: '';
@@ -198,9 +216,9 @@
           vertical-align: middle;
         }
         &.active {
-          color: #5D81D2;
+          color: @main-color;
           &:before {
-            background: #5D81D2;
+            background: @main-color;
           }
         }
       }
