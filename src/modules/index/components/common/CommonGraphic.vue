@@ -102,7 +102,7 @@
           },*/
           loop : true,
           on: {
-            click: ()=>{
+            doubleTap: ()=>{
               // 通过$refs获取对应的swiper对象
               console.log('你点击了swiper')
               this.scaleImg = !this.scaleImg
