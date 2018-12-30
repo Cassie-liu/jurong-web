@@ -2,6 +2,7 @@
   <ul class="side-menu">
     <li v-for="menu in menus" :class="{'active': menu === currentMenu}" @click="changeMenu(menu)">
       <div class="title">
+        <img class="fl" :src="menu === currentMenu?'/static/img/menu/' + menu.iconHover:'/static/img/menu/' + menu.icon">
         <span>{{menu.title}}</span>
         <i :class="{'icon-angle-right': menu !== currentMenu, 'icon-angle-down': menu === currentMenu}" v-show="menu.children"></i>
       </div>

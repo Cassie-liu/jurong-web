@@ -3,13 +3,15 @@ module.exports = [
   {
     url: 'center-management/overview',
     title: '实践中心概况',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-1.png',
+    iconHover: 'icon-menu-1-hover.png',
     requirePermissions: []
   },
   {
     url: 'center-management',
     title: '分中心管理',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-2.png',
+    iconHover: 'icon-menu-2-hover.png',
     requirePermissions: [],
     children: [
       {
@@ -38,7 +40,8 @@ module.exports = [
   {
     url: 'stop-management',
     title: '镇所管理',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-3.png',
+    iconHover: 'icon-menu-3-hover.png',
     requirePermissions: [],
     children: [
       {
@@ -58,11 +61,12 @@ module.exports = [
       }
     ]
   },
-  // 决策引擎规则集
+  // 村站管理
   {
     url: 'village-management',
     title: '村站管理',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-4.png',
+    iconHover: 'icon-menu-4-hover.png',
     requirePermissions: [],
     children: [
       {
@@ -80,7 +84,8 @@ module.exports = [
   {
     url: 'volunteer-service',
     title: '文明实践志愿服务队',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-5.png',
+    iconHover: 'icon-menu-5-hover.png',
     requirePermissions: [],
     children: [
       {
@@ -98,7 +103,8 @@ module.exports = [
   {
     url: 'announcement',
     title: '通知公告',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-6.png',
+    iconHover: 'icon-menu-6-hover.png',
     requirePermissions: []
     // children: [
     //   {
@@ -111,18 +117,22 @@ module.exports = [
   {
     url: 'system-config',
     title: '系统配置',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-7.png',
+    iconHover: 'icon-menu-7-hover.png',
     requirePermissions: []
   },
   {
     url: 'system-operation',
     title: '系统运维',
-    // icon: 'icon-menu-5.png',
+    icon: 'icon-menu-8.png',
+    iconHover: 'icon-menu-8-hover.png',
     requirePermissions: []
   },
     {
-        title: '菜单配置',
-        url: 'system-menu',
-        requiredPermissions: []
+      title: '菜单配置',
+      url: 'system-menu',
+      icon: 'icon-menu-9.png',
+      iconHover: 'icon-menu-9-hover.png',
+      requiredPermissions: []
     }
 ];
