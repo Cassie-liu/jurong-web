@@ -7,15 +7,12 @@
     <div class="gView" v-show="!showEdit">
       <el-row class="h-100">
         <el-col :span="scaleImg? 24 : 10" class="h-100 xy-center">
-          <div :class="scaleImg? 'imgBig' : 'imgC' ">
-            <swiper :options="swiperOption" ref="mySwiper">
-              <swiper-slide v-for="(slide, index) in imgData" :key="index">
+          <div :class="scaleImg? 'imgBig' : 'imgC' " @click="switchBigImg">
+            <el-carousel indicator-position="outside">
+              <el-carousel-item v-for="(slide, index) in imgData" :key="index">
                 <img :src="slide.path" class="img-fluid" style="height: 100%">
-              </swiper-slide>
-              <div class="swiper-pagination" slot="pagination"></div>
-              <!--<div class="swiper-button-prev" slot="button-prev"></div>
-              <div class="swiper-button-next" slot="button-next"></div>-->
-            </swiper>
+              </el-carousel-item>
+            </el-carousel>
           </div>
         </el-col>
 
@@ -62,21 +59,19 @@
 
 
 <script>
-  import { swiper, swiperSlide } from 'vue-awesome-swiper'
-
   export default {
-    name: "graphicView",
-    components: {
-      swiper,
-      swiperSlide
-    },
+    name: 'graphicView',
+    components: {},
     props: {
       data: {
         type: Object,
         require: true
+      },
+      refresh: {
+        type: Boolean
       }
     },
-    data() {
+    data () {
       return {
         btnText: '编辑',
         textarea: '',
@@ -87,62 +82,49 @@
           imgB: []
         },
         imgData: [],
-        swiperOption: {
-          pagination: {
-            el: '.swiper-pagination',
-            clickable :true
-          },
-          centeredSlides: true,
-          autoplay:true,
-          preventClicks : false,//默认true
-          /*navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-            hideOnClick: true
-          },*/
-          loop : true,
-          on: {
-            doubleTap: ()=>{
-              // 通过$refs获取对应的swiper对象
-              console.log('你点击了swiper')
-              this.scaleImg = !this.scaleImg
-              this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img
-              let swiper = this.$refs.mySwiper.swiper;
-
-            }
-          }
-        }
-      }
+        swiperOption: {}
+      };
     },
-    created() {
+    created () {
       this.data.img.forEach(v => {
-        let _img = {}
-        let _imgB = {}
-        _img.path = v.path
-        _imgB.path = v.pathB
-        this.imgList.img.push(_img)
-        this.imgList.imgB.push(_imgB)
-      })
-      this.imgData = this.imgList.img
-      this.textarea = this.data.text
+        let _img = {};
+        let _imgB = {};
+        _img.path = v.path;
+        _imgB.path = v.pathB;
+        this.imgList.img.push(_img);
+        this.imgList.imgB.push(_imgB);
+      });
+      this.imgData = this.imgList.img;
+      this.textarea = this.data.text;
+      this.init();
     },
     methods: {
+      init () {
+        // 初始化
+        this.btnText = '编辑';
+        this.scaleImg = false;
+        this.showEdit = false;
+      },
       switchEdit () {
         if (this.showEdit) {
-          console.log('点击了保存')
-          this.btnText = '编辑'
+          console.log('点击了保存');
+          this.btnText = '编辑';
         } else {
-          console.log('点击了编辑')
-          this.btnText = '保存'
+          console.log('点击了编辑');
+          this.btnText = '保存';
           // todo 调取保存接口然后重新load页面
         }
-        this.showEdit = !this.showEdit
+        this.showEdit = !this.showEdit;
       },
-      handleAvatarSuccess(res, file) {
+      switchBigImg () {
+        this.scaleImg = !this.scaleImg;
+        this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img;
+      },
+      handleAvatarSuccess (res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
-        console.log(file)
+      beforeAvatarUpload (file) {
+        console.log(file);
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -154,19 +136,23 @@
         }
         return isJPG && isLt2M;
       }
+    },
+    watch: {
+      refresh: function (v) {
+        this.init();
+      }
     }
-  }
+  };
+
 </script>
 
 <style scoped lang="less">
-  @import '../../../../assets/less/swiper.css';
-
   .gView{
-    height: 600px;
+    height: 500px;
   }
 
   .imgC{
-    width: 300px;
+    width: 400px;
     height: 300px;
   }
 
@@ -256,4 +242,5 @@
     height: 140px;
     border-radius: 5px;
   }
+
 </style>
