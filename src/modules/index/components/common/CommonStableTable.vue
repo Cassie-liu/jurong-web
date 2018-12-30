@@ -1,14 +1,18 @@
 <template>
     <div>
       <el-table
+        v-loading="loading"
         :data="tableData"
+        border
         :span-method="objectSpanMethod"
         style="width: 100%; margin-top: 20px">
-        <el-table-column v-for="(item, $index) in columns" :prop="item.prop" :label="item.label" :key="$index"  v-if="item.type!=='function'"></el-table-column>
+        <el-table-column v-for="(item, $index) in columns" :prop="item.prop" :label="item.label" :key="$index"
+                         v-if="item.type!=='function'" :fixed="item.fixed"></el-table-column>
         <el-table-column v-for="(item, index) in columns" :key="item.label" :label="item.label"
-                         :width="item.width || ''" v-if="item.type === 'function'">
+                         :width="item.width || ''" v-if="item.type === 'function'"  fixed="right">
           <template slot-scope="scope">
-            <el-button v-for="(func, $index) in item.functionOpt" :key="$index" :type="func.type" @click="func.func(scope.$index, scope.row)">
+            <el-button v-for="(func, $index) in item.functionOpt" :key="$index"
+                       :type="func.type" @click="func.func(scope.$index, scope.row)">
               {{func.label}}
             </el-button>
           </template>
@@ -18,16 +22,20 @@
 </template>
 
 <script>
+  import reqType from '@/api/reqType';
     export default {
         name: 'CommonStableTable',
       props:{
         columns: Array,
-        mergeField: String
+        mergeField: String,
+        apiRoot: String
       },
       data () {
           return {
             tableData: [],
-            spanArr: []
+            spanArr: [],
+            visible: false,
+            loading: true
           };
       },
       mounted() {
@@ -62,6 +70,17 @@
           }
         },
         loadTableData(){
+          this.loading = true;
+          this.$http(reqType.POST, `${this.apiRoot}`, false).then(
+            data => {
+              // this.tableData = data.content;
+              this.loading = false;
+              this.getSpanArr(this.tableData);
+            }
+          ).catch(res => {
+            this.loading = false;
+          });
+          // dummy
           this.tableData = [
             {
               town: '镇所1',
@@ -70,6 +89,9 @@
               culturalCategory: '33333',
               content: '444444',
               practicePoint: '5555',
+              score: '55',
+              startTime: '2018-11-11',
+              endTime: '2018-12-11',
               remark: '66666'
             },
             {
@@ -79,6 +101,9 @@
               culturalCategory: '33333',
               content: '444444',
               practicePoint: '5555',
+              score: '55',
+              startTime: '2018-11-11',
+              endTime: '2018-12-11',
               remark: '66666'
             },
             {
@@ -88,6 +113,9 @@
               culturalCategory: '33333',
               content: '444444',
               practicePoint: '5555',
+              score: '55',
+              startTime: '2018-11-11',
+              endTime: '2018-12-11',
               remark: '66666'
             },
             {
@@ -97,6 +125,9 @@
               culturalCategory: '33333',
               content: '444444',
               practicePoint: '5555',
+              score: '55',
+              startTime: '2018-11-11',
+              endTime: '2018-12-11',
               remark: '66666'
             }
           ];

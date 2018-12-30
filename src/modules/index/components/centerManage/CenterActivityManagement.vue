@@ -13,10 +13,10 @@
           <CommonTable  :columns="columns" :api-root="'center'" ref="formulateTable"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="planReview" label="计划审核">
-          <CommonStableTable :columns="planColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
+          <CommonStableTable api-root="'center'" :columns="planColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
         </el-tab-pane>
         <el-tab-pane name="activityReview" label="活动审核">
-
+          <CommonStableTable api-root="'center'" :columns="activityColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
         </el-tab-pane>
         <el-tab-pane name="statistics" label="活动统计">
 
@@ -34,6 +34,13 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="publishDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="publishActivity">发布</el-button>
+      </div>
+    </el-dialog>
+    <!--活动审核-->
+    <el-dialog title="审核" :visible.sync="activityDialogVisible">
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="activityDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="activityReview">审核</el-button>
       </div>
     </el-dialog>
   </div>
@@ -129,17 +136,20 @@
               }
             ],
             publishDialogVisible: false,
+            activityDialogVisible: false,
             ActivityList: [],
             publishList: [],
             showBtn: false,
             planColumns: [
               {
                 prop: 'town',
-                label: '镇所'
+                label: '镇所',
+                fixed: 'fixed'
               },
               {
                 prop: 'villageStation',
-                label: '村站'
+                label: '村站',
+                fixed: 'fixed'
               },
               {
                 prop: 'activityName',
@@ -158,12 +168,25 @@
                 label: '执行实践点'
               },
               {
+                prop: 'score',
+                label: '积分'
+              },
+              {
+                prop: 'startTime',
+                label: '开始时间'
+              },
+              {
+                prop: 'endTime',
+                label: '截止时间'
+              },
+              {
                 prop: 'remark',
                 label: '备注'
               },
               {
                 type: 'function',
                 label: '操作',
+                fixed: 'fixed',
                 functionOpt: [
                   {
                     type: 'text',
@@ -178,6 +201,75 @@
                 ]
               }
             ],
+            activityColumns: [
+              {
+                prop: 'town',
+                label: '镇所',
+                fixed: 'fixed',
+              },
+              {
+                prop: 'villageStation',
+                label: '村站',
+                fixed: 'fixed',
+              },
+              {
+                prop: 'activityName',
+                label: '活动名称'
+              },
+              {
+                prop: 'culturalCategory',
+                label: '文化类别'
+              },
+              {
+                prop: 'content',
+                label: '活动内容'
+              },
+              {
+                prop: 'practicePoint',
+                label: '执行实践点'
+              },
+              {
+                prop: 'score',
+                label: '积分'
+              },
+              {
+                prop: 'startTime',
+                label: '开始时间'
+              },
+              {
+                prop: 'endTime',
+                label: '完成时间'
+              },
+              {
+                prop: 'remark',
+                label: '备注'
+              },
+              {
+                type: 'function',
+                label: '操作',
+                fixed: 'right',
+                functionOpt: [
+                  {
+                    type: 'text',
+                    label: '审核',
+                    func: this.actReview
+                  },
+                  {
+                    type: 'text',
+                    label: '删除',
+                    func: this.deleteRow
+                  }
+                ]
+              }
+            ],
+            graphic: {
+              img: [
+                {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
+                {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'},
+                {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
+                {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'}
+              ]
+            }
           };
         },
       components: {
@@ -241,6 +333,7 @@
         showDetails (index,row) {
           if (this.$refs.formulateDialog) {
             this.$refs.formulateDialog.disabled = true;
+            this.$refs.formulateDialog.title = '查看';
             this.$refs.formulateDialog.dialogVisible = true;
             this.$refs.formulateDialog.form = row;
           }
@@ -250,6 +343,7 @@
          * */
         edit (index, row) {
           if (this.$refs.formulateDialog) {
+            this.$refs.formulateDialog.title = '编辑';
             this.$refs.formulateDialog.dialogVisible = true;
             this.$refs.formulateDialog.form = row;
           }
@@ -258,9 +352,13 @@
         * 删除
         * */
         deleteRow(index, row) {
-          this.$alert('需要删除的接口', '提示', {
-            dangerouslyUseHTMLString: true
-          });
+          this.$confirm('确认删除？')
+            .then(_ => {
+              this.$alert('需要删除的接口', '提示', {
+                dangerouslyUseHTMLString: true
+              });
+            })
+            .catch(_ => {});
         },
         /**
          * 增加
@@ -293,6 +391,15 @@
             dangerouslyUseHTMLString: true
           });
         },
+        actReview () {
+          this.activityDialogVisible = true;
+        },
+        activityReview () {
+          this.activityDialogVisible = false;
+          this.$alert('需要活动审核的接口', '提示', {
+            dangerouslyUseHTMLString: true
+          });
+        },
         /**
          * 保存活动
          * */
@@ -319,4 +426,7 @@
 .center{
   margin-left:15%;
 }
+  .right{
+
+  }
 </style>

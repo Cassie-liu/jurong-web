@@ -1,6 +1,19 @@
 <template>
     <div class="base-data">
-      镇所活动管理
+      <el-tabs v-model="activeName">
+          <el-tab-pane name="activeQuery">
+
+          </el-tab-pane>
+          <el-tab-pane name="planReview">
+
+          </el-tab-pane>
+        <el-tab-pane name="activityReview">
+
+        </el-tab-pane>
+        <el-tab-pane name="statistics">
+
+        </el-tab-pane>
+      </el-tabs>
     </div>
 </template>
 
@@ -9,7 +22,9 @@
         name: 'StopActManage',
         props: [],
         data () {
-          return {};
+          return {
+            activeName: 'activeQuery'
+          };
         },
         mounted () {
 
