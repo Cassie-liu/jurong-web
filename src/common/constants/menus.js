@@ -96,6 +96,13 @@ module.exports = [
     ]
   },
   {
+    url: 'special-events',
+    title: '特色活动',
+    icon: 'icon-menu-5.png',
+    iconHover: 'icon-menu-5-hover.png',
+    requirePermissions: []
+  },
+  {
     url: 'announcement',
     title: '通知公告',
     icon: 'icon-menu-6.png',

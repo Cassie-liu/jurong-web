@@ -16,6 +16,7 @@ import VillageActManage from '../components/villageManage/VillageActManage';
 import VolunteerBaseInfo from '../components/VolunteerService/VolunteerBaseInfo';
 import VolunteerServiceTeam from '../components/VolunteerService/VolunteerServiceTeam';
 import Announce from '../components/Announce';
+import SpecialEvents from '../components/specialEvents/specialEvents';
 import SystemConfig from '../components/SystemConfig';
 import SystemOperation from '../components/system/SystemOperation';
 Vue.use(Router);
@@ -84,6 +85,11 @@ export default new Router({
           path: 'volunteer-service/service-team',     // 文明实践志愿服务队  基础信息
           name: 'VolunteerServiceTeam',
           component: VolunteerServiceTeam
+        },
+        {
+          path: 'special-events',     // 特色活动
+          name: 'SpecialEvents',
+          component: SpecialEvents
         },
         {
           path: 'announcement',     // 通知公告
