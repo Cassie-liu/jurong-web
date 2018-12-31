@@ -9,25 +9,26 @@
       <el-form  :model="form" ref="form"  :label-position="'left'">
         <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label" label-width="100px">
             <el-col :span="12">
-              <el-input v-model="form[item.key]" v-show="item.type === 'text'" :type="item.type" :disabled="disabled"></el-input>
+              <el-input v-model="form[item.key]" v-show="item.type === 'text' || item.type==='textarea'" :type="item.type" :disabled="item.disabled"></el-input>
             </el-col>
             <el-col :span="12">
-              <el-select v-model="form[item.key]" v-show="item.type === 'select'" style="width: 100%" :disabled="disabled">
+              <el-select v-model="form[item.key]" v-show="item.type === 'select'" style="width: 100%" :disabled="item.disabled">
                 <el-option v-for="opItem in item.options" :value="opItem.value" :label="opItem.label" :key="opItem.value"></el-option>
               </el-select>
             </el-col>
             <!--预留富文本编辑-->
-            <div v-if="item.type === 'editor' && showEditor">
+            <!--<div v-if="item.type === 'editor' && showEditor">-->
               <!--<editor width="100%" element-id="addEditor" v-model="form[item.key]"></editor>-->
-              <editor width="90%" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
-            </div>
+              <editor width="90%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
+            <!--</div>-->
             <div v-if="item.type === 'datePicker'">
               <el-col :span="12">
                 <el-date-picker
                   :disabled="disabled"
                   type="date"
-                  v-model="form[item.key]"
+                  v-model = "form[item.key]"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                   style="width: 100%"
                 >
                 </el-date-picker>
@@ -48,7 +49,7 @@
         <span slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="submit" :disabled="disabled">确 定</el-button>
-            </span>
+        </span>
       </div>
 
     </el-dialog>
@@ -71,20 +72,33 @@
           imageUrl: '',
           dialogVisible: false,
           disabled: false,
-          showEditor: false
+          showEditor: false,
+          dateTime: ''
         }
       },
       components :{
         Editor
       },
+      created(){
+        this.showEditor=false;
+      },
       mounted () {
-          this.showEditor = true;
+          this.initFormParams();
       },
       methods: {
+          /**
+          *  初始化form表单的参数， 为了防止undefined赋不上值
+          * */
+          initFormParams(){
+            for(let i in this.formColumns) {
+              this.form[this.formColumns[i].key] = '';
+            }
+          },
           add() {
             this.title = '新增';
             this.dialogVisible = true;
             this.form = {};
+            this.showEditor = true;
             vue.set(this, 'form', {});
           },
         handleClose (done) {

@@ -11,6 +11,9 @@
         <el-table-column v-for="(item, index) in columns" :key="item.label" :label="item.label"
                          :width="item.width || ''" v-if="item.type === 'function'"  fixed="right">
           <template slot-scope="scope">
+            <!--<el-col v-for="(func, $index) in item.functionOpt" :key="$index">-->
+              <!--<el-button :type="func.type" @click="func.func(scope.$index, scope.row)">{{func.label}}</el-button>-->
+            <!--</el-col>-->
             <el-button v-for="(func, $index) in item.functionOpt" :key="$index"
                        :type="func.type" @click="func.func(scope.$index, scope.row)">
               {{func.label}}

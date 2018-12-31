@@ -75,13 +75,21 @@
             login () {
                 this.$http(reqType.POST, 'principal/login', this.auth).then(
                     (data) => {
-                            // 登录成功后保存token
+                          // var userId = data.slice(data.lastIndexOf(',')+1);
+                          var userId = data.split(',');
+                          // 登录成功后保存token
                             this.authError = false;
-                            sessionStorage.setItem('token', data);
-                            location.href = '/#/practice-management/overview';
+                            sessionStorage.setItem('token', userId[0]);
+                            if(userId[1]) {
+                              this.$http(reqType.GET,`principal/${userId[1]}id`)
+                                .then(data => {
+                                  sessionStorage.setItem('user', JSON.stringify(data));
+                                  location.href = '/#/practice-management/overview';
+                                });
+                            }
                         }).catch((msg) => {
                             this.authError = true;
-                            this.errorMessage = msg;
+                            // this.errorMessage = msg;
                         });
             },
             /**

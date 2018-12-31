@@ -58,6 +58,8 @@
        */
       logout () {
         location.replace(location.protocol + '//' + location.host + '/login.html');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
       }
       /**
        * 检测用户是否有权限
