@@ -19,11 +19,11 @@ module.exports = [
         url: 'center-overview',
         requiredPermissions: []
       },
-      {
-        title: '分中心建设',
-        url: 'center-build',
-        requiredPermissions: []
-      },
+      // {
+      //   title: '分中心建设',
+      //   url: 'center-build',
+      //   requiredPermissions: []
+      // },
       {
         title: '分中心活动管理',
         url: 'activity-management',
@@ -44,12 +44,13 @@ module.exports = [
         url: 'base-data',
         requiredPermissions: []
       },
+      // {
+      //   title: '功能室概况',
+      //   url: 'features-build',
+      //   requiredPermissions: []
+      // },
       {
-        title: '功能室建设',
-        url: 'features-build',
-        requiredPermissions: []
-      },
-      {
+        // title: '功能室概况',
         title: '镇所活动管理',
         url: 'activity-manage',
         requiredPermissions: []
