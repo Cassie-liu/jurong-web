@@ -130,7 +130,7 @@
               this.data = data;
               // 再保存图片
               let formData = new FormData();
-              this.$refs.upload.uploadFiles.map(item => item.raw).forEach( (sub, index) => {
+              this.$refs.upload.uploadFiles.map(item => item.raw).forEach((sub, index) => {
                 console.log('sub', sub);
                 formData.append('multipartFile', sub);
               });
