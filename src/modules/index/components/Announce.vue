@@ -1,37 +1,106 @@
 <template>
-  <div class="announce">
+  <div class="announce p-15">
+    <CommonSearch :columns="searchColumns" @search="search" :inline="true" ref="searchForm"
+                  :title="'搜索'"></CommonSearch>
     <CommonTable :api-root="'center'" :columns="columns" ref="announceTable"></CommonTable>
-    <CommonDialog  :form-columns="formColumns" :show-btn="false" ref="announceDialog"></CommonDialog>
+    <el-dialog
+      title="新增"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose">
+
+      <div class="view-box">
+        <div class="view-item">
+          <div class="view-item__title">标题</div>
+          <div class="view-item__content">{{viewForm.title}}</div>
+        </div>
+
+        <div class="view-item">
+          <div class="view-item__title">内容</div>
+          <div class="view-item__content" v-html="viewForm.content"></div>
+        </div>
+
+        <div class="view-item">
+          <div class="view-item__title">发布时间</div>
+          <div class="view-item__content">{{viewForm.releaseTime}}</div>
+        </div>
+
+        <div class="view-item">
+          <div class="view-item__title">发布单位</div>
+          <div class="view-item__content">{{viewForm.issued}}</div>
+        </div>
+
+        <div class="view-item">
+          <div class="view-item__title">发布人</div>
+          <div class="view-item__content">{{viewForm.publisher}}</div>
+        </div>
+
+        <div class="view-item">
+          <div class="view-item__title">下载附件</div>
+          <div class="view-item__content">
+            <el-button type="primary" @click="downLoad">下载</el-button>
+          </div>
+        </div>
+
+      </div>
+
+      <div slot="footer" class="dialog-footer text-center">
+        <el-button @click="dialogVisible = false">关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import CommonSearch from './common/CommonSearch';
   import CommonTable from './common/CommonTable';
   import CommonDialog from './common/CommonDialog';
+
   export default {
     name: 'Announce',
 
     data () {
       return {
+        searchColumns: [
+          {
+            type: 'select',
+            key: 'culturalCategory',
+            label: '选择分中心',
+            options: [
+              {
+                value: '文化类别1',
+                key: '文化类别1'
+              },
+              {
+                value: '文化类别2',
+                key: '文化类别2'
+              },
+              {
+                value: '文化类别3',
+                key: '文化类别3'
+              }
+            ]
+          }
+        ],
         columns: [
           {
-            type:'index',
+            type: 'index',
             label: '序号'
           },
           {
-            prop:'coding',
+            prop: 'coding',
             label: '编码'
           },
           {
-            prop:'publishTime',
+            prop: 'publishTime',
             label: '发布单位'
           },
           {
-            prop:'culturalCategory',
+            prop: 'culturalCategory',
             label: '文化类别'
           },
           {
-            prop:'content',
+            prop: 'content',
             label: '内容简介'
           },
           {
@@ -51,44 +120,22 @@
             ]
           }
         ],
-        formColumns: [
-          {
-            type: 'text',
-            key: 'coding',
-            label: '编码'
-          },
-          {
-            type: 'text',
-            key: 'publishTime',
-            label: '发布单位'
-          },
-          {
-            type: 'select',
-            key: 'culturalCategory',
-            label: '文化类别',
-            options: [
-              {
-                value: 'value1',
-                label: '文化类别1'
-              },
-              {
-                value: 'value2',
-                label: '文化类别2'
-              }
-            ]
-          },
-          {
-            type: 'text',
-            key: 'content',
-            label: '内容简介'
-          }
-        ]
+        dialogVisible: false,
+        viewForm: {
+          title: 'asdda',
+          content: 'html',
+          releaseTime: '2019-10-12',
+          issued: '广电总局',
+          publisher: '老张',
+          downLoadUrl: 'www.baidu.com'
+        }
       };
     },
 
     components: {
       CommonTable,
-      CommonDialog
+      CommonDialog,
+      CommonSearch
     },
 
     mounted () {
@@ -123,38 +170,57 @@
           total: 4,
           currentPage: 1,
           pageSize: 10
-        }
+        };
       }
     },
 
     methods: {
+      search (formData) {
+        console.log(formData);
+        if (this.$refs.brother) {
+          this.$refs.brother.tableData = formData;
+        }
+      },
       /**
        * 查看
        */
-      showDetail(index, row) {
-        this.$refs.announceDialog.dialogVisible = true;
-        this.$refs.announceDialog.form = row;
+      showDetail (index, row) {
+        this.dialogVisible = true;
+        this.viewForm = row;
       },
       /***
        *  下载
        */
-      downLoad (index, row) {
-        this.$alert('需要附件下载的接口', '提示', {
-          dangerouslyUseHTMLString: true
-        });
-      }
+      downLoad () {
+        if (this.viewForm && this.viewForm.downLoadUrl) {
+          window.open(this.viewForm.downLoadUrl, '_blank');
+        } else {
+
+        }
+      },
+      handleClose () {}
     },
 
-    computed: {
+    computed: {},
 
-    },
-
-    watch: {
-
-    }
+    watch: {}
   };
 </script>
 
 <style lang="less" scoped>
-
+  .view-box {
+    .view-item{
+      display: flex;
+      padding: 10px 0;
+      &__title{
+        width: 100px;
+        text-align: right;
+        margin-right: 10px;
+        &::after{
+          content: ':';
+          margin-left: 3px;
+        }
+      }
+    }
+  }
 </style>
