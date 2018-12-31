@@ -1,7 +1,9 @@
 <template>
   <div class="base-data">
       <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
-        <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+        <div class="xy-center">
+          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+        </div>
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
       <div v-show="showManagement">
@@ -25,9 +27,9 @@
           {id: 5, path: '/static/img/bj.jpg', name: '村站5'},
           {id: 6, path: '/static/img/bj.jpg', name: '村站6'},
           {id: 7, path: '/static/img/bj.jpg', name: '村站7'},
-          {id: 8, path: '/static/img/bj.jpeg', name: '村站8'},
+          {id: 8, path: '/static/img/bj.jpg', name: '村站8'},
           {id: 9, path: '/static/img/bj.jpg', name: '村站9'},
-          {id: 10, path: '/static/img/bj.jpeg', name: '村站10'}
+          {id: 10, path: '/static/img/bj.jpg', name: '村站10'}
         ],
         showManagement: false,
         graphic: {

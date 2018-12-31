@@ -5,7 +5,11 @@
         <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
       </el-tab-pane>
       <el-tab-pane label="领导机构" name="organization">
-        <el-button type="primary" class="right" @click="showOrganizationTable">切换</el-button>
+        <div class="wrap">
+          <div>
+            <img :src="!showTable ? '/static/img/button_totable.png' : 'static/img/button_topic.png'" @click="showOrganizationTable">
+          </div>
+        </div>
         <div class="back"></div>
         <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
         <div v-show="showTable">
@@ -110,7 +114,7 @@
             }
           ],
           'depName': '政府'
-        }], // 模拟领带机构图数据
+        }], // 模拟领导机构图数据
         organizationColumns: [
           {
             type: 'index',
@@ -335,19 +339,19 @@
        */
       showOrganizationTable () {
         this.showTable = !this.showTable;
-        if (this.showTable === true) {
-          this.$refs.organizationTable.tableData = [{
-            name: '张三',
-            sex: '男',
-            duty: '办公室主任',
-            remark: '负责整个办公室的各项事务'
-          }];
-          this.$refs.organizationTable.pageable = {
-            total: 1,
-            currentPage: 1,
-            pageSize: 10
-          };
-        }
+        // if (this.showTable === true) {
+        //   this.$refs.organizationTable.tableData = [{
+        //     name: '张三',
+        //     sex: '男',
+        //     duty: '办公室主任',
+        //     remark: '负责整个办公室的各项事务'
+        //   }];
+        //   this.$refs.organizationTable.pageable = {
+        //     total: 1,
+        //     currentPage: 1,
+        //     pageSize: 10
+        //   };
+        // }
       },
       /**
        * 新增和编辑弹框
@@ -366,12 +370,24 @@
 
 <style scoped lang="less">
   .overview {
+    img {
+      width: 45px;
+      height: 45px;
+    }
     padding: 0 15px 15px;
     .back {
       background: url("/static/img/jgbj.png");
     }
-    .right {
-      float: right;
+    .wrap {
+      text-align: right;
+      &>div{
+        display: inline-flex;
+        flex-direction: column;
+      }
+      img {
+        width: 40px;
+        height: 40px;
+      }
     }
     .chart-wrap {
       width:100%;

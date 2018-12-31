@@ -5,7 +5,7 @@
         <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
-      <div v-show="showManagement">
+      <div v-show="showManagement" class="content-wrap">
         <common-graphic :data="graphic"></common-graphic>
       </div>
     </div>
@@ -59,20 +59,24 @@
     };
 </script>
 
-<style scoped>
+<style scoped lang="less">
   .stop-base {
+    padding: 15px 15px 15px;
     .base-data{
       display: flex;
       width: 100%;
       overflow: hidden;
       flex-wrap: wrap;
       .content {
-        padding: 0 1% 40px 0;
+        padding: 0 1% 20px 0;
         width:15%;
         img {
           cursor: pointer;
           width:100%;
         }
+      }
+      .content-wrap {
+        width:100%;
       }
     }
   }

@@ -19,11 +19,11 @@ module.exports = [
         url: 'center-overview',
         requiredPermissions: []
       },
-      {
-        title: '分中心建设',
-        url: 'center-build',
-        requiredPermissions: []
-      },
+      // {
+      //   title: '分中心建设',
+      //   url: 'center-build',
+      //   requiredPermissions: []
+      // },
       {
         title: '分中心活动管理',
         url: 'activity-management',

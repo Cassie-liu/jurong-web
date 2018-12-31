@@ -39,11 +39,6 @@ export default new Router({
           component: CenterOverview
         },
         {
-          path: 'center-management/center-build',     // 分中心建设
-          name: 'CenterBuild',
-          component: CenterBuild
-        },
-        {
           path: 'center-management/activity-management',     // 分中心活动管理
           // name: 'ActivityManagement',
           name: 'CenterActivityManagement',
