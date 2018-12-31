@@ -62,7 +62,8 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="活动状态" name="status">
-
+        <CommonTable :columns="ActivityStatusColumns" api-root="activity"></CommonTable>
+        <CommonDialog :form-columns="ActivityStatusFormColumns" ref="ActivityStatusDialog" :disabled="true" :show-btn="false"></CommonDialog>
       </el-tab-pane>
       <el-tab-pane label="活动统计" name="statistics">
 
@@ -531,14 +532,80 @@
         ],
         tableData: [],
         loading: false,
-        uploadActivityVisible: false
+        uploadActivityVisible: false,
+        ActivityStatusColumns:[
+          {
+            type: 'index',
+            label: '序号'
+          },
+          {
+            prop: 'name',
+            label: '活动标题'
+          },
+          {
+            prop: 'content',
+            label: '活动内容'
+          },
+          {
+            prop: 'startAt',
+            label: '开始时间'
+          },
+          {
+            prop: 'endAt',
+            label: '截止时间'
+          },
+          {
+            prop: 'score',
+            label: '积分'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt:[
+              {
+                type: 'text',
+                label: '查看',
+                func: this.showStatusDetail
+              },
+              {
+                type: 'text',
+                label: '附件下载',
+                func: this.downLoad
+              }
+            ]
+          }
+        ],
+        ActivityStatusFormColumns: [
+          {
+            type: 'text',
+            key: 'name',
+            label: '活动标题'
+          },
+          {
+            type: 'text',
+            key: 'content',
+            label: '活动内容'
+          },
+          {
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
+          },
+          {
+            type: 'datePicker',
+            key: 'endAt',
+            label: '截止时间'
+          },
+          {
+            type: 'text',
+            key: 'score',
+            label: '积分'
+          }
+        ]
       };
     },
     mounted () {
       this.initAct();
-    },
-    comments: {
-      CommonTable
     },
     methods: {
       initAct(){
@@ -640,6 +707,23 @@
       },
       formatter(row,column,cellValue){
           console.log(row);
+      },
+      showStatusDetail(index, row){
+        this.$refs.ActivityStatusDialog.form = row;
+        this.$refs.ActivityStatusDialog.title = '查看';
+        this.$refs.ActivityStatusDialog.dialogVisible = true;
+      },
+      downLoad(index, row){
+        this.$confirm('确认下载附件？')
+          .then(_ => {
+            this.$alert('需要下载附件的接口', '提示', {
+              dangerouslyUseHTMLString: true
+            });
+            done();
+          })
+          .catch(_ => {
+
+          });
       }
     },
     watch: {

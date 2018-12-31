@@ -106,6 +106,7 @@
           'depName': '政府'
         }], // 模拟人员管理图数据
         showTable: false, // 默认不显示表格，点击切换显示表格
+        organizationColumns: [],
         organizationFormColumns: [
           {
             type: 'text',
