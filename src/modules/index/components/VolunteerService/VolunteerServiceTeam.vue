@@ -1,6 +1,6 @@
 <template>
     <div class="base-data">
-      文明实践志愿服务队  服务队伍
+      开发中...
     </div>
 </template>
 
@@ -20,5 +20,7 @@
 </script>
 
 <style scoped>
-
+.base-data {
+  padding:15px;
+}
 </style>

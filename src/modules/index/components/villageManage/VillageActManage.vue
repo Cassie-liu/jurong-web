@@ -696,5 +696,8 @@
 </script>
 
 <style scoped>
+  .base-data {
+    padding: 15px;
+  }
 
 </style>

@@ -26,14 +26,14 @@
       return {
         tree: [],
         defaultProps: {
-          label: "name"
+          label: 'name'
         },
         idList: [],
         treeLoading: false
       };
     },
     methods: {
-      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 0) {
           if (rowIndex % 2 === 0) {
             return {
@@ -48,16 +48,16 @@
           }
         }
       },
-      submit() {
+      submit () {
         let menus = this.$refs.tree.getCheckedKeys();
         menus.concat(this.$refs.tree.getHalfCheckedKeys());
         this.$http(reqType.POST, `roleMenu/${this.roleId}roleId`, menus).then(
           data => {
           }
-        )
+        );
       }
     },
-    mounted() {
+    mounted () {
       this.treeLoading = true;
       this.$http(reqType.POST, `menu/list`, false).then(
         data => {
@@ -75,7 +75,7 @@
             this.treeLoading = false;
           }
         )
-      )
+      );
     }
   };
 </script>

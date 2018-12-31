@@ -76,6 +76,7 @@ module.exports = [
       }
     ]
   },
+  // 志愿服务队
   {
     url: 'volunteer-service',
     title: '志愿服务队',
@@ -95,11 +96,27 @@ module.exports = [
       }
     ]
   },
+  // 志愿者名单
+  {
+    url: 'volunteer-service/list',
+    title: '志愿者名单',
+    icon: 'button_zhiyuanzhemingdan_n.png',
+    iconHover: 'button_zhiyuanzhemingdan_h.png',
+    requirePermissions: []
+  },
+  // 志愿者招募
+  {
+    url: 'volunteer-service/recruit',
+    title: '志愿者招募',
+    icon: 'icon-menu-5.png',
+    iconHover: 'icon-menu-5-hover.png',
+    requirePermissions: []
+  },
   {
     url: 'special-events',
     title: '特色活动',
-    icon: 'menu_special-events.png',
-    iconHover: 'menuH_special-events.png',
+    icon: 'button_zhaomu_n.png',
+    iconHover: 'button_zhaomu_h.png',
     requirePermissions: []
   },
   {

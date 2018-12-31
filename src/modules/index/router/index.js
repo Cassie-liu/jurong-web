@@ -13,6 +13,8 @@ import FeatureBuild from '../components/stopManage/FeatureBuild';
 import StopActManage from '../components/stopManage/StopActManage';
 import VillageBaseData from '../components/villageManage/VillageBaseData';
 import VillageActManage from '../components/villageManage/VillageActManage';
+import Volunteerlist from '../components/VolunteerService/Volunteerlist';
+import VolunteerrRecruit from '../components/VolunteerService/VolunteerrRecruit';
 import VolunteerBaseInfo from '../components/VolunteerService/VolunteerBaseInfo';
 import VolunteerServiceTeam from '../components/VolunteerService/VolunteerServiceTeam';
 import Announce from '../components/Announce';
@@ -87,6 +89,16 @@ export default new Router({
           path: 'volunteer-service/service-team',     // 文明实践志愿服务队  基础信息
           name: 'VolunteerServiceTeam',
           component: VolunteerServiceTeam
+        },
+        {
+          path: 'volunteer-service/list',     // 志愿者名单
+          name: 'Volunteerlist',
+          component: Volunteerlist
+        },
+        {
+          path: 'volunteer-service/recruit',     // 志愿者招募
+          name: 'VolunteerrRecruit',
+          component: VolunteerrRecruit
         },
         {
           path: 'special-events',     // 特色活动
