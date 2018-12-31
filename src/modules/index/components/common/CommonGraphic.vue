@@ -29,6 +29,7 @@
       <div class="upload-img upload-imgs">
         <div class="upload-img-item" v-for="(item, index) in imgList.img" :key="index">
           <el-upload
+            multiple
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
