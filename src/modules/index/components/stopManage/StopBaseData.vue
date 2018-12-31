@@ -20,18 +20,18 @@
     data () {
       return {
         img: [
-          {id: 1, path: '/static/img/bj.jpg', name: '所站1'},
-          {id: 2, path: '/static/img/bj.jpg', name: '所站2'},
-          {id: 3, path: '/static/img/bj.jpg', name: '所站3'},
-          {id: 4, path: '/static/img/bj.jpg', name: '所站4'},
-          {id: 5, path: '/static/img/bj.jpg', name: '所站5'},
-          {id: 6, path: '/static/img/bj.jpg', name: '所站6'},
-          {id: 7, path: '/static/img/bj.jpg', name: '所站7'},
-          {id: 8, path: '/static/img/bj.jpg', name: '所站8'},
-          {id: 9, path: '/static/img/bj.jpg', name: '所站9'},
-          {id: 10, path: '/static/img/bj.jpg', name: '所站10'},
-          {id: 11, path: '/static/img/bj.jpg', name: '所站11'},
-          {id: 12, path: '/static/img/bj.jpg', name: '所站12'}
+          {id: 1, path: '/static/img/town/img_chongmingjiedao.png', name: '崇明街道'},
+          {id: 2, path: '/static/img/town/img_huayangjiedao.png', name: '华阳街道'},
+          {id: 3, path: '/static/img/town/img_huangmeiqiao.png', name: '黄梅街道'},
+          {id: 4, path: '/static/img/town/img_xiashuzhen.png', name: '下蜀镇'},
+          {id: 5, path: '/static/img/town/img_baituzhen.png', name: '白兔镇'},
+          {id: 6, path: '/static/img/town/img_maoshanzheng.png', name: '茅山镇'},
+          {id: 7, path: '/static/img/town/img_houbaizhen.png', name: '后白镇'},
+          {id: 8, path: '/static/img/town/img_guozhuangzhen.png', name: '郭庄镇'},
+          {id: 9, path: '/static/img/town/img_tianwangzhen.png', name: '天王镇'},
+          {id: 10, path: '/static/img/town/img_baohuazheng.png', name: '宝华镇'},
+          {id: 11, path: '/static/img/town/img_bianchengzhen.png', name: '边城镇'},
+          {id: 12, path: '/static/img/town/img_kaifaqu.png', name: '开发区'}
         ],
         showManagement: false,
         graphic: {
@@ -42,7 +42,7 @@
             {path: '/static/img/test.jpeg', pathB: '4b'}
           ],
           text: 'asdasd'
-        } // 镇所详情
+        }, // 村站详情
       };
     },
     methods: {
@@ -52,6 +52,8 @@
       getDetailManagement (id) {
         this.showManagement = true;
       }
+    },
+    mounted () {
     },
     components: {
       CommonGraphic
@@ -76,7 +78,22 @@
         }
       }
       .content-wrap {
+        .wrap {
+          text-align: right;
+          &>div{
+            display: inline-flex;
+            flex-direction: column;
+          }
+          img {
+            width: 40px;
+            height: 40px;
+          }
+        }
         width:100%;
+      }
+      .chart-wrap {
+        width:100%;
+        height:300px;
       }
     }
   }

@@ -8,7 +8,7 @@
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
       <div v-show="showManagement" class="content-wrap">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" @tab-click="switchTab">
           <el-tab-pane label="概况" name="survey">
             <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
           </el-tab-pane>
@@ -28,7 +28,10 @@
             <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
             <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
           </el-tab-pane>
-          <el-tab-pane label="活动发布" name="public"></el-tab-pane>
+          <el-tab-pane label="发布公告" name="public">
+            <CommonDialog ref="publishDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+            <CommonTable ref="publishTable" :api-root="'center'" :columns="publishTableColumns" @search="searchActivity" :show-btn="true"></CommonTable>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -53,11 +56,11 @@
       return {
         activeName: 'survey',
         img: [
-          {id: 1, path: '/static/img/img_lilunxuanjiang.png', name: '理论宣讲'},
-          {id: 2, path: '/static/img/img_jiaoyushijian.png', name: '教育实践'},
-          {id: 3, path: '/static/img/img_wenhuafuwu.png', name: '文体服务'},
-          {id: 4, path: '/static/img/img_kejikepu.png', name: '科技科普'},
-          {id: 5, path: '/static/img/img_jianshentiyu.png', name: '健康普及'}
+          {id: 1, path: '/static/img/center/img_lilunxuanjiang.png', name: '理论宣讲'},
+          {id: 2, path: '/static/img/center/img_jiaoyushijian.png', name: '教育实践'},
+          {id: 3, path: '/static/img/center/img_wenhuafuwu.png', name: '文体服务'},
+          {id: 4, path: '/static/img/center/img_kejikepu.png', name: '科技科普'},
+          {id: 5, path: '/static/img/center/img_jianshentiyu.png', name: '健康普及'}
         ],
         showTable: false, // 默认不显示表格，点击切换显示表格
         showManagement: false,
@@ -171,8 +174,15 @@
             label: '经度'
           },
           {
-            prop: 'survey',
-            label: '概况'
+            type: 'function',
+            label: '概况',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '查看',
+                func: this.showDetail
+              }
+            ]
           },
           {
             prop: 'latitude',
@@ -226,7 +236,80 @@
           ],
           text: 'asdasd'
         }, // 镇所详情
-        surveyRefresh: false
+        practiceFormColumns: [
+          {
+            type: 'text',
+            key: 'name',
+            label: '实践点名称'
+          },
+          {
+            type: 'text',
+            key: 'longitude',
+            label: '经度'
+          },
+          {
+            type: 'text',
+            key: 'latitude',
+            label: '纬度'
+          },
+          {
+            type: 'editor',
+            key: 'remark',
+            label: '概况'
+          }
+        ], // 新增弹框数据
+        publishTableColumns: [
+          {
+            prop: 'title',
+            label: '标题'
+          },
+          {
+            prop: 'publishTime',
+            label: '发布时间'
+          },
+          {
+            prop: 'owner',
+            label: '发布人'
+          },
+          {
+            prop: 'updateTime',
+            label: '修改时间'
+          },
+          {
+            prop: 'updateOwner',
+            label: '修改人'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '编辑',
+                func: this.editPublicActivity
+              },
+              {
+                type: 'text',
+                label: '删除',
+                func: this.deletePublicActivity
+              }
+            ]
+          }
+        ], // 活动发布表头数据
+        surveyRefresh: false,
+        showPublicDialog: false, // 默认不显示
+        publishFormColumns: [
+          {
+            type: 'text',
+            key: 'title',
+            label: '公告标题'
+          },
+          {
+            type: 'editor',
+            key: 'content',
+            label: '公告内容'
+          }
+        ] // 活动发布弹框内容
       };
     },
     mounted () {
@@ -248,11 +331,12 @@
        * 查询领导机构表格内容
        */
       searchOrganization () {},
+      searchActivity () {},
       /**
        * 新增和编辑弹框
        */
       traggerBrotherEvent () {
-        if (this.activeName === 'organization' && this.showTable === true) {
+        if (this.activeName === 'practice' && this.showTable === true) {
           this.$refs.organizationDialog.title = '新增';
           this.$refs.organizationDialog.form = {};
           this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
@@ -275,13 +359,17 @@
         // }
       },
       /**
+       * 查看实践点详情
+       */
+      showDetail () {},
+      /**
        * 编辑某一个实践点
        */
       edit (index, row) {
-        if (this.$refs.organizationDialog) {
-          this.$refs.organizationDialog.title = '编辑';
-          this.$refs.organizationDialog.dialogVisible = true;
-          this.$refs.organizationDialog.form = row;
+        if (this.$refs.practiceDialog) {
+          this.$refs.practiceDialog.title = '编辑';
+          this.$refs.practiceDialog.dialogVisible = true;
+          this.$refs.practiceDialog.form = row;
         }
       },
       /**
@@ -336,9 +424,61 @@
               animationDurationUpdate: 750
             }
           ]
-        },
+        };
           chart = echarts.init(myChart);
         chart.setOption(option);
+      },
+      /**
+       * 编辑活动发布
+       */
+      editPublicActivity (index, row) {
+        if (this.$refs.publishDialog) {
+          this.$refs.publishDialog.title = '编辑';
+          this.$refs.publishDialog.dialogVisible = true;
+          this.$refs.publishDialog.form = row;
+        }
+      },
+      /**
+       * 删除发布的活动
+       */
+      deletePublicActivity () {},
+      /**
+       * 切换tab
+       */
+      switchTab (e) {
+        let _index = parseInt(e.index);
+        switch (_index) {
+          case 0: // 概况 survey
+            this.surveyRefresh = !this.surveyRefresh;
+            return false;
+          case 1: // 人员管理 organization
+            this.showTable = false;
+            return false;
+          case 2: // 文明实践点 practice
+              this.$refs.practiceTable.tableData = [{
+                name: '句容',
+                longitude: '12',
+                latitude: '43',
+                remark: 'wecvmvkmvjvnnvjnkkvmcnvvniznvfirfdcnv dvjrgc'
+              }];
+              this.$refs.practiceTable.pageable = {
+                total: 1,
+                currentPage: 1,
+                pageSize: 10
+              };
+            return false;
+          case 3: // 活动发布 public
+            this.$refs.publishTable.tableData = [
+              {
+                title: '句容市广场舞大赛',
+                publishTime: '2018-12-31',
+                owner: 'seven',
+                updateTime: '2018-12-31',
+                updateOwner: 'seven'
+              }
+            ];
+            return false;
+        }
       }
     },
     watch: {
