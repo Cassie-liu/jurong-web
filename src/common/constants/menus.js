@@ -1,7 +1,7 @@
 module.exports = [
   // 概览
   {
-    url: 'center-management/overview',
+    url: 'practice-management/overview',
     title: '实践中心概况',
     icon: 'icon-menu-1.png',
     iconHover: 'icon-menu-1-hover.png',
@@ -17,11 +17,6 @@ module.exports = [
       {
         title: '分中心概况',
         url: 'center-overview',
-        requiredPermissions: []
-      },
-      {
-        title: '分中心基础数据',
-        url: 'base-data',
         requiredPermissions: []
       },
       {
@@ -83,7 +78,7 @@ module.exports = [
   },
   {
     url: 'volunteer-service',
-    title: '文明实践志愿服务队',
+    title: '志愿服务队',
     icon: 'icon-menu-5.png',
     iconHover: 'icon-menu-5-hover.png',
     requirePermissions: [],

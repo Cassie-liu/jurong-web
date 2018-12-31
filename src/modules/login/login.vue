@@ -78,11 +78,11 @@
                             // 登录成功后保存token
                             this.authError = false;
                             sessionStorage.setItem('token', data);
-                            location.href = '/#/center-management/base-data';
+                            location.href = '/#/practice-management/overview';
                         }).catch((msg) => {
                             this.authError = true;
                             this.errorMessage = msg;
-                        })
+                        });
             },
             /**
              * 回车登录

@@ -26,20 +26,15 @@ export default new Router({
       path: '/',
       name: 'QueryMain',
       component: Main,
-      redirect: '/center-management/overview', // 默认跳转到分中心基础数据
+      redirect: '/practice-management/overview', // 默认跳转到实践中心概览
       children: [
         {
-          path: 'center-management/overview',     // 实践中心概览
+          path: 'practice-management/overview',     // 实践中心概览
           name: 'Overview',
           component: Overview
         },
         {
-          path: 'center-management/base-data',     // 分中心基础数据
-          name: 'CenterBaseData',
-          component: CenterBaseData
-        },
-        {
-          path: 'center-management/center-overview',     // 分中心基础数据
+          path: 'center-management/center-overview',     // 分中心概况
           name: 'CenterOverview',
           component: CenterOverview
         },
