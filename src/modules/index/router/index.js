@@ -26,10 +26,10 @@ export default new Router({
       path: '/',
       name: 'QueryMain',
       component: Main,
-      redirect: '/center-management/overview', // 默认跳转到实践中心概览
+      redirect: '/practice-management/overview', // 默认跳转到实践中心概览
       children: [
         {
-          path: 'center-management/overview',     // 实践中心概览
+          path: 'practice-management/overview',     // 实践中心概览
           name: 'Overview',
           component: Overview
         },

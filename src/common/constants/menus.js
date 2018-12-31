@@ -1,7 +1,7 @@
 module.exports = [
   // 概览
   {
-    url: 'center-management/overview',
+    url: 'practice-management/overview',
     title: '实践中心概况',
     icon: 'icon-menu-1.png',
     iconHover: 'icon-menu-1-hover.png',

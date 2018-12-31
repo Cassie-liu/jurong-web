@@ -78,7 +78,7 @@
                             // 登录成功后保存token
                             this.authError = false;
                             sessionStorage.setItem('token', data);
-                            location.href = '/#/center-management/overview';
+                            location.href = '/#/practice-management/overview';
                         }).catch((msg) => {
                             this.authError = true;
                             this.errorMessage = msg;
