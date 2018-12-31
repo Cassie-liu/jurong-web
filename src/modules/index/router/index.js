@@ -17,6 +17,8 @@ import VolunteerBaseInfo from '../components/VolunteerService/VolunteerBaseInfo'
 import VolunteerServiceTeam from '../components/VolunteerService/VolunteerServiceTeam';
 import Announce from '../components/Announce';
 import SpecialEvents from '../components/specialEvents/specialEvents';
+import CivilizedPractice from '../components/civilizedPractice/civilizedPractice';
+import Details from '../components/civilizedPractice/details';
 import SystemConfig from '../components/SystemConfig';
 import SystemOperation from '../components/system/SystemOperation';
 Vue.use(Router);
@@ -90,6 +92,16 @@ export default new Router({
           path: 'special-events',     // 特色活动
           name: 'SpecialEvents',
           component: SpecialEvents
+        },
+        {
+          path: 'civilized-practice',     // 文明实践点
+          name: 'CivilizedPractice',
+          component: CivilizedPractice
+        },
+        {
+          path: 'details',     // 文明实践点
+          name: 'Details',
+          component: Details
         },
         {
           path: 'announcement',     // 通知公告

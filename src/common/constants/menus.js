@@ -103,6 +103,13 @@ module.exports = [
     requirePermissions: []
   },
   {
+    url: 'civilized-practice',
+    title: '文明实践点',
+    icon: 'icon-menu-5.png',
+    iconHover: 'icon-menu-5-hover.png',
+    requirePermissions: []
+  },
+  {
     url: 'announcement',
     title: '通知公告',
     icon: 'icon-menu-6.png',
@@ -130,11 +137,11 @@ module.exports = [
     iconHover: 'icon-menu-8-hover.png',
     requirePermissions: []
   },
-    {
-      title: '菜单配置',
-      url: 'system-menu',
-      icon: 'icon-menu-9.png',
-      iconHover: 'icon-menu-9-hover.png',
-      requiredPermissions: []
-    }
+  {
+    title: '菜单配置',
+    url: 'system-menu',
+    icon: 'icon-menu-9.png',
+    iconHover: 'icon-menu-9-hover.png',
+    requiredPermissions: []
+  }
 ];
