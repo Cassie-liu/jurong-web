@@ -9,18 +9,15 @@
       <el-form  :model="form" ref="form"  :label-position="'left'">
         <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label" label-width="100px">
             <el-col :span="12">
-              <el-input v-model="form[item.key]" v-show="item.type === 'text' || item.type==='textarea'" :type="item.type" :disabled="item.disabled"></el-input>
+              <el-input v-model="form[item.key]" v-if="item.type === 'text' || item.type==='textarea'" :type="item.type" :disabled="item.disabled"></el-input>
             </el-col>
             <el-col :span="12">
-              <el-select v-model="form[item.key]" v-show="item.type === 'select'" style="width: 100%" :disabled="item.disabled">
+              <el-select v-model="form[item.key]" v-if="item.type === 'select'" style="width: 100%" :disabled="item.disabled">
                 <el-option v-for="opItem in item.options" :value="opItem.value" :label="opItem.label" :key="opItem.value"></el-option>
               </el-select>
             </el-col>
             <!--预留富文本编辑-->
-            <!--<div v-if="item.type === 'editor' && showEditor">-->
-              <!--<editor width="100%" element-id="addEditor" v-model="form[item.key]"></editor>-->
               <editor width="90%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
-            <!--</div>-->
             <div v-if="item.type === 'datePicker'">
               <el-col :span="12">
                 <el-date-picker
@@ -28,14 +25,21 @@
                   type="date"
                   v-model = "form[item.key]"
                   placeholder="选择日期"
-                  value-format="yyyy-MM-dd"
+                  :value-format="'yyyy-MM-ddTHH:mm:ss'"
                   style="width: 100%"
                 >
                 </el-date-picker>
               </el-col>
             </div>
+          <div v-if="item.type === 'carousel'" class="carousel">
+            <el-carousel height="150px">
+              <el-carousel-item v-for="(list,$index) in item.options" :key="item">
+                <h3>{{ list.value }}</h3>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
             <el-upload
-              v-show="item.type === 'img'"
+              v-if="item.type === 'img'"
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"
               :show-file-list="false"
@@ -51,7 +55,6 @@
                 <el-button type="primary" @click="submit" :disabled="disabled">确 定</el-button>
         </span>
       </div>
-
     </el-dialog>
   </div>
 </template>
@@ -91,8 +94,13 @@
           * */
           initFormParams(){
             for(let i in this.formColumns) {
-              this.form[this.formColumns[i].key] = '';
+              if(this.formColumns[i].showDefault) {
+                this.form[this.formColumns[i].key] = this.formColumns[i].options[0].label;
+              } else {
+                this.form[this.formColumns[i].key] = '';
+              }
             }
+            console.log(this.form);
           },
           add() {
             this.title = '新增';
@@ -126,7 +134,7 @@
              * */
           this.dialogVisible = false;
           this.disabled = false;
-          this.$emit('submit');
+          this.$emit('submit', this.form);
           this.form ={};
         },
         // 清空数据

@@ -2,9 +2,9 @@
     <div class="common-table">
       <el-table :data="tableData" v-loading="loading" size="small">
         <el-table-column v-for="item in columns" :key="item.prop" :prop="item.prop" :label="item.label" :type="item.type? item.type: ''"
-                         :width="item.width || ''" v-if="item.type !=='function'"></el-table-column>
+                         :width="item.width || ''" v-if="item.type !=='function'" :formatter="formatter"></el-table-column>
         <el-table-column v-for="(item, index) in columns" :key="index" :label="item.label"
-                          :width="item.width || ''" v-if="item.type === 'function'">
+                          :width="item.width || ''" v-if="item.type === 'function'" :formatter="formatter">
           <template slot-scope="scope">
             <el-button v-for="(func, $index) in item.functionOpt" :key="$index" :type="func.type" @click="func.func(scope.$index, scope.row)">
               {{func.label}}
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+  import Map from '../Map';
     import reqType from "../../../../api/reqType";
     export default {
         name: 'CommonTable',
@@ -31,6 +32,7 @@
           return {
             loading: false,
             tableData: [],
+            Map,
             pageable: {
               total: 0,
               currentPage: 1,
@@ -55,6 +57,13 @@
           ).catch(error => {
             this.loading = false;
           });
+        },
+        formatter(row, column, cellValue, index) {
+          if(Map['culturalCategory'].hasOwnProperty(cellValue)){
+            return Map['culturalCategory'][cellValue];
+          } else {
+            return cellValue;
+          }
         }
       }
     };
