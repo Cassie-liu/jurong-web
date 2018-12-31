@@ -5,13 +5,13 @@
         <!--<span>{{item.title}}</span>-->
         <!--<ul class="hide">-->
           <!--<li v-for="sub in item.children">-->
-            <!--<a @click="directTo(item.url, sub.url)">{{sub.title}}</a>-->
+            <!--<a @click="directTo(item.ur.l, sub.url)">{{sub.title}}</a>-->
           <!--</li>-->
         <!--</ul>-->
       <!--</li>-->
       <li>
         <img class="fl avatar" src="/static/img/avatar.png">
-        <span class="fl name">Admin</span>
+        <span class="fl name">{{user.name}}</span>
       </li>
       <li class="logout">
         <img src="/static/img/header/login-out.png" alt="" @click="logout">
