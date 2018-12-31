@@ -1,11 +1,13 @@
 <template>
   <div class="main">
-    <side-menu></side-menu>
+    <div class="main-box">
+      <side-menu></side-menu>
 
-    <div class="main-content">
-      <breadcrumbs></breadcrumbs>
-      <div class="wrap">
-        <router-view></router-view>
+      <div class="main-content">
+        <breadcrumbs></breadcrumbs>
+        <div class="wrap">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
