@@ -10,7 +10,7 @@
           <div :class="scaleImg? 'imgBig' : 'imgC' " @click="switchBigImg">
             <el-carousel indicator-position="outside">
               <el-carousel-item v-for="(slide, index) in imgData" :key="index">
-                <img :src="slide.path" class="img-fluid" style="height: 100%">
+                <img :src="slide.path" class="img-fluid">
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -27,20 +27,21 @@
     <div class="full" v-show="showEdit">
       <div class="title">选择图片</div>
       <div class="upload-img upload-imgs">
-        <div class="upload-img-item" v-for="(item, index) in imgList.img" :key="index">
-          <el-upload
-            multiple
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="item.path" :src="item.path" class="img-fluid">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-
-          <span style="font-size: 12px">第{{ index + 1 }}张图片</span>
-        </div>
+        <el-upload
+          ref="upload"
+          multiple
+          action=""
+          list-type="picture-card"
+          :auto-upload="false"
+          :limit="imgLimit"
+          :on-exceed="handleExceed"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
 
         <ul class="upload-img-text">
           <li>上传5张图片，只能上传jpg/png/pdf文件，且不超过5M</li>
@@ -51,7 +52,7 @@
 
       <div class="title">编辑内容</div>
       <div>
-        <textarea name="" id="" cols="30" class="upload-textarea" v-model="textarea">
+        <textarea name="" id="" cols="30" class="upload-textarea" v-model="data.des">
         </textarea>
       </div>
     </div>
@@ -60,6 +61,8 @@
 
 
 <script>
+  import reqType from '@/api/reqType';
+
   export default {
     name: 'graphicView',
     components: {},
@@ -75,28 +78,38 @@
     data () {
       return {
         btnText: '编辑',
-        textarea: '',
         scaleImg: false,
         showEdit: false,
         imgList: {
           img: [],
           imgB: []
         },
+        imgUploadList: [
+          {url: ''},
+          {url: ''},
+          {url: ''},
+          {url: ''},
+          {url: ''}
+        ],
         imgData: [],
-        swiperOption: {}
+        swiperOption: {},
+        dialogImageUrl: '',
+        dialogVisible: false,
+        imgLimit: 5
       };
     },
     created () {
-      this.data.jrResourceList.forEach(v => {
-        let _img = {};
-        let _imgB = {};
-        _img.path = v.thumbnail;
-        _imgB.path = v.url;
-        this.imgList.img.push(_img);
-        this.imgList.imgB.push(_imgB);
-      });
+      if (this.data.jrResourceList) {
+        this.data.jrResourceList.forEach(v => {
+          let _img = {};
+          let _imgB = {};
+          _img.path = v.thumbnail;
+          _imgB.path = v.url;
+          this.imgList.img.push(_img);
+          this.imgList.imgB.push(_imgB);
+        });
+      }
       this.imgData = this.imgList.img;
-      this.textarea = this.data.des;
       this.init();
     },
     methods: {
@@ -110,32 +123,46 @@
         if (this.showEdit) {
           console.log('点击了保存');
           this.btnText = '编辑';
+
+          // 先保存des数据
+          this.$http(reqType.PUT, `city/${this.data.id}`, this.data, false)
+            .then(data => {
+                this.data = data;
+
+                // 再保存图片
+                let _file = {};
+                _file.multipartFile = this.$refs.upload.uploadFiles;
+                _file.id = this.data.id;
+                _file.type = 'city';
+
+                this.$http(reqType.POST, `jrResource/fileUpload`, _file, false)
+                  .then(data => {
+                    this.data = data;
+                  });
+            });
         } else {
           console.log('点击了编辑');
           this.btnText = '保存';
-          // todo 调取保存接口然后重新load页面
+          this.showEdit = !this.showEdit;
         }
-        this.showEdit = !this.showEdit;
-      },
+    },
       switchBigImg () {
         this.scaleImg = !this.scaleImg;
         this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img;
       },
-      handleAvatarSuccess (res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+      handleRemove (file, fileList) {
+        console.log(file, fileList);
       },
-      beforeAvatarUpload (file) {
-        console.log(file);
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
+      handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handleExceed () {
+        let _this = this;
+        this.$message({
+          message: `最多可以上传${_this.imgLimit}张图片`,
+          type: 'warning'
+        });
       }
     },
     watch: {
@@ -147,7 +174,7 @@
 
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
   .gView{
     height: 500px;
   }
@@ -174,14 +201,11 @@
     padding: 20px;
     background-color: #fafafa;
     border-radius: 4px;
-    height: 140px;
     display: flex;
     align-items: center;
 
     &-item {
-      width: 140px;
       margin-right: 10px;
-      float: left;
       text-align: center;
       color: #b8b8b8;
       overflow: hidden;
@@ -228,10 +252,10 @@
         }
       }
     }
-  }
 
-  .upload-imgs {
-    height: 160px;
+    .img-label{
+      font-size: 14px;
+    }
   }
 
   .title{
