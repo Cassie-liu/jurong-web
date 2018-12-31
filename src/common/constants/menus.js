@@ -20,11 +20,6 @@ module.exports = [
         requiredPermissions: []
       },
       {
-        title: '分中心基础数据',
-        url: 'base-data',
-        requiredPermissions: []
-      },
-      {
         title: '分中心建设',
         url: 'center-build',
         requiredPermissions: []
@@ -83,7 +78,7 @@ module.exports = [
   },
   {
     url: 'volunteer-service',
-    title: '文明实践志愿服务队',
+    title: '志愿服务队',
     icon: 'icon-menu-5.png',
     iconHover: 'icon-menu-5-hover.png',
     requirePermissions: [],

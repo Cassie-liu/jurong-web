@@ -108,7 +108,7 @@
 
   .breadcrumbs {
     width: 100%;
-    line-height: 34px;
+    line-height: 40px;
     img {
       width: 18px;
       vertical-align: middle;
@@ -156,7 +156,7 @@
     border-radius: 9px;
   }
   &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    background-color: #9fb6e9;
+    background-color: #eee;
     border-radius: 9px;
     background-clip: content-box;
     border: 5px solid transparent;
@@ -169,19 +169,31 @@
       .title {
         background: @bg-color;
         color: @main-color;
+        border-left: 4px solid @main-color;
       }
     }
     .title {
+      border-left: 4px solid transparent;
       font-size: 18px;
       font-weight: bold;
-      padding: 25px 20px;
+      height: 65px;
+      padding: 10px 20px 10px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       letter-spacing:3px;
+      position: relative;
       &:hover {
         background: @bg-color;
-        color: @main-color;
+        //color: @main-color;
       }
-      img {
-        margin: -5px 10px 0 0;
+      &-img {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
       }
       i {
         float: right;
@@ -194,9 +206,9 @@
       /*height: 0;*/
       transition: height 300ms;
       li {
-        padding: 10px 0 10px 40px;
+        padding: 10px 0 10px 80px;
         position: relative;
-        background: @bg-color;
+        background: lighten(@bg-color, 2%);
         border-bottom: solid 1px #dedede;
 
         &:last-child {
@@ -205,7 +217,7 @@
         &:hover {
           background: #dedede;
         }
-        &:before {
+        /*&:before {
           content: '';
           background-color: #fff;
           width: 3px;
@@ -214,7 +226,7 @@
           margin-right: 10px;
           display: inline-block;
           vertical-align: middle;
-        }
+        }*/
         &.active {
           color: @main-color;
           &:before {
