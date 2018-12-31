@@ -1,5 +1,6 @@
 <template>
   <div class="header">
+    <img src="../../../static/img/header/banner.png" alt="">
     <span class="title" v-if="showNavigation"></span>
     <navigation v-if="showNavigation"></navigation>
   </div>

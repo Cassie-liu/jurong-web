@@ -1,5 +1,5 @@
 <template>
-  <div class="center-act">
+  <div class="content">
       <el-tabs v-model="activeName">
         <el-tab-pane name="formulate" label="活动制定">
           <!--todo:需要配置权限(管理员没有新增的权限)-->
@@ -602,8 +602,8 @@
 </script>
 
 <style scoped lang="less">
-  .center-act{
-    padding:15px;
+  .content{
+    padding: 0 15px 15px;
     .center{
       margin-left:15%;
     }
@@ -612,5 +612,4 @@
       height:150px;
     }
   }
-
 </style>

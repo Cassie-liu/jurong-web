@@ -1,14 +1,16 @@
 <template>
   <div class="center-overview">
-    <div class="base-data">
-      <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
-        <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+    <el-row class="base-data">
+      <el-col :span="8" v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
+        <div class="img-card">
+          <img :src="item.path" @click="getDetailManagement(item.id)">
+        </div>
         <div class="text-center mt-15">{{item.name}}</div>
-      </div>
-      <div v-show="showManagement">
+      </el-col>
+      <el-col :span="24" v-show="showManagement">
         <common-graphic :data="graphic"></common-graphic>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -65,11 +67,16 @@
       overflow: hidden;
       flex-wrap: wrap;
       .content {
-        padding: 0 1% 25px 0;
-        img {
-          width:500px;
-          height:300px;
+        padding: 0 20px 20px 0;
+        .img-card{
+          height: 300px;
+          width: 100%;
+          position: relative;
           cursor: pointer;
+          img{
+            width: 100%;
+            height: 100%;
+          }
         }
       }
     }

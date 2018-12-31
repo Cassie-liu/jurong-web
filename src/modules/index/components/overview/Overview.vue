@@ -227,16 +227,11 @@
        * 获取概况列表
        */
       getSurveylist () {
-        this.loading = true;
         this.$http(reqType.POST, `city/list`, false)
           .then(data => {
-            this.graphic = data[0].content;
-            console.log(data);
+            this.graphic = data[0];
             this.loading = false;
-          })
-          .catch(res => {
-          this.loading = false;
-        });
+          });
       },
       /**
        * 切换tab
