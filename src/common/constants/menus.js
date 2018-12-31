@@ -98,15 +98,15 @@ module.exports = [
   {
     url: 'special-events',
     title: '特色活动',
-    icon: 'icon-menu-5.png',
-    iconHover: 'icon-menu-5-hover.png',
+    icon: 'menu_special-events.png',
+    iconHover: 'menuH_special-events.png',
     requirePermissions: []
   },
   {
     url: 'civilized-practice',
     title: '文明实践点',
-    icon: 'icon-menu-5.png',
-    iconHover: 'icon-menu-5-hover.png',
+    icon: 'menu_civilized-practice.png',
+    iconHover: 'menuH_civilized-practice.png',
     requirePermissions: []
   },
   {
