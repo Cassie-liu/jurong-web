@@ -118,11 +118,16 @@ export default new Router({
           name: 'SystemOperation',
           component: SystemOperation
         },
-          {
-              path: 'system-menu',
-              name: 'SystemMenu',
-              component: () => import('../components/system/MenuConfig')
-          }
+        {
+            path: 'system-operation/system-menu',
+            name: 'SystemMenu',
+            component: () => import('../components/system/MenuConfig')
+        },
+        {
+          path: 'system-operation/system-account',
+          name: 'SystemAccount',
+          component: SystemOperation
+        }
       ]
     }
     // {
