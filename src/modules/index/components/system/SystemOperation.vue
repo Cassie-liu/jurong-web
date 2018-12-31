@@ -2,8 +2,7 @@
   <div class="system-operation">
     <el-tabs v-model="activeName">
         <el-tab-pane label="账号管理" name="account">
-          <CommonDialog ref="brotherDialog" :form-columns="accountFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-          <commonTable  api-root="principal" :columns="accountColumns" ref="brother"></commonTable>
+          <CommonCRUD :columns="accountColumns" api-root="principal" :form-columns="accountFormColumns"></CommonCRUD>
         </el-tab-pane>
         <el-tab-pane label="角色管理" name="role">
           <div v-show="!showAuth">
@@ -21,6 +20,7 @@
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonSearch from '../common/CommonSearch';
+  import CommonCRUD from '../common/CommonCRUD';
   import Authorise from './Authorise';
   import resType from '@/api/reqType';
 
@@ -47,22 +47,6 @@
           {
             prop: 'orgName',
             label: '所属组织',
-          },
-          {
-            type: 'function',
-            label: '操作',
-            functionOpt: [
-              {
-                type: 'text',
-                label: '编辑',
-                func: this.edit
-              },
-              {
-                type: 'text',
-                label: '删除',
-                func: this.deleteRow
-              }
-            ]
           }
         ],
         accountFormColumns: [
@@ -75,6 +59,11 @@
             type: 'text',
             key: 'name',
             label: '账号名称'
+          },
+          {
+            type: 'text',
+            key: 'password',
+            label: '密码'
           },
           {
             type: 'select',
@@ -168,35 +157,36 @@
       CommonTable,
       CommonDialog,
       CommonSearch,
-      Authorise
+      Authorise,
+      CommonCRUD
     },
 
     mounted () {
       if (this.activeName === 'account') {
         this.$http(resType.POST, `role/list`, false).then(
           data => {
-            this.accountFormColumns[2].options = data.map(item => {
+            this.accountFormColumns[3].options = data.map(item => {
               return { label: item.name, value: item.id }
             });
           }
         );
         this.$http(resType.POST, `orgCenter/list`, false).then(
           data => {
-            this.accountFormColumns[3].options = data.map(item => {
+            this.accountFormColumns[4].options = data.map(item => {
               return { label: item.name, value: item.id }
             });
           }
         );
         this.$http(resType.POST, `orgRoom/list`, false).then(
           data => {
-            this.accountFormColumns[3].options = this.accountFormColumns[3].options.concat(data.map(item => {
+            this.accountFormColumns[4].options = this.accountFormColumns[4].options.concat(data.map(item => {
               return { label: item.name, value: item.id }
             }));
           }
         );
         this.$http(resType.POST, `country/list`, false).then(
           data => {
-            this.accountFormColumns[3].options = this.accountFormColumns[3].options.concat(data.map(item => {
+            this.accountFormColumns[4].options = this.accountFormColumns[4].options.concat(data.map(item => {
               return { label: item.name, value: item.id }
             }));
           }
