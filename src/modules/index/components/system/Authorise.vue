@@ -7,6 +7,8 @@
         node-key="id"
         ref="tree"
         highlight-current
+        v-loading="treeLoading"
+        :default-checked-keys="idList"
         :props="defaultProps">
       </el-tree>
       <el-button @click="submit">保存</el-button>
@@ -25,7 +27,9 @@
         tree: [],
         defaultProps: {
           label: "name"
-        }
+        },
+        idList: [],
+        treeLoading: false
       };
     },
     methods: {
@@ -45,19 +49,33 @@
         }
       },
       submit() {
-
+        let menus = this.$refs.tree.getCheckedKeys();
+        menus.concat(this.$refs.tree.getHalfCheckedKeys());
+        this.$http(reqType.POST, `roleMenu/${this.roleId}roleId`, menus).then(
+          data => {
+          }
+        )
       }
     },
     mounted() {
-        this.$http(reqType.POST, `menu/list`).then(
+      this.treeLoading = true;
+      this.$http(reqType.POST, `menu/list`, false).then(
+        data => {
+          let tree = data.filter(item => item.parentId === null);
+          tree.map(item => {
+            item.children = data.filter(sub => sub.parentId === item.id);
+          });
+          this.tree = tree;
+        }
+      ).then(
+        this.$http(reqType.GET, `role/domain/${this.roleId}`, false).then(
           data => {
-            let tree = data.filter(item => item.parentId === null);
-            tree.map(item => {
-              item.children = data.filter(sub => sub.parentId === item.id);
-            });
-            this.tree = tree;
+            this.idList = data.roleMenus.map(item => item.menuId);
+            this.$refs.tree.setCheckedKeys(this.idList);
+            this.treeLoading = false;
           }
         )
+      )
     }
   };
 </script>

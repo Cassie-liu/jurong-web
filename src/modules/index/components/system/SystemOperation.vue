@@ -10,7 +10,7 @@
             <commonTable  api-root="role" :columns="roleColumns" ref="brotherRole"></commonTable>
           </div>
           <el-button icon="el-icon-back" type="text" @click="back" v-show="showAuth">返回</el-button>
-          <Authorise v-show="showAuth" :roleId="roleId"></Authorise>
+          <Authorise v-if="showAuth" :roleId="roleId"></Authorise>
         </el-tab-pane>
     </el-tabs>
   </div>
