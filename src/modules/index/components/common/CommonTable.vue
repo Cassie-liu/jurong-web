@@ -59,10 +59,12 @@
           });
         },
         formatter(row, column, cellValue, index) {
-          if(Map['culturalCategory'].hasOwnProperty(cellValue)){
-            return Map['culturalCategory'][cellValue];
-          } else {
-            return cellValue;
+          for(let i in Map) {
+            if(Map[i].hasOwnProperty(cellValue)){
+              return  Map[i][cellValue];
+            } else {
+              return cellValue;
+            }
           }
         }
       }
