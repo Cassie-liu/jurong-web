@@ -1,7 +1,7 @@
 module.exports = {
   culturalCategory: {
     'ORG_TYPE_LLXJ': '理论宣讲',
-    '"ORG_TYPE_JYFW";': '教育实践',
+    'ORG_TYPE_JYSJ': '教育实践',
     'ORG_TYPE_WTFW': '文体服务',
     'ORG_TYPE_KJKP': '科技科普',
     'ORG_TYPE_JKPJ': '健康普及'

@@ -16,6 +16,9 @@ import VillageActManage from '../components/villageManage/VillageActManage';
 import VolunteerBaseInfo from '../components/VolunteerService/VolunteerBaseInfo';
 import VolunteerServiceTeam from '../components/VolunteerService/VolunteerServiceTeam';
 import Announce from '../components/Announce';
+import SpecialEvents from '../components/specialEvents/specialEvents';
+import CivilizedPractice from '../components/civilizedPractice/civilizedPractice';
+import Details from '../components/civilizedPractice/details';
 import SystemConfig from '../components/SystemConfig';
 import SystemOperation from '../components/system/SystemOperation';
 Vue.use(Router);
@@ -37,11 +40,6 @@ export default new Router({
           path: 'center-management/center-overview',     // 分中心概况
           name: 'CenterOverview',
           component: CenterOverview
-        },
-        {
-          path: 'center-management/center-build',     // 分中心建设
-          name: 'CenterBuild',
-          component: CenterBuild
         },
         {
           path: 'center-management/activity-management',     // 分中心活动管理
@@ -89,6 +87,21 @@ export default new Router({
           path: 'volunteer-service/service-team',     // 文明实践志愿服务队  基础信息
           name: 'VolunteerServiceTeam',
           component: VolunteerServiceTeam
+        },
+        {
+          path: 'special-events',     // 特色活动
+          name: 'SpecialEvents',
+          component: SpecialEvents
+        },
+        {
+          path: 'civilized-practice',     // 文明实践点
+          name: 'CivilizedPractice',
+          component: CivilizedPractice
+        },
+        {
+          path: 'details',     // 文明实践点
+          name: 'Details',
+          component: Details
         },
         {
           path: 'announcement',     // 通知公告

@@ -19,11 +19,11 @@ module.exports = [
         url: 'center-overview',
         requiredPermissions: []
       },
-      {
-        title: '分中心建设',
-        url: 'center-build',
-        requiredPermissions: []
-      },
+      // {
+      //   title: '分中心建设',
+      //   url: 'center-build',
+      //   requiredPermissions: []
+      // },
       {
         title: '分中心活动管理',
         url: 'activity-management',
@@ -96,6 +96,20 @@ module.exports = [
     ]
   },
   {
+    url: 'special-events',
+    title: '特色活动',
+    icon: 'menu_special-events.png',
+    iconHover: 'menuH_special-events.png',
+    requirePermissions: []
+  },
+  {
+    url: 'civilized-practice',
+    title: '文明实践点',
+    icon: 'menu_civilized-practice.png',
+    iconHover: 'menuH_civilized-practice.png',
+    requirePermissions: []
+  },
+  {
     url: 'announcement',
     title: '通知公告',
     icon: 'icon-menu-6.png',
@@ -123,11 +137,11 @@ module.exports = [
     iconHover: 'icon-menu-8-hover.png',
     requirePermissions: []
   },
-    {
-      title: '菜单配置',
-      url: 'system-menu',
-      icon: 'icon-menu-9.png',
-      iconHover: 'icon-menu-9-hover.png',
-      requiredPermissions: []
-    }
+  {
+    title: '菜单配置',
+    url: 'system-menu',
+    icon: 'icon-menu-9.png',
+    iconHover: 'icon-menu-9-hover.png',
+    requiredPermissions: []
+  }
 ];

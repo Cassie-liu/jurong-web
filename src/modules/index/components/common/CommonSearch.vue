@@ -1,6 +1,6 @@
 <template>
   <div class="common-search">
-    <el-form :inline="inline" :model="form" ref="form" :label-position="'left'">
+    <el-form :inline="inline" :model="form" ref="form" :label-position="'right'">
       <el-form-item v-for="item in columns" :key="item.label" :label="item.label" label-width="120px" style="margin-right:10px;">
         <el-col :span="inline? 24: 6">
           <el-input v-model="form[item.key]" v-if="item.type === 'text'"></el-input>
@@ -68,16 +68,11 @@
     };
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .common-search{
-  .text-left{
-    margin-left:120px;
-  }
-  input[type="text"]{
-    width: 40%;
-  }
-  .label-width{
-    width: 100%;
+  .el-form-item__label::after{
+    content: ':';
+    margin-left: 3px;
   }
 }
 </style>

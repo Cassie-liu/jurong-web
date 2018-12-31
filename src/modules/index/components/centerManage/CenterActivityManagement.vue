@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
       <el-tabs v-model="activeName">
         <el-tab-pane name="formulate" label="活动制定">
           <!--todo:需要配置权限(管理员没有新增的权限)-->
@@ -23,14 +23,36 @@
         </el-tab-pane>
       </el-tabs>
     <!--发布弹框-->
-     <el-dialog title="发布" :visible.sync="publishDialogVisible">
-     <div class="center">
-       <el-transfer
-         v-model="publishList"
-         :titles="['选择活动', '发布活动']"
-         :data="ActivityList">
-       </el-transfer>
-     </div>
+     <el-dialog title="活动发布" :visible.sync="publishDialogVisible">
+       <div class="center">
+         <!--<el-transfer-->
+           <!--v-model="publishList"-->
+           <!--:titles="['选择活动', '发布活动']"-->
+           <!--:data="ActivityList">-->
+         <!--</el-transfer>-->
+         <el-form>
+           <el-form-item label="选择活动">
+             <el-select v-model="publishParams.activityList" multiple placeholder="请选择">
+               <el-option
+                 v-for="item in publishList.activityList"
+                 :key="item.value"
+                 :label="item.label"
+                 :value="item.value">
+               </el-option>
+             </el-select>
+           </el-form-item>
+           <el-form-item label="选择镇所">
+             <el-select v-model="publishParams.activityList" multiple placeholder="请选择">
+               <el-option
+                 v-for="item in publishList.activityList"
+                 :key="item.value"
+                 :label="item.label"
+                 :value="item.value">
+               </el-option>
+             </el-select>
+           </el-form-item>
+         </el-form>
+       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="publishDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="publishActivity">发布</el-button>
@@ -61,6 +83,13 @@
               </el-date-picker>
             </el-col>
           </div>
+          <div v-if="item.type === 'carousel'" class="carousel">
+            <el-carousel height="150px">
+              <el-carousel-item v-for="item in 4" :key="item">
+                <h3>{{ item }}</h3>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -72,36 +101,36 @@
 </template>
 
 <script>
+  import reqType from '@/api/reqType';
   import Editor from '../../../../common/components/Editor';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonStableTable from '../common/CommonStableTable';
   import showCenterDetail from '../common/showCenterDetail';
+  import Map from '../Map';
     export default {
         name: 'CenterActivityManagement',
         data () {
           return {
+            user: {},
             activeName: 'formulate',
             text: '',
+            Map,
             columns: [
               {
                 type: 'index',
                 label: '序号',
               },
               {
-                prop: 'title',
+                prop: 'name',
                 label: '活动标题'
-              },
-              {
-                prop: 'culturalCategory',
-                label: '文化类别'
               },
               {
                 prop:'activityType',
                 label: '活动类型'
               },
               {
-                prop: 'content',
+                prop: 'des',
                 label: '活动内容'
               },
               {
@@ -138,38 +167,10 @@
                 ]
               }
             ],
-            formColumns: [
-              {
-                type: 'text',
-                key: 'title',
-                label: '活动标题'
-              },
-              {
-                type: 'select',
-                key: 'culturalCategory',
-                label: '文化类别',
-                options:[]
-              },
-              {
-                type: 'datePicker',
-                key: 'beginAt',
-                label: '开始时间'
-              },
-              {
-                type: 'datePicker',
-                key: 'endAt',
-                label: '结束时间'
-              },
-              {
-                type: 'editor',
-                key: 'content',
-                label: '活动内容'
-              }
-            ],
+            formColumns: [], // 活动制定新增弹框
             publishDialogVisible: false,
             activityDialogVisible: false,
             ActivityList: [],
-            publishList: [],
             culturalCategory: [],
             showBtn: false,
             planColumns: [
@@ -304,12 +305,7 @@
                 type: 'select',
                 key: 'culturalCategory',
                 label: '文化类别',
-                options: [
-                  {
-                    value: '文化类别',
-                    label: '文化类别'
-                  }
-                ]
+                options: this.culturalCategory
               },
               {
                 type: 'datePicker',
@@ -329,7 +325,13 @@
               {
                 type: 'carousel',
                 key: 'picture',
-                label: '图片'
+                label: '图片',
+                options: [
+                  {
+                    value: '',
+                    key: ''
+                  }
+                ]
               },
               {
                 type: 'text',
@@ -380,7 +382,8 @@
                 type: 'text',
                 key: 'reviewPerson',
                 label: '审核人'
-              },{
+              },
+              {
                 type: 'text',
                 key: 'uploadPerson',
                 label: '上传人'
@@ -403,7 +406,15 @@
               startTime: '',
               endTime: ''
             },
-            showDetail: false
+            showDetail: false,
+            publishParams:{
+              activityList: [],
+              town: []
+            },
+            publishList:{
+              activityList: [],
+              townList: []
+            }
           };
         },
       components: {
@@ -414,13 +425,50 @@
         showCenterDetail
       },
       mounted () {
-
+        this.getUserInfo();
+        if (this.activeName === 'formulate'){
+          this.formColumns=[
+            {
+              type: 'text',
+              key: 'name',
+              label: '活动标题'
+            },
+            {
+              type: 'select',
+              key: 'activityType',
+              label: '文化类别',
+              showDefault: true,
+              options: this.culturalCategory
+            },
+            {
+              type: 'datePicker',
+              key: 'beginAt',
+              label: '开始时间'
+            },
+            {
+              type: 'datePicker',
+              key: 'endAt',
+              label: '结束时间'
+            },
+            {
+              type: 'editor',
+              key: 'des',
+              label: '活动内容'
+            }
+          ];
+        }
       },
       methods: {
           getUserInfo () {
             var user = sessionStorage.getItem('user');
             if (user) {
-              console.log(user);
+              this.user = JSON.parse(user);
+            }
+            if (this.user.orgCenter && this.user.orgCenter.type) {
+              var type = {};
+              type.value = this.user.orgCenter.type;
+              type.label = Map['culturalCategory'][this.user.orgCenter.type];
+              this.culturalCategory.push(type);
             }
           },
           /**
@@ -462,9 +510,10 @@
         deleteRow(index, row) {
           this.$confirm('确认删除？')
             .then(_ => {
-              this.$alert('需要删除的接口', '提示', {
-                dangerouslyUseHTMLString: true
-              });
+              this.$http(reqType.DELETE,`activity/${row.id}`)
+                .then(data => {
+                  this.$refs.formulateTable.loadTableData();
+                });
             })
             .catch(_ => {});
         },
@@ -512,8 +561,34 @@
         review () {
 
         },
-        addCenterAct(){
-          console.log(1111);
+        /**
+         * 新增活动制定
+         * */
+        addCenterAct(params){
+          console.log(params);
+          let method;
+          params.type = 'ACT_TYPE_CENTER';
+          params.status = 'ACTIVITY_CITY_PASSED';
+          // 更新
+          if (params.id) {
+            // 新增
+            this.$http(reqType.PUT,`activity/${params.id}`, params)
+              .then(data => {
+                if (data.code === 200) {
+                  window.alert(data.msg);
+                }
+                this.$refs.formulateTable.loadTableData();
+              });
+          } else {
+            // 新增
+            this.$http(reqType.POST,`activity/`, params)
+              .then(data => {
+                if (data.code === 200) {
+                  window.alert(data.msg);
+                }
+                this.$refs.formulateTable.loadTableData();
+              });
+          }
         }
       },
       watch: {
@@ -527,10 +602,14 @@
 </script>
 
 <style scoped lang="less">
-.center{
-  margin-left:15%;
-}
-  .right{
-
+  .content{
+    padding: 0 15px 15px;
+    .center{
+      margin-left:15%;
+    }
+    .carousel{
+      width:300px;
+      height:150px;
+    }
   }
 </style>
