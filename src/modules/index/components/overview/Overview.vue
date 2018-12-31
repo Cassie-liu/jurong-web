@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import reqType from '@/api/reqType';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonGraphic from '../common/CommonGraphic';
@@ -47,15 +48,7 @@
     data () {
       return {
         activeName: 'survey', // 默认tab
-        graphic: {
-          img: [
-            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'},
-            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg', pathB: '/static/img/bj.jpg'}
-          ],
-          text: 'asdasd'
-        },
+        graphic: {},
         organization: [{
           'name': '戴裔',
           'id': '4',
@@ -225,10 +218,26 @@
       };
     },
     mounted () {
+      this.getSurveylist();
       this.drawChart1();
       this.officeName = this.officeTab && this.officeTab[0].name;
     },
     methods: {
+      /**
+       * 获取概况列表
+       */
+      getSurveylist () {
+        this.loading = true;
+        this.$http(reqType.POST, `city/list`, false)
+          .then(data => {
+            this.graphic = data[0].content;
+            console.log(data);
+            this.loading = false;
+          })
+          .catch(res => {
+          this.loading = false;
+        });
+      },
       /**
        * 切换tab
        */

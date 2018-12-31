@@ -18,7 +18,7 @@
 
         <template v-if="!scaleImg">
           <el-col :span="14" class="h-100">
-            <div class="h-100 xy-center">{{data.text}}</div>
+            <div class="h-100 xy-center">{{data.des}}</div>
           </el-col>
         </template>
       </el-row>
@@ -86,16 +86,16 @@
       };
     },
     created () {
-      this.data.img.forEach(v => {
+      this.data.jrResourceList.forEach(v => {
         let _img = {};
         let _imgB = {};
-        _img.path = v.path;
-        _imgB.path = v.pathB;
+        _img.path = v.thumbnail;
+        _imgB.path = v.url;
         this.imgList.img.push(_img);
         this.imgList.imgB.push(_imgB);
       });
       this.imgData = this.imgList.img;
-      this.textarea = this.data.text;
+      this.textarea = this.data.des;
       this.init();
     },
     methods: {
