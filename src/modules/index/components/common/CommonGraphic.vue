@@ -127,15 +127,15 @@
           // 先保存des数据
           this.$http(reqType.PUT, `city/${this.data.id}`, this.data, false)
             .then(data => {
-                this.data = data;
+              this.data = data;
+              // 再保存图片
+              let formData = new FormData();
+              this.$refs.upload.uploadFiles.map(item => item.raw).forEach( (sub, index) => {
+                console.log('sub', sub);
+                formData.append('multipartFile', sub);
+              });
 
-                // 再保存图片
-                let _file = {};
-                _file.multipartFile = this.$refs.upload.uploadFiles;
-                _file.id = this.data.id;
-                _file.type = 'city';
-
-                this.$http(reqType.POST, `jrResource/fileUpload`, _file, false)
+              this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=CITY`, formData, false)
                   .then(data => {
                     this.data = data;
                   });
