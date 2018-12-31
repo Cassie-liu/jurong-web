@@ -97,6 +97,20 @@ module.exports = [
     ]
   },
   {
+    url: 'special-events',
+    title: '特色活动',
+    icon: 'menu_special-events.png',
+    iconHover: 'menuH_special-events.png',
+    requirePermissions: []
+  },
+  {
+    url: 'civilized-practice',
+    title: '文明实践点',
+    icon: 'menu_civilized-practice.png',
+    iconHover: 'menuH_civilized-practice.png',
+    requirePermissions: []
+  },
+  {
     url: 'announcement',
     title: '通知公告',
     icon: 'icon-menu-6.png',
@@ -122,13 +136,22 @@ module.exports = [
     title: '系统运维',
     icon: 'icon-menu-8.png',
     iconHover: 'icon-menu-8-hover.png',
-    requirePermissions: []
-  },
-    {
-      title: '菜单配置',
-      url: 'system-menu',
-      icon: 'icon-menu-9.png',
-      iconHover: 'icon-menu-9-hover.png',
-      requiredPermissions: []
-    }
+    requirePermissions: [],
+    children: [
+      {
+        title: '菜单配置',
+        url: 'system-menu',
+        icon: 'icon-menu-9.png',
+        iconHover: 'icon-menu-9-hover.png',
+        requiredPermissions: []
+      },
+      {
+        title: '账号角色管理',
+        url: 'system-account',
+        icon: 'icon-menu-9.png',
+        iconHover: 'icon-menu-9-hover.png',
+        requiredPermissions: []
+      },
+    ]
+  }
 ];
