@@ -1,6 +1,6 @@
 <template>
     <div class="common-table">
-      <el-table :data="tableData" v-loading="loading" size="small">
+      <el-table :data="tableData" v-loading="loading" size="small" :row-class-name="tableRowClassName">
         <el-table-column v-for="item in columns" :key="item.prop" :prop="item.prop" :label="item.label" :type="item.type? item.type: ''"
                          :width="item.width || ''" v-if="item.type !=='function'" :formatter="formatter"></el-table-column>
         <el-table-column v-for="(item, index) in columns" :key="index" :label="item.label"
@@ -26,7 +26,8 @@
         name: 'CommonTable',
       props: {
           columns: Array,
-          apiRoot: String
+          apiRoot: String,
+          showClass: Boolean
       },
       data () {
           return {
@@ -66,6 +67,12 @@
               return cellValue;
             }
           }
+        },
+        /**
+         * 表格行的颜色
+         * */
+        tableRowClassName({row,index}){
+          // console.log(row);
         }
       }
     };

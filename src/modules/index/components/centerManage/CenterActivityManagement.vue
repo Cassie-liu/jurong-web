@@ -335,6 +335,11 @@
               key: 'des',
               label: '活动内容',
               disabled: true
+            },
+            {
+              type: 'textarea',
+              key: 'comment',
+              label: '活动备注'
             }
           ];
         } else if (this.activeName === 'planReview') {
@@ -368,9 +373,15 @@
             },
             {
               type: 'textarea',
-              ey: 'content',
+              key: 'content',
               disabled: true,
               label: '活动内容'
+            },
+            {
+              type: 'text',
+              key: 'comment',
+              disabled: true,
+              label: '活动意见'
             },
             {
               type: 'carousel',

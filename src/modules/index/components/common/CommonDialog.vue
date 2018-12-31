@@ -3,23 +3,23 @@
     <el-button @click="add" v-show="showBtn">新增</el-button>
     <el-dialog
       :title="title"
-      width="60%"
+      width="40%"
       :visible.sync="dialogVisible"
       :before-close="handleClose">
       <el-form  :model="form" ref="form"  :label-position="'left'">
-        <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label" label-width="100px">
-            <el-col :span="12">
+        <el-form-item v-for="item in formColumns" :key="item.label" :label="item.label" label-width="120px">
+            <el-col :span="20">
               <el-input v-model="form[item.key]" v-if="item.type === 'text' || item.type==='textarea'" :type="item.type" :disabled="disabled"></el-input>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="20">
               <el-select v-model="form[item.key]" v-if="item.type === 'select'" style="width: 100%" :disabled="disabled">
                 <el-option v-for="opItem in item.options" :value="opItem.value" :label="opItem.label" :key="opItem.value"></el-option>
               </el-select>
             </el-col>
             <!--预留富文本编辑-->
-              <editor width="90%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
+              <editor width="85%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
             <div v-if="item.type === 'datePicker'">
-              <el-col :span="12">
+              <el-col :span="20">
                 <el-date-picker
                   :disabled="disabled"
                   type="date"
@@ -152,7 +152,7 @@
   }
   .footer{
     text-align: left;
-    margin-left:100px;
+    margin-left:120px;
   }
 }
 </style>

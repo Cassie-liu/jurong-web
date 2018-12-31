@@ -5,7 +5,7 @@
         <el-form :inline="true">
           <el-form-item label="选择活动类型">
             <el-select v-model="claimParams.activityType" >
-              <el-option v-for="(item, $index) in activityTypeList1" :label="item.value" :key="$index" :value="item.label"></el-option>
+              <el-option v-for="(item, $index) in activityTypeList2" :label="item.value" :key="$index" :value="item.label"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="认领状态">
@@ -25,7 +25,40 @@
           <CommonTable :columns="selfPlanColumns" api-root="activity"></CommonTable>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="活动上传" name="execution">
+      <el-tab-pane label="活动上传" name="upload">
+        <el-form :inline="true">
+          <el-form-item label="选择活动类型" class="item-wrap">
+            <el-select v-model="uoploadParams.activityType" >
+              <el-option v-for="(item, $index) in activityTypeList2" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="活动属性" class="item-wrap">
+            <el-select v-model="uoploadParams.actProps" >
+              <el-option v-for="(item, $index) in actPropsOpt" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="活动状态" class="item-wrap">
+            <el-select v-model="uoploadParams.actStatus" >
+              <el-option v-for="(item, $index) in actStatusOpt" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item class="item-wrap">
+            <el-button type="primary">查询</el-button>
+          </el-form-item>
+        </el-form>
+        <CommonDialog :form-columns="uploadFormColumns" ref="uploadDialog" :disabled="true"></CommonDialog>
+        <!--<CommonTable :columns="uploadColumns" api-root="activity"></CommonTable>-->
+        <el-table :data="tableData" v-loading="loading">
+          <el-table-column v-for="item in uploadColumns" :key="item.prop" :prop="item.prop" :label="item.label" :type="item.type? item.type: ''"
+                           :width="item.width || ''"  ></el-table-column>
+          <el-table-column label="操作" :formatter="formatter">
+              <template slot-scope="scope">
+                <el-button @click="">新增</el-button>
+              </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="活动状态" name="status">
 
       </el-tab-pane>
       <el-tab-pane label="活动统计" name="statistics">
@@ -123,10 +156,20 @@
         </span>
       </div>
     </el-dialog>
+
+    <el-dialog title="活动上传" :visible.sync = "uploadActivityVisible">
+      <div class="footer">
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="uploadActivityVisible = false">取 消</el-button>
+                <el-button type="primary" @click="uploadActivityVisible = false" >确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import reqType from "../../../../api/reqType";
   import Editor from '../../../../common/components/Editor';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
@@ -352,7 +395,140 @@
             key: 'reviewStatus',
             label: '审核状态'
           }
-        ]
+        ],
+        actPropsOpt: [
+          {
+            value: '所有',
+            label: 'all'
+          },
+          {
+            value: '固选活动',
+            label: ''
+          },
+          {
+            value: '自选活动',
+            label: ''
+          }
+        ],
+        uoploadParams: {},
+        actStatusOpt: [
+          {
+            value: '已完成',
+            label: 'completed'
+          },
+          {
+            value: '审核中',
+            label: 'reviewing'
+          },
+          {
+            value: '未完成',
+            label: 'unCompleted'
+          },
+          {
+            value: '已驳回',
+            label: 'reject'
+          }
+        ],
+        uploadColumns: [
+          {
+            type: 'selection'
+          },
+          {
+            type: 'index',
+            label: '序号'
+          },
+          {
+            prop: 'name',
+            label: '活动标题'
+          },
+          {
+            prop: 'type',
+            label: '活动类型'
+          },
+          {
+            prop: 'props',
+            label: '活动属性'
+          },
+          {
+            prop: 'status',
+            label: '活动状态'
+          },
+          {
+            prop: 'startAt',
+            label: '开始时间'
+          },
+          {
+            prop: 'endAt',
+            label: '截止时间'
+          },
+          {
+            prop: 'targetScore',
+            label: '目标积分'
+          },
+          {
+            prop: 'actualScore',
+            label: '实际积分'
+          },
+          {
+            prop: 'comment',
+            label: '审核意见'
+          }
+        ],
+        uploadFormColumns: [
+          {
+            type: 'text',
+            key: 'name',
+            label: '活动标题'
+          },
+          {
+            type: 'text',
+            key: 'content',
+            label: '活动内容'
+          },
+          {
+            type: 'text',
+            key: 'type',
+            label: '活动类型'
+          },
+          {
+            type: 'text',
+            key: 'props',
+            label: '活动属性'
+          },
+          {
+            type: 'text',
+            key: 'status',
+            label: '活动状态'
+          },
+          {
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
+          },
+          {
+            type: 'datePicker',
+            key: 'endAt',
+            label: '截止时间'
+          },
+          {
+            type: 'text',
+            key: 'targetScore',
+            label: '目标积分'
+          },
+          {
+            type: 'text',
+            key: 'actualScore',
+            label: '实际积分'
+          },
+          {
+            type: 'textarea',
+            key: 'comment',
+            label: '审核意见'
+          }
+        ],
+        tableData: [],
+        loading: false,
+        uploadActivityVisible: false
       };
     },
     mounted () {
@@ -370,7 +546,17 @@
         this.activityTypeList2.unshift({label:'all',  value:'所有'});
       },
       switchTab(){
-
+        if(this.activeName === 'upload') {
+          //  活动上传的接口
+          this.loading = true;
+          this.$http(reqType.GET, `activity/list`)
+            .then(data => {
+              console.log(data);
+              this.loading = false;
+            }).catch(data => {
+              this.loading = false;
+          });
+        }
       },
       showDetail(index, row){
         if(this.$refs.claimDialog) {
@@ -438,12 +624,24 @@
        * */
       downloadSelf(){
 
+      },
+      /**
+       * 查看活动上传详情
+       * */
+      showUploadDetail(index, row){
+        if(this.$refs.uploadDialog) {
+          this.$refs.uploadDialog.form =row;
+          this.$refs.uploadDialog.title = '查看';
+          this.$refs.uploadDialog.dialogVisible = true;
+        }
+      },
+      formatter(row,column,cellValue){
+          console.log(row);
       }
     },
     watch: {
       activeName: {
         handler (oldVal, curVal) {
-          console.log(oldVal);
           this.switchTab();
         }
       }
@@ -479,6 +677,9 @@
   .right{
     text-align: right;
     padding-right:15px;
+  }
+  .item-wrap{
+    margin-right:20px;
   }
   .footer{
     text-align: center;
