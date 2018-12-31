@@ -44,6 +44,9 @@
           </el-form-item>
           <el-form-item class="item-wrap">
             <el-button type="primary">查询</el-button>
+            <el-button type="primary">编辑</el-button>
+            <el-button type="primary">上传</el-button>
+            <el-button type="primary">附件下载</el-button>
           </el-form-item>
         </el-form>
         <CommonDialog :form-columns="uploadFormColumns" ref="uploadDialog" :disabled="true"></CommonDialog>
