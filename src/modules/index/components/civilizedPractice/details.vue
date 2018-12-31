@@ -3,7 +3,7 @@
     <div class="mb-15">
       <el-button @click="back" type="primary">返回</el-button>
     </div>
-    <CommonSearch :columns="statisticsFormColumns" @search="search" :inline="true" ref="brotherStatisticsSearch"
+    <CommonSearch :columns="statisticsFormColumns" @search="search" :inline="true" ref="searchForm"
                   :title="'搜索'"></CommonSearch>
     <CommonTable :api-root="'center'" :columns="statisticsColumns" ref="brotherStatistics"
                  @search="searchBrother"></CommonTable>
