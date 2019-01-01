@@ -9,8 +9,8 @@
           <CommonTable v-show="activeName === 'activeQuery'" :columns="queryColumns"  ref="activeQueryTable"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="activityReview" label="活动审核">
-          <CommonDialog :form-columns="actFormColumns" ref="activityReviewDialog" :show-btn="false"></CommonDialog>
-          <CommonTable v-show="activeName === 'activityReview'" :columns="activityColumns"  ref="planReviewTable" api-root="record/domain/page"></CommonTable>
+          <CommonDialog :form-columns="actFormColumns" ref="activityReviewDialog" :show-btn="false" @submit="submitOption"></CommonDialog>
+          <CommonTable v-if="activeName === 'activityReview'" :columns="activityColumns"  ref="planReviewTable" api-root="record/domain/page"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="statistics" label="活动统计">
 
@@ -36,6 +36,7 @@
 <script>
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
+  import reqType from '@/api/reqType';
   import {getUserInfo} from '../factories/commonFunc';
     export default {
         name: 'StopActManage',
@@ -156,15 +157,15 @@
                 fixed: 'fixed',
               },
               {
-                prop: 'activityName',
+                prop: 'activity.name',
                 label: '活动名称'
               },
               {
-                prop: 'culturalCategory',
+                prop: 'activity.type',
                 label: '文化类别'
               },
               {
-                prop: 'creator.des',
+                prop: 'content',
                 label: '活动内容'
               },
               {
@@ -172,19 +173,23 @@
                 label: '执行实践点'
               },
               {
-                prop: 'creator.score',
+                prop: 'status',
+                label: '审核状态'
+              },
+              {
+                prop: 'score',
                 label: '积分'
               },
               {
-                prop: 'startTime',
+                prop: 'startAt',
                 label: '开始时间'
               },
               {
-                prop: 'endTime',
+                prop: 'endAt',
                 label: '完成时间'
               },
               {
-                prop: 'creator.remark',
+                prop: 'remark',
                 label: '备注'
               },
               {
@@ -326,12 +331,6 @@
                   ]
                 },
                 {
-                  type: 'text',
-                  key: 'practicePoint',
-                  label: '执行实践点',
-                  disabled: true,
-                },
-                {
                   type:'text',
                   key: 'score',
                   label: '积分'
@@ -371,17 +370,6 @@
                       label: '不通过'
                     }
                   ]
-                },
-                {
-                  type: 'text',
-                  key: 'reviewPerson',
-                  label: '审核人'
-                },
-                {
-                  type: 'text',
-                  key: 'uploadPerson',
-                  label: '上传人',
-                  disabled: true,
                 },
                 {
                   type: 'editor',
@@ -436,6 +424,19 @@
                 });
               })
               .catch(_ => {});
+          },
+          submitOption(form) {
+            form.status = 'RECORD_TOWN_PASSED';
+            if (form.result === 'reject') {
+              form.status = 'RECORD_REJECTED';
+            }
+            this.$http(reqType.PUT, `record/${form.id}`, form).then(() => {
+              this.$message({
+                type: "success",
+                message: "上传成功！"
+              });
+              this.$refs.planReviewTable.loadTableData();
+            })
           }
         },
       watch: {

@@ -16,8 +16,10 @@ module.exports = {
     'ACT_TYPE_CENTER': '分中心计划'
   },
   recordCategory: {
-    'RECORD_COMMITED': '',
-    'RECORD_TOWN_PASSED': 'RECORD_CITY_PASSED'
+    RECORD_UNFINSHED: '村未执行',
+    RECORD_TOWN_PASSED: '镇已通过',
+    RECORD_COMMITED: '村已提交',
+    RECORD_CITY_PASSED: '分中心已通过'
   },
   activityCategory: {
     'ACTIVITY_COMMITED': '审核中',

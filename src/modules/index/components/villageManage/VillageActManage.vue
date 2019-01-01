@@ -73,7 +73,7 @@
                        @current-change="loadTableData" @size-change="loadTableData" layout="total, sizes, prev, pager, next">
         </el-pagination>
         <!--活动上传-->
-        <CommonDialog :form-columns="uploadDetailFormColumns" ref="uploadDetailDialog"></CommonDialog>
+        <CommonDialog :form-columns="uploadDetailFormColumns" ref="uploadDetailDialog" @submit="submitOpinion"></CommonDialog>
       </el-tab-pane>
       <el-tab-pane label="活动状态" name="status">
         <CommonTable :columns="ActivityStatusColumns" api-root="activity/page"></CommonTable>
@@ -947,6 +947,16 @@
           this.$refs.uploadDetailDialog.title = '活动上传';
           this.$refs.uploadDetailDialog.dialogVisible = true;
         }
+      },
+      submitOpinion(form) {
+        form.status = 'RECORD_COMMITED';
+        this.$http(reqType.PUT, `record/${form.id}`, form).then(() => {
+          this.$message({
+            type: "success",
+            message: "上传成功！"
+          });
+          this.loadTableData();
+        })
       }
     },
     watch: {

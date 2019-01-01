@@ -10,14 +10,15 @@
             <el-button class="fr" @click="publishDialogVisible = true">发布</el-button>
           </el-row>
           <CommonDialog :form-columns="formColumns" ref="formulateDialog" :show-btn="!showBtn" :disabled="disabled" @submit="addCenterAct"></CommonDialog>
-          <CommonTable v-show="activeName === 'formulate'" :columns="columns" :api-root="activity/page" ref="formulateTable"></CommonTable>
+          <CommonTable v-if="activeName === 'formulate'" :columns="columns" api-root="activity/page" ref="formulateTable"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="planReview" label="计划审核">
           <CommonStableTable api-root="record/page" :columns="planColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
         </el-tab-pane>
         <el-tab-pane name="activityReview" label="活动审核">
-          <CommonDialog :form-columns="actColumns" ref="activityReviewDialog" :show-btn="false"></CommonDialog>
-          <CommonStableTable api-root="record/page" :columns="activityColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
+          <CommonDialog :form-columns="actColumns" ref="activityReviewDialog" :show-btn="false" @submit="submitOpinion"></CommonDialog>
+          <CommonTable :columns="activityColumns"  ref="planReviewTable" api-root="record/domain/page"></CommonTable>
+          <!--<CommonStableTable api-root="record/domain/page" :columns="activityColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>-->
         </el-tab-pane>
         <el-tab-pane name="statistics" label="活动统计">
 
@@ -89,19 +90,15 @@
             text: '',
             columns: [
               {
-                type: 'index',
-                label: '序号',
-              },
-              {
-                prop: 'name',
+                prop: 'activity.name',
                 label: '活动标题'
               },
               {
-                prop:'activityType',
+                prop:'activity.type',
                 label: '活动类型'
               },
               {
-                prop: 'des',
+                prop: 'content',
                 label: '活动内容'
               },
               {
@@ -214,21 +211,25 @@
                 fixed: 'fixed',
               },
               {
-                prop: 'villageStation',
+                prop: 'creator.country.name',
                 label: '村站',
                 fixed: 'fixed',
               },
               {
-                prop: 'activityName',
+                prop: 'activity.name',
                 label: '活动名称'
               },
               {
-                prop: 'activityType',
+                prop: 'activity.type',
                 label: '活动类别'
               },
               {
                 prop: 'content',
                 label: '活动内容'
+              },
+              {
+                prop: 'status',
+                label: '审核状态'
               },
               {
                 prop: 'practicePoint',
@@ -239,11 +240,11 @@
                 label: '积分'
               },
               {
-                prop: 'startTime',
+                prop: 'activity.createdAt',
                 label: '开始时间'
               },
               {
-                prop: 'endTime',
+                prop: 'createdAt',
                 label: '完成时间'
               },
               {
@@ -602,17 +603,6 @@
                   ]
                 },
                 {
-                  type: 'text',
-                  key: 'reviewPerson',
-                  label: '审核人'
-                },
-                {
-                  type: 'text',
-                  key: 'uploadPerson',
-                  label: '上传人',
-                  disabled: true,
-                },
-                {
                   type: 'editor',
                   key: 'remark',
                   label: '备注',
@@ -731,6 +721,19 @@
                 });
             }
           }
+        },
+        submitOption(form) {
+          form.status = 'RECORD_CITY_PASSED';
+          if (form.result === 'reject') {
+            form.status = 'RECORD_REJECTED';
+          }
+          this.$http(reqType.PUT, `record/${form.id}`, form).then(() => {
+            this.$message({
+              type: "success",
+              message: "上传成功！"
+            });
+            this.$refs.planReviewTable.loadTableData();
+          })
         }
       },
       watch: {

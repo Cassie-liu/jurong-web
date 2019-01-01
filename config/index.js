@@ -43,7 +43,7 @@ module.exports = {
     proxyTable: {
         '/api': {
             // target: 'http://192.168.10.94',  // 本地域名
-            target: 'http://172.16.0.126',  // 本地域名
+            target: 'http://localhost',  // 本地域名
             changeOrigin: true,  //是否跨域
             pathRewrite: {
                 '^/api': '/'   //需要rewrite重写的,
