@@ -35,7 +35,7 @@
 
     <div class="full" v-show="showEdit">
       <div class="title">选择图片</div>
-      <div class="upload-img upload-imgs">
+      <!--<div class="upload-img upload-imgs">
         <el-upload
           ref="upload"
           multiple
@@ -58,7 +58,8 @@
 
           <li>图片的宽或高至少有一个为450px以上（建议上传图片为正方形）</li>
         </ul>
-      </div>
+      </div>-->
+      <file-upload :imgList="data.imgB" @getFile="getFileList"></file-upload>
 
       <div class="title">编辑内容</div>
       <div>
@@ -72,10 +73,13 @@
 
 <script>
   import reqType from '@/api/reqType';
+  import FileUpload from '@/common/components/FileUpload';
 
   export default {
     name: 'graphicView',
-    components: {},
+    components: {
+      FileUpload
+    },
     props: {
       data: {
         type: Object,
@@ -83,17 +87,19 @@
       },
       refresh: {
         type: Boolean
-      }
+      },
+      type: String
     },
     data () {
       return {
         btnText: '编辑',
         scaleImg: false,
         showEdit: false,
-         swiperOption: {},
+        swiperOption: {},
         dialogImageUrl: '',
         dialogVisible: false,
-        imgLimit: 5
+        imgLimit: 5,
+        uploadFiles: []
       };
     },
     created () {
@@ -111,21 +117,25 @@
           console.log('点击了保存');
           this.btnText = '编辑';
           // 先保存des数据
-          this.$http(reqType.PUT, `city/${this.data.id}`, this.data, false)
+          this.$http(reqType.PUT, `${this.type}/${this.data.id}`, this.data, false)
             .then(data => {
-              this.data.des = data.des
+              this.data.des = data.des;
               // 再保存图片
               let formData = new FormData();
-              this.$refs.upload.uploadFiles.map(item => item.raw).forEach((sub, index) => {
-                formData.append('multipartFile', sub);
-              });
-              this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=CITY`, formData, false)
+              formData.append('id', this.data.id);
+              formData.append('type', this.type);
+              if (this.uploadFiles.length > 0) {
+                this.uploadFiles.map(item => item.raw).forEach((sub, index) => {
+                  formData.append('multipartFile', sub);
+                });
+              }
+              this.$http(reqType.POST, `jrResource/fileUpload`, formData, false)
                 .then(() => {
                   this.$message({
                     message: '保存成功',
                     type: 'success'
                   });
-                  window.location.reload();
+                  // window.location.reload();
                 });
             });
         } else {
@@ -137,19 +147,8 @@
       switchBigImg () {
         this.scaleImg = !this.scaleImg;
       },
-      handleRemove (file) {
-        console.log(file);
-      },
-      handlePictureCardPreview (file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      handleExceed () {
-        let _this = this;
-        this.$message({
-          message: `最多可以上传${_this.imgLimit}张图片`,
-          type: 'warning'
-        });
+      getFileList (file) {
+        this.uploadFiles = file;
       }
     },
     watch: {

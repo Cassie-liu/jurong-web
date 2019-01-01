@@ -3,14 +3,14 @@
     <div class="base-data">
       <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
         <div class="xy-center">
-          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item)">
         </div>
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
       <div v-show="showManagement" class="content-wrap">
         <el-tabs v-model="activeName" @tab-click="switchTab">
           <el-tab-pane label="概况" name="survey">
-            <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
+            <common-graphic :data="graphic" type="orgCenter" :refresh="surveyRefresh"></common-graphic>
           </el-tab-pane>
           <el-tab-pane label="人员管理" name="organization">
             <div class="wrap">
@@ -20,17 +20,13 @@
             </div>
             <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
             <div v-show="showTable">
-              <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-              <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+              <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerEvent" :show-btn="true"></CommonDialog>
+              <CommonTable ref="organizationTable" api-root="orgPerson" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
             </div>
           </el-tab-pane>
           <el-tab-pane label="文明实践点" name="practice">
             <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
-          </el-tab-pane>
-          <el-tab-pane label="发布公告" name="public">
-            <CommonDialog ref="publishDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="publishTable" :api-root="'center'" :columns="publishTableColumns" @search="searchActivity" :show-btn="true"></CommonTable>
+            <CommonTable ref="practiceTable" api-root="point" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -42,6 +38,7 @@
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonGraphic from '../common/CommonGraphic';
+  import reqType from '@/api/reqType';
   const echarts = require('echarts/lib/echarts');
   require('echarts/lib/chart/bar');
   require('echarts/lib/chart/pie');
@@ -55,13 +52,7 @@
     data () {
       return {
         activeName: 'survey',
-        img: [
-          {id: 1, path: '/static/img/center/img_lilunxuanjiang.png', name: '理论宣讲'},
-          {id: 2, path: '/static/img/center/img_jiaoyushijian.png', name: '教育实践'},
-          {id: 3, path: '/static/img/center/img_wenhuafuwu.png', name: '文体服务'},
-          {id: 4, path: '/static/img/center/img_kejikepu.png', name: '科技科普'},
-          {id: 5, path: '/static/img/center/img_jianshentiyu.png', name: '健康普及'}
-        ],
+        img: [],
         showTable: false, // 默认不显示表格，点击切换显示表格
         showManagement: false,
         organization: [{
@@ -200,7 +191,7 @@
               {
                 type: 'text',
                 label: '删除',
-                func: this.delete
+                func: this.deleteCenterPerson
               }
             ]
           }
@@ -218,22 +209,27 @@
           },
           {
             type: 'text',
+            key: 'positon',
+            label: '职位'
+          },
+          {
+            type: 'text',
             key: 'duty',
-            label: '职务'
+            label: '行政职务'
           },
           {
             type: 'text',
             key: 'remark',
             label: '备注'
+          },
+          {
+            type: 'text',
+            key: 'level',
+            label: '层级'
           }
         ], // 人员管理弹框内容
         graphic: {
-          img: [
-            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg', pathB: '2b'},
-            {path: '/static/img/test.jpeg', pathB: '3b'},
-            {path: '/static/img/test.jpeg', pathB: '4b'}
-          ],
+          img: [],
           text: 'asdasd'
         }, // 镇所详情
         practiceFormColumns: [
@@ -251,6 +247,11 @@
             type: 'text',
             key: 'latitude',
             label: '纬度'
+          },
+          {
+            type: 'text',
+            key: 'type',
+            label: '文化类别'
           },
           {
             type: 'editor',
@@ -312,6 +313,13 @@
         ] // 活动发布弹框内容
       };
     },
+    created () {
+      this.$http(reqType.POST, `orgCenter/list`, false).then(
+        data => {
+          this.img = data;
+        }
+      );
+    },
     mounted () {
       this.drawChart1();
     },
@@ -324,8 +332,20 @@
       /**
        * 获取所站概况
        */
-      getDetailManagement (id) {
+      getDetailManagement (item) {
+        this.graphic = item;
+        this.graphic.img = item.jrResourceList.map((item) => { return {url: `http://172.16.0.126${item.thumbnail}`}; });
+        this.graphic.imgB = item.jrResourceList.map((item) => { return {url: `http://172.16.0.126${item.url}`}; });
         this.showManagement = true;
+      },
+      /**
+       * 获取领导机构列表
+       */
+      getOrganizationlist () {
+        this.$http(reqType.POST, `orgPerson/list`, {orgId: this.graphic.id, type: 'ORG_CENTER'}, false)
+          .then(data => {
+            this.$refs.organizationTable.tableData = data;
+          });
       },
       /**
        * 查询领导机构表格内容
@@ -336,27 +356,65 @@
        * 新增和编辑弹框
        */
       traggerBrotherEvent () {
-        if (this.activeName === 'practice' && this.showTable === true) {
-          this.$refs.organizationDialog.title = '新增';
-          this.$refs.organizationDialog.form = {};
+        // 新增文明实践点
+        if (this.activeName === 'practice') {
+          this.$refs.practiceDialog.title = '新增';
+          // this.$refs.organizationDialog.form = {};
+          let _form = this.$refs.practiceDialog.form;
+          let user = JSON.parse(sessionStorage.getItem('user'));
+          let params = {};
+          params.orgId = user.orgCenter.id;
+          params.orgType = user.orgCenter.type;
+          params.type = user.type;
+          params.des = _form.des;
+          params.name = _form.name;
+          console.log(JSON.parse(sessionStorage.getItem('user')));
+
+          this.$http(reqType.POST, 'point/', params)
+            .then(data => {
+              console.log(data);
+              return;
+                this.tableData = data.content;
+                this.pageable.total = data.totalElements;
+                this.loading = false;
+              }
+            );
           this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
         }
       },
+      /**
+      * 新增/编辑人员管理
+     */
+      traggerEvent (form) {
+        if (!form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CENTER';
+          this.$http(reqType.POST, `orgPerson/`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
+        }
+        if (form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CENTER';
+          this.$http(reqType.PUT, `orgPerson/${form.id}`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
+        }
+      },
+      /**
+       * 删除某一管理人员
+       */
+      deleteCenterPerson (index, row) {
+        this.$http(reqType.DELETE, `orgPerson/${row.id}`, false)
+          .then(data => {
+            this.$alert('删除成功', '提示', {dangerouslyUseHTMLString: true});
+            this.getOrganizationlist();
+          });
+      },
       showOrganizationTable () {
         this.showTable = !this.showTable;
-        // if (this.showTable === true) {
-        //   this.$refs.organizationTable.tableData = [{
-        //     name: '张三',
-        //     sex: '男',
-        //     duty: '办公室主任',
-        //     remark: '负责整个办公室的各项事务'
-        //   }];
-        //   this.$refs.organizationTable.pageable = {
-        //     total: 1,
-        //     currentPage: 1,
-        //     pageSize: 10
-        //   };
-        // }
       },
       /**
        * 查看实践点详情
@@ -452,6 +510,7 @@
             this.surveyRefresh = !this.surveyRefresh;
             return false;
           case 1: // 人员管理 organization
+            this.getOrganizationlist();
             this.showTable = false;
             return false;
           case 2: // 文明实践点 practice

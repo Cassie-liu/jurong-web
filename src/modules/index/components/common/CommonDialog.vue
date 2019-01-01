@@ -86,11 +86,11 @@
           dialogImageUrl: ''
         }
       },
-      components :{
+      components: {
         Editor
       },
-      created(){
-        this.showEditor=false;
+      created () {
+        this.showEditor = false;
       },
       mounted () {
           this.initFormParams();
@@ -99,16 +99,16 @@
           /**
           *  初始化form表单的参数， 为了防止undefined赋不上值
           * */
-          initFormParams(){
-            for(let i in this.formColumns) {
-              if(this.formColumns[i].showDefault) {
+          initFormParams () {
+            for (let i in this.formColumns) {
+              if (this.formColumns[i].showDefault) {
                 this.form[this.formColumns[i].key] = this.formColumns[i].options[0].label;
               } else {
                 this.form[this.formColumns[i].key] = '';
               }
             }
           },
-          add() {
+          add () {
             this.title = '新增';
             this.dialogVisible = true;
             this.form = {};
@@ -121,7 +121,7 @@
             .then(_ => {
               // this.from = {};
               this.dialogVisible = false;
-              this.form ={};
+              this.form = {};
               this.showEditor = false;
               this.$emit('submit');
               done();
@@ -139,7 +139,7 @@
              * */
           this.dialogVisible = false;
           this.$emit('submit', this.form);
-          this.form ={};
+          this.form = {};
         },
         // 清空数据
         cancel () {

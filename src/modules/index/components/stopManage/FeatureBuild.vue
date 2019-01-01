@@ -2,31 +2,72 @@
   <div class="stop-base">
     <div class="base-data">
       <div class="content-wrap">
-        <!--<common-graphic :data="graphic"></common-graphic>-->
-        <el-tabs v-model="activeName" @tab-click="switchTab">
-          <el-tab-pane label="人员管理" name="organization">
-            <div class="wrap">
-              <div>
-                <img :src="!showTable ? '/static/img/button_totable.png' : 'static/img/button_topic.png'" @click="showOrganizationTable">
+        <!--功能室建设表格-->
+        <div v-show="!showTable">
+          <div class="orgRoom">
+            <el-select v-model="params.townId" placeholder="请选择">
+              <el-option
+                v-for="item in params"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+            <el-button type="primary" @click="getSpecificRoom">搜索</el-button>
+          </div>
+          <CommonDialog ref="buildDialog" :form-columns="buildFormColumns" @submit="handleOrgRoom" :show-btn="true"></CommonDialog>
+          <CommonTable ref="buildTable" api-root="orgRoom/page" :columns="buildColumns"></CommonTable>
+        </div>
+        <!--功能室详细信息-->
+        <div v-show="showTable">
+          <el-tabs v-model="activeName" @tab-click="switchTab">
+            <el-tab-pane label="功能室信息" name="function">
+              <el-form ref="form" :model="functionDetail" label-width="100px">
+                <el-form-item label="功能室名称:">
+                  <el-input class="function" v-model="functionDetail.name"></el-input>
+                </el-form-item>
+                <el-form-item label="文化类别:">
+                  <el-select v-model="functionDetail.cultureType" placeholder="请选择">
+                      <el-option :value="ORG_TYPE_LLXJ">理论宣讲</el-option>
+                      <el-option :value="ORG_TYPE_JYFW">教育服务</el-option>
+                      <el-option :value="ORG_TYPE_WTFW">文体服务</el-option>
+                      <el-option :value="ORG_TYPE_KJKP">科技科普</el-option>
+                      <el-option :value="ORG_TYPE_JKPJ">健康普及</el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属镇所:">
+                  <el-select v-model="functionDetail.town" placeholder="请选择">
+                    <el-option></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="人员管理" name="organization">
+              <div class="wrap">
+                <div>
+                  <img :src="!showTopic ? '/static/img/button_totable.png' : 'static/img/button_topic.png'" @click="showOrganizationTable">
+                </div>
               </div>
-            </div>
-            <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
-            <div v-show="showTable">
-              <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-              <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="文明实践点" name="practice">
-            <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
-          </el-tab-pane>
-        </el-tabs>
+              <div v-show="!showTopic" id="chartWrap1" class="chart-wrap"></div>
+              <div v-show="showTopic">
+                <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+                <CommonTable ref="organizationTable" :api-root="''" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="文明实践点" name="practice">
+              <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+              <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <!--<common-graphic :data="graphic"></common-graphic>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import reqType from '@/api/reqType';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonGraphic from '../common/CommonGraphic';
@@ -42,7 +83,40 @@
     props: [],
     data () {
       return {
-        activeName: 'organization',
+        params: {
+          townId: '' // 功能室列表查询条件
+        },
+        activeName: 'function',
+        buildColumns: [
+          {
+            prop: 'name',
+            label: '功能室名称'
+          },
+          {
+            prop: 'townName',
+            label: '所属镇所'
+          },
+          {
+            prop: 'type',
+            label: '文化类别'
+          },
+          {
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label: '编辑',
+                func: this.editBuild
+              },
+              {
+                type: 'text',
+                label: '删除',
+                func: this.deleteBuild
+              }
+            ]
+          }
+        ],
         organization: [{
           'name': '戴裔',
           'id': '4',
@@ -106,6 +180,7 @@
           'depName': '政府'
         }], // 模拟人员管理图数据
         showTable: false, // 默认不显示表格，点击切换显示表格
+        showTopic: false, // 默认显示人员管理表格
         organizationColumns: [],
         organizationFormColumns: [
           {
@@ -120,13 +195,8 @@
           },
           {
             type: 'text',
-            key: 'duty',
-            label: '职务'
-          },
-          {
-            type: 'text',
-            key: 'remark',
-            label: '备注'
+            key: 'positon',
+            label: '职位'
           }
         ], // 人员管理弹框内容
         practiceTbaleColumns: [
@@ -213,10 +283,71 @@
             type: 'editor',
             key: 'remark',
             label: '概况'
-          }]
+          }],
+        buildFormColumns: [], // 新增功能室
+        functionDetail: {} // 某一条功能室信息对象
       };
     },
     methods: {
+      /**
+       * 查询镇所下拉框
+       */
+      getTownList () {
+        this.$http(reqType.POST, `town/list`, false)
+          .then(data => {
+            this.params = data;
+            let arr = this.params.map(item => { return {key: item.id, value: item.name}; });
+            this.buildFormColumns = [
+              {
+                type: 'text',
+                key: 'name',
+                label: '功能室名称'
+              },
+              {
+                type: 'select',
+                key: 'townName',
+                label: '所属镇所',
+                options: arr
+              },
+              {
+                type: 'select',
+                key: 'type',
+                label: '文化类别',
+                options: [
+                  {
+                    value: '理论宣讲',
+                    key: 'ORG_TYPE_LLXJ'
+                  },
+                  {
+                    value: '教育服务',
+                    key: 'ORG_TYPE_JYFW'
+                  },
+                  {
+                    value: '文体服务',
+                    key: 'ORG_TYPE_WTFW'
+                  },
+                  {
+                    value: '科技科普',
+                    key: 'ORG_TYPE_KJKP'
+                  },
+                  {
+                    value: '健康普及',
+                    key: 'ORG_TYPE_JKPJ'
+                  }
+                ]
+              }];
+          });
+      },
+      /**
+       * 查询某一个镇的功能室
+       */
+      getSpecificRoom () {
+        console.log(this.params.townId);
+        this.$http(reqType.POST, `orgRoom/list`, {townId: this.params.townId}, false)
+          .then(data => {
+            this.$refs.buildTable.tableData = data;
+          });
+      },
       /**
        * 查询领导机构表格内容
        */
@@ -233,7 +364,7 @@
         }
       },
       showOrganizationTable () {
-        this.showTable = !this.showTable;
+        this.showTopic = !this.showTopic;
         // if (this.showTable === true) {
         //   this.$refs.organizationTable.tableData = [{
         //     name: '张三',
@@ -251,7 +382,8 @@
       /**
        * 查看实践点详情
        */
-      showDetail () {},
+      showDetail () {
+      },
       /**
        * 编辑某一个实践点
        */
@@ -260,6 +392,17 @@
           this.$refs.practiceDialog.title = '编辑';
           this.$refs.practiceDialog.dialogVisible = true;
           this.$refs.practiceDialog.form = row;
+        }
+      },
+      /**
+       * 处理功能室新增
+       */
+      handleOrgRoom (form) {
+        if (!form.id) {
+          this.$http(reqType.POST, `orgRoom/`, form, false)
+            .then(data => {
+              // this.getOrganizationlist();
+            });
         }
       },
       /**
@@ -319,23 +462,38 @@
         chart.setOption(option);
       },
       /**
+       * 点击编辑显示功能室详细信息
+       */
+      editBuild (index, row) {
+        this.showTable = !this.showTable;
+        this.functionDetail = row;
+        console.log(row);
+      },
+      deleteBuild () {},
+      /**
        * 切换tab
        */
       switchTab (e) {
         let _index = parseInt(e.index);
         switch (_index) {
-          case 0: // 人员管理 organization
+          case 0: //  function
+            return false;
+          case 1: //  organization
             this.surveyRefresh = !this.surveyRefresh;
             this.drawChart1();
             return false;
-          case 1: // 文明实践点 practice
-            this.showTable = false;
+          case 2: // 文明实践点 practice
+            // this.showTable = false;
             return false;
         }
+      },
+      handleSelectOptions () {
       }
     },
     mounted () {
+      this.getTownList();
       this.drawChart1();
+      this.handleSelectOptions();
     },
     components: {
       CommonGraphic,
@@ -362,6 +520,9 @@
         }
       }
       .content-wrap {
+        .function {
+          width: 188px;
+        }
         .wrap {
           text-align: right;
           &>div{
@@ -374,6 +535,9 @@
           }
         }
         width:100%;
+        .orgRoom {
+          margin-bottom:10px;
+        }
       }
       .chart-wrap {
         width:100%;

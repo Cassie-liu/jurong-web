@@ -250,7 +250,7 @@
             functionOpt: [
               {
                 type: 'text',
-                label:'查看',
+                label: '查看',
                 func: this.showDetail
               },
               {
