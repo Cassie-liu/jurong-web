@@ -145,7 +145,7 @@
           当前认领活动 <span class="red">{{receiveList.total}}</span>条,共计积分 <span class="red">{{receiveList.totalScore}}</span> 分：
         </el-row>
         <div class="top">
-          <el-row v-for="(item, $index) in activityTypeList1" :key="$index">
+          <el-row v-for="(item, $index) in activityTypeList" :key="$index">
             {{item.value}} <span class="red">{{receiveList[item.label] || 0 }}</span>条
           </el-row>
         </div>
@@ -278,8 +278,7 @@
             label: '认领状态'
           }
         ],
-        activityTypeList1: [],
-        activityTypeList2: [],
+        activityTypeList: [],
         status: [
           {
             label: 'all',
@@ -610,10 +609,8 @@
     methods: {
       initAct(){
         for (let i in Map['culturalCategory']) {
-          this.activityTypeList1.push({label: i,value: Map['culturalCategory'][i]});
-          this.activityTypeList2.push({label: i,value: Map['culturalCategory'][i]});
+          this.activityTypeList.push({label: i,value: Map['culturalCategory'][i]});
         }
-        this.activityTypeList2.unshift({label:'all',  value:'所有'});
       },
       switchTab(){
         if(this.activeName === 'upload') {
