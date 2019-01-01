@@ -10,14 +10,14 @@
             <el-button class="fr" @click="publishDialogVisible = true">发布</el-button>
           </el-row>
           <CommonDialog :form-columns="formColumns" ref="formulateDialog" :show-btn="!showBtn" :disabled="disabled" @submit="addCenterAct"></CommonDialog>
-          <CommonTable v-show="activeName === 'formulate'" :columns="columns" :api-root="'activity'" ref="formulateTable"></CommonTable>
+          <CommonTable v-show="activeName === 'formulate'" :columns="columns" :api-root="activity/page" ref="formulateTable"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="planReview" label="计划审核">
-          <CommonStableTable api-root="'center'" :columns="planColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
+          <CommonStableTable api-root="record/page" :columns="planColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
         </el-tab-pane>
         <el-tab-pane name="activityReview" label="活动审核">
           <CommonDialog :form-columns="actColumns" ref="activityReviewDialog" :show-btn="false"></CommonDialog>
-          <CommonStableTable api-root="'center'" :columns="activityColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
+          <CommonStableTable api-root="record/page" :columns="activityColumns" :merge-field="'id'" ref="planTable"></CommonStableTable>
         </el-tab-pane>
         <el-tab-pane name="statistics" label="活动统计">
 
@@ -317,6 +317,11 @@
               showDefault: true,
               disabled: true,
               options: this.culturalCategory
+            },
+            {
+              type: 'text',
+              key: 'score',
+              label: '积分'
             },
             {
               type: 'datePicker',

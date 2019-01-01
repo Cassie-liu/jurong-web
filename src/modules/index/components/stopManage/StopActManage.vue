@@ -2,15 +2,15 @@
     <div class="base-data">
       <el-tabs v-model="activeName">
           <el-tab-pane name="planReview" label="计划审核">
-            <CommonTable v-show="activeName === 'planReview'" :columns="planColumns" :api-root="'activity'" ref="planReviewTable"></CommonTable>
+            <CommonTable v-show="activeName === 'planReview'" :columns="planColumns"  ref="planReviewTable" api-root="record/page"></CommonTable>
           </el-tab-pane>
-        <el-tab-pane name="activityReview" label="活动审核">
-          <CommonDialog :form-columns="actFormColumns" ref="activityReviewDialog" :show-btn="false"></CommonDialog>
-          <CommonTable v-show="activeName === 'activityReview'" :columns="activityColumns" :api-root="'activity'" ref="planReviewTable"></CommonTable>
-        </el-tab-pane>
         <el-tab-pane name="activeQuery" label="活动状态">
           <CommonDialog :form-columns="queFormColumns"  :show-btn="false" :disabled="true" ref="activeQueryDialog"></CommonDialog>
-          <CommonTable v-show="activeName === 'activeQuery'" :columns="queryColumns" :api-root="'activity'" ref="activeQueryTable"></CommonTable>
+          <CommonTable v-show="activeName === 'activeQuery'" :columns="queryColumns"  ref="activeQueryTable"></CommonTable>
+        </el-tab-pane>
+        <el-tab-pane name="activityReview" label="活动审核">
+          <CommonDialog :form-columns="actFormColumns" ref="activityReviewDialog" :show-btn="false"></CommonDialog>
+          <CommonTable v-show="activeName === 'activityReview'" :columns="activityColumns"  ref="planReviewTable" api-root="record/domain/page"></CommonTable>
         </el-tab-pane>
         <el-tab-pane name="statistics" label="活动统计">
 
@@ -151,7 +151,7 @@
             ],
             activityColumns: [
               {
-                prop: 'villageStation',
+                prop: 'creator.name',
                 label: '村站',
                 fixed: 'fixed',
               },
@@ -164,7 +164,7 @@
                 label: '文化类别'
               },
               {
-                prop: 'content',
+                prop: 'creator.des',
                 label: '活动内容'
               },
               {
@@ -172,7 +172,7 @@
                 label: '执行实践点'
               },
               {
-                prop: 'score',
+                prop: 'creator.score',
                 label: '积分'
               },
               {
@@ -184,7 +184,7 @@
                 label: '完成时间'
               },
               {
-                prop: 'remark',
+                prop: 'creator.remark',
                 label: '备注'
               },
               {
@@ -285,7 +285,7 @@
               this.actFormColumns = [
                 {
                   type: 'text',
-                  key: 'title',
+                  key: 'name',
                   label: '活动标题',
                   disabled: true
                 },
@@ -298,19 +298,19 @@
                 },
                 {
                   type: 'datePicker',
-                  key: 'startTime',
+                  key: 'startAt',
                   disabled: true,
                   label: '开始时间'
                 },
                 {
                   type: 'datePicker',
-                  key: 'endTime',
+                  key: 'endAt',
                   disabled: true,
                   label: '截止时间'
                 },
                 {
                   type: 'textarea',
-                  key: 'content',
+                  key: 'des',
                   disabled: true,
                   label: '活动内容'
                 },

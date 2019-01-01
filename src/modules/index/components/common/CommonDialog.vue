@@ -17,7 +17,7 @@
               </el-select>
             </el-col>
             <!--预留富文本编辑-->
-              <editor width="85%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]"></editor>
+              <editor width="85%" v-if="item.type === 'editor'" element-id="addEditor" v-model="form[item.key]" :value="form[item.key]" ></editor>
             <div v-if="item.type === 'datePicker'">
               <el-col :span="20">
                 <el-date-picker
@@ -38,21 +38,25 @@
               </el-carousel-item>
             </el-carousel>
           </div>
-            <el-upload
-              v-if="item.type === 'img'"
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+          <el-upload
+            v-if = "item.type === 'img'"
+            action=""
+            multiple
+            :auto-upload="false"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="imgDialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
         </el-form-item>
       </el-form>
       <div class="footer">
         <span slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
-                <el-button type="primary" @click="submit" :disabled="disabled">确 定</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
         </span>
       </div>
     </el-dialog>
@@ -77,7 +81,9 @@
           dialogVisible: false,
           // disabled: false,
           showEditor: false,
-          dateTime: ''
+          dateTime: '',
+          imgDialogVisible: false,
+          dialogImageUrl: ''
         }
       },
       components :{
@@ -139,6 +145,13 @@
         cancel () {
           this.dialogVisible = false;
           this.form ={};
+        },
+        handlePictureCardPreview (file) {
+          this.dialogImageUrl = file.url;
+          // this.imgDialogVisible = true;
+        },
+        handleRemove (file) {
+          console.log(file);
         }
       }
     }

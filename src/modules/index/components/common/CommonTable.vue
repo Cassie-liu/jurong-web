@@ -1,6 +1,9 @@
 <template>
     <div class="common-table">
-      <el-table :data="tableData" v-loading="loading" size="small" :row-class-name="tableRowClassName">
+      <el-table :data="tableData" v-loading="loading" size="small"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+      >
         <el-table-column v-for="item in columns" :key="item.prop" :prop="item.prop" :label="item.label" :type="item.type? item.type: ''"
                          :width="item.width || ''" v-if="item.type !=='function'" :formatter="formatter"></el-table-column>
         <el-table-column v-for="(item, index) in columns" :key="index" :label="item.label"
@@ -49,7 +52,7 @@
         loadTableData () {
           this.$emit('search');
           this.loading = true;
-          this.$http(reqType.POST, `${this.apiRoot}/page?page=${this.pageable.currentPage - 1}&size=${this.pageable.pageSize}`, false)
+          this.$http(reqType.POST, `${this.apiRoot}?page=${this.pageable.currentPage - 1}&size=${this.pageable.pageSize}`, false)
             .then(data => {
               this.tableData = data.content;
               this.pageable.total = data.totalElements;
@@ -73,6 +76,12 @@
          * */
         tableRowClassName({row,index}){
           // console.log(row);
+        },
+        /**
+         * 处理多选
+         * */
+        handleSelectionChange(val){
+          this.$emit('selectChange', val);
         }
       }
     };

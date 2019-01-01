@@ -1,7 +1,7 @@
 <template>
     <div class="base-data">
       <CommonDialog ref="publishDialog" :form-columns="formColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-      <commonTable api-root="notice" :columns="columns" ref="brother"></commonTable>
+      <commonTable api-root="notice/page" :columns="columns" ref="brother"></commonTable>
     </div>
 </template>
 
@@ -130,6 +130,8 @@
     };
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.base-data{
+  padding:15px;
+}
 </style>

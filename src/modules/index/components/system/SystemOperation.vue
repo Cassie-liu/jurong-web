@@ -7,7 +7,7 @@
         <el-tab-pane label="角色管理" name="role">
           <div v-show="!showAuth">
             <CommonDialog ref="brotherRoleDialog" :form-columns="roleFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <commonTable  api-root="role" :columns="roleColumns" ref="brotherRole"></commonTable>
+            <commonTable  api-root="role/page" :columns="roleColumns" ref="brotherRole"></commonTable>
           </div>
           <el-button icon="el-icon-back" type="text" @click="back" v-show="showAuth">返回</el-button>
           <Authorise v-if="showAuth" :roleId="roleId"></Authorise>

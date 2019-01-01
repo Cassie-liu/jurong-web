@@ -2,7 +2,7 @@
   <div class="announce p-15">
     <CommonSearch :columns="searchColumns" @search="search" :inline="true" ref="searchForm"
                   :title="'搜索'"></CommonSearch>
-    <CommonTable api-root="notice" :columns="columns" ref="announceTable"></CommonTable>
+    <CommonTable api-root="notice/page" :columns="columns" ref="announceTable"></CommonTable>
     <el-dialog
       title="查看"
       :visible.sync="dialogVisible"

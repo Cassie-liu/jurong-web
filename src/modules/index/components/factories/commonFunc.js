@@ -1,6 +1,6 @@
 import Map from '../Map';
 export function getUserInfo () {
-  let option = [];
+    let option = [];
     var user = sessionStorage.getItem('user');
     if (user) {
       user = JSON.parse(user);
@@ -13,3 +13,10 @@ export function getUserInfo () {
     }
     return option;
 };
+export function getUser(){
+  var user = sessionStorage.getItem('user');
+  if (user) {
+    user = JSON.parse(user);
+  }
+  return user;
+}

@@ -2,7 +2,7 @@
   <div class="list">
     <CommonSearch :columns="statisticsFormColumns" @search="search" :inline="true" ref="brotherStatisticsSearch"
                   :title="'搜索'"></CommonSearch>
-    <CommonTable :api-root="" :columns="statisticsColumns" ref="brotherStatistics"
+    <CommonTable  :columns="statisticsColumns" ref="brotherStatistics"
                  @search="searchBrother"></CommonTable>
   </div>
 </template>
