@@ -27,15 +27,13 @@
                   <el-input class="function" v-model="functionDetail.name"></el-input>
                 </el-form-item>
                 <el-form-item label="文化类别:">
-                  <!--<el-select v-model="functionDetail.cultureType" placeholder="请选择">-->
-                      <el-option></el-option>
-                      <!--<el-option-->
-                      <!--v-for="item in options"-->
-                      <!--:key="item.value"-->
-                      <!--:label="item.label"-->
-                      <!--:value="item.value">-->
-                      <!--</el-option>-->
-                    <!--</el-select>-->
+                  <el-select v-model="functionDetail.cultureType" placeholder="请选择">
+                      <el-option :value="ORG_TYPE_LLXJ">理论宣讲</el-option>
+                      <el-option :value="ORG_TYPE_JYFW">教育服务</el-option>
+                      <el-option :value="ORG_TYPE_WTFW">文体服务</el-option>
+                      <el-option :value="ORG_TYPE_KJKP">科技科普</el-option>
+                      <el-option :value="ORG_TYPE_JKPJ">健康普及</el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="所属镇所:">
                   <el-select v-model="functionDetail.town" placeholder="请选择">
