@@ -95,7 +95,7 @@
             useStatus: '11111111'
           }
         ];
-        this.$refs.configTable.pageable ={
+        this.$refs.configTable.pageable = {
           total: 4,
           currentPage: 1,
           pageSize: 10
@@ -104,11 +104,11 @@
     },
 
     methods: {
-      edit(index,row) {
+      edit (index, row) {
         this.$refs.configDialog.dialogVisible = true;
         this.$refs.configDialog.form = row;
       },
-      deleteRow(index,row){
+      deleteRow (index, row) {
         this.$alert('需要删除的接口', '提示', {
           dangerouslyUseHTMLString: true
         });
@@ -126,5 +126,7 @@
 </script>
 
 <style lang="less" scoped>
-
+.config {
+  padding:15px;
+}
 </style>

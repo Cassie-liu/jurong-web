@@ -1,6 +1,8 @@
 <template>
+  <div class="wrap">
     <CommonCRUD :columns="columns" api-root="menu" :form-columns="formColumns">
     </CommonCRUD>
+  </div>
 </template>
 
 <script>
@@ -38,7 +40,7 @@
                         label: '父菜单id'
                     }
                 ]
-            }
+            };
         },
         components: {
             CommonCRUD
@@ -47,5 +49,7 @@
 </script>
 
 <style scoped>
-
+.wrap {
+  padding:15px;
+}
 </style>

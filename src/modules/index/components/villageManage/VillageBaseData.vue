@@ -28,7 +28,7 @@
             <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
             <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
           </el-tab-pane>
-          <el-tab-pane label="活动发布" name="public">
+          <el-tab-pane label="公告发布" name="public">
             <CommonTable ref="publishTable" :api-root="'center'" :columns="publishTbaleColumns" @search="searchActivity"></CommonTable>
           </el-tab-pane>
         </el-tabs>
@@ -432,8 +432,23 @@
       }
     }
     .content-wrap {
+      .wrap {
+        text-align: right;
+        &>div{
+          display: inline-flex;
+          flex-direction: column;
+        }
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
       width: 100%;
       padding:15px;
+      .chart-wrap {
+        width:100%;
+        height:300px;
+      }
     }
   }
 </style>

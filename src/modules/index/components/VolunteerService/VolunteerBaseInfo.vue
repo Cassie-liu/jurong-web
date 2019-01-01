@@ -1,24 +1,27 @@
 <template>
-    <div class="base-data">
-      文明实践志愿服务队基础信息
-    </div>
+  <div class="stop-base">
+    <div>开发中...</div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'VolunteerBaseInfo',
-        props: [],
-        data () {
-          return {};
-        },
-        mounted () {
-
-        },
-        comments: {},
-        methods: {}
-    };
+  export default {
+    name: 'VolunteerBaseInfo',
+    props: [],
+    data () {
+      return {};
+    },
+    methods: {
+    },
+    mounted () {
+    },
+    components: {
+    }
+  };
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  .stop-base {
+    padding: 15px;
+  }
 </style>

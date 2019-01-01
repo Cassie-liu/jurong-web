@@ -1,319 +1,571 @@
 <template>
   <div class="base-data">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="固选活动上传" name="publish">
-        <el-tabs v-model="submitName">
-          <el-tab-pane label="未提交" name="unSubmit">
-            <CommonTable  :api-root="'center'" :columns="unSubmitActiveColumns" ref="unSubmitStatistics" @search="searchBrother"></CommonTable>
-          </el-tab-pane>
-          <el-tab-pane label="已提交" name="submit">
-            <commonTable  :api-root="'center'" :columns="submitActiveColumns" ref="submitStatistics" @search="searchBrother"></commonTable>
-          </el-tab-pane>
-        </el-tabs>
+      <el-tab-pane label="活动认领" name="claim">
+        <el-form :inline="true">
+          <el-form-item label="选择活动类型">
+            <el-select v-model="claimParams.activityType" >
+              <el-option v-for="(item, $index) in activityTypeList2" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="认领状态">
+            <el-select v-model="claimParams.status" >
+              <el-option v-for="(item, $index) in status" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <CommonTable :columns="claimColumns" api-root="activity"></CommonTable>
+        <CommonDialog :form-columns="claimFormColumns" ref="claimDialog" :disabled="true"></CommonDialog>
+        <el-row class="center">
+          <el-button @click="showSelfPlanModal" type="primary">添加自选计划</el-button>
+          <el-button @click="showReceiveModal" type="primary">认领</el-button>
+        </el-row>
+        <el-row class="top">
+          <CommonDialog :form-columns="selfPlanFormColumns" ref="selfPlanDialog" :disabled="true"></CommonDialog>
+          <CommonTable :columns="selfPlanColumns" api-root="activity"></CommonTable>
+        </el-row>
       </el-tab-pane>
-      <el-tab-pane label="自选活动申报" name="stable">
-        <CommonDialog ref="brotherDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-        <commonTable  :api-root="'center'" :columns="publishColumns" ref="brother"></commonTable>
+      <el-tab-pane label="活动上传" name="upload">
+        <el-form :inline="true">
+          <el-form-item label="选择活动类型" class="item-wrap">
+            <el-select v-model="uoploadParams.activityType" >
+              <el-option v-for="(item, $index) in activityTypeList2" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="活动属性" class="item-wrap">
+            <el-select v-model="uoploadParams.actProps" >
+              <el-option v-for="(item, $index) in actPropsOpt" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="活动状态" class="item-wrap">
+            <el-select v-model="uoploadParams.actStatus" >
+              <el-option v-for="(item, $index) in actStatusOpt" :label="item.value" :key="$index" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item class="item-wrap">
+            <el-button type="primary">查询</el-button>
+          </el-form-item>
+        </el-form>
+        <CommonDialog :form-columns="uploadFormColumns" ref="uploadDialog" :disabled="true"></CommonDialog>
+        <!--<CommonTable :columns="uploadColumns" api-root="activity"></CommonTable>-->
+        <el-table :data="tableData" v-loading="loading">
+          <el-table-column v-for="item in uploadColumns" :key="item.prop" :prop="item.prop" :label="item.label" :type="item.type? item.type: ''"
+                           :width="item.width || ''"  ></el-table-column>
+          <el-table-column label="操作" :formatter="formatter">
+              <template slot-scope="scope">
+                <el-button @click="">查看</el-button>
+                <el-button @click="">编辑</el-button>
+                <el-button @click="">上传</el-button>
+                <el-button @click="">附件下载</el-button>
+              </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="活动状态" name="status">
+        <CommonTable :columns="ActivityStatusColumns" api-root="activity"></CommonTable>
+        <CommonDialog :form-columns="ActivityStatusFormColumns" ref="ActivityStatusDialog" :disabled="true" :show-btn="false"></CommonDialog>
       </el-tab-pane>
       <el-tab-pane label="活动统计" name="statistics">
-        <CommonSearch :columns="statisticsFormColumns"  @search="search" :inline="true" ref="brotherStatisticsSearch" :title="'搜索'"></CommonSearch>
-        <CommonTable  :api-root="'center'" :columns="statisticsColumns" ref="brotherStatistics" @search="searchBrother"></CommonTable>
+
       </el-tab-pane>
     </el-tabs>
+    <!--添加自选计划-->
+    <el-dialog title="添加自选计划" :visible.sync="dialogTableVisible">
+      <el-form :data="form" label-width="80px">
+        <el-form-item  prop="date" label="活动标题" >
+          <el-row>
+            <el-col :span="18">
+              <el-input v-model="form.name"></el-input>
+            </el-col>
+           <el-col :span="6">
+             <span class="text">字数限制25个字</span>
+           </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item  prop="name" label="活动内容">
+          <Editor element-id="contentEditor" v-model="form.content" width="85%"></Editor>
+        </el-form-item>
+        <el-form-item prop="startAt" label="开始时间">
+          <el-col :span="8">
+            <el-date-picker
+              type="date"
+              v-model = "form.startAt"
+              placeholder="选择日期"
+              :value-format="'yyyy-MM-ddTHH:mm:ss'"
+              style="width: 100%"
+            >
+            </el-date-picker>
+          </el-col>
+          <el-col :span="4" class="right">
+            <span>截止时间</span>
+          </el-col>
+          <el-col :span="8">
+            <el-date-picker
+              type="date"
+              v-model = "form.endAt"
+              placeholder="选择日期"
+              :value-format="'yyyy-MM-ddTHH:mm:ss'"
+              style="width: 100%"
+            >
+            </el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item prop="score" label="积分">
+          <el-col :span="8">
+            <el-input v-model="form.score"></el-input>
+          </el-col>
+          <el-col :span="4" class="text-right content">
+            <span>活动类型</span>
+          </el-col>
+          <el-col :span="10" >
+            <el-select v-model="form.activityType" style="width:80%">
+              <el-option v-for="(item, $index) in activityTypeList2" :key="$index"
+                         :value="item.label" :label="item.value"></el-option>
+            </el-select>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+         <el-col :span="20">
+           <el-input type="textarea" placeholder="字数限制200个字" :autosize="{minRows: 3, maxRows: 5}"></el-input>
+         </el-col>
+        </el-form-item>
+      </el-form>
+      <div class="footer">
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogTableVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addSelfPlan" >确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
+
+    <!--确认认领-->
+    <el-dialog title="确认认领" :visible.sync="dialogReceiveVisible" width="30%">
+      <div>
+        <el-row>
+          当前认领活动 <span class="red">{{receiveList.total}}</span>条,共计积分 <span class="red">{{receiveList.totalScore}}</span> 分：
+        </el-row>
+        <div class="top">
+          <el-row v-for="(item, $index) in activityTypeList1" :key="$index">
+            {{item.value}} <span class="red">{{receiveList[item.label] || 0 }}</span>条
+          </el-row>
+        </div>
+        <div class="top">
+          <el-row>请注意各活动的开始时间和截止时间，按时完成</el-row>
+        </div>
+      </div>
+      <div class="footer">
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogReceiveVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmReceive" >确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="活动上传" :visible.sync = "uploadActivityVisible">
+      <div class="footer">
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="uploadActivityVisible = false">取 消</el-button>
+                <el-button type="primary" @click="uploadActivityVisible = false" >确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import reqType from "../../../../api/reqType";
+  import Editor from '../../../../common/components/Editor';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonSearch from '../common/CommonSearch';
+  import Map from '../Map';
   export default {
     name: 'VillageActManage',
     components: {
       CommonTable,
       CommonDialog,
-      CommonSearch
+      CommonSearch,
+      Editor
     },
     props: [],
     data () {
       return {
-        activeName: 'publish',
-        submitName: 'unSubmit',
-        // 自选活动申报表格数据
-        publishColumns: [
+        activeName: 'claim',
+        dialogTableVisible: false,
+        dialogReceiveVisible: false,
+        claimColumns: [
+          {
+            type: 'selection'
+          },
           {
             type: 'index',
             label: '序号'
           },
           {
-            prop: 'coding',
-            label: '活动编码'
+            prop: 'name',
+            label: '活动标题'
           },
           {
-            prop: 'culturalCategory',
-            label: '文化类别'
+            prop: 'content',
+            label: '活动内容'
           },
           {
-            prop: 'activityName',
-            label: '活动名称'
+            prop:'startAt',
+            label: '开始时间'
           },
           {
-            prop: 'activityContent',
-            label: '执行村站'
+            prop: 'endAt',
+            label: '截止时间'
           },
           {
-            prop: 'targetScore',
-            label: '预计完成时间'
+            prop: 'score',
+            label: '积分'
           },
           {
-            prop: 'deadline',
-            label: '分值'
+            prop: 'receiveStatus',
+            label: '认领状态'
           },
           {
-            prop: 'status',
+            type: 'function',
+            label: '操作',
+            functionOpt: [
+              {
+                type: 'text',
+                label:'查看',
+                func: this.showDetail
+              },
+              {
+                type: 'text',
+                label: '附件下载',
+                func: this.download
+              }
+            ]
+          }
+        ],
+        claimParams: {
+          activityType: '',
+          status: ''
+        },
+        claimFormColumns: [
+          {
+            type: 'text',
+            key: 'name',
+            label: '活动标题'
+          },
+          {
+            type: 'editor',
+            key: 'content',
+            label: '活动内容'
+          },
+          {
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
+          },
+          {
+            type: 'datePicker',
+            key: 'endAt',
+            label: '截止时间'
+          },
+          {
+            type: 'text',
+            key: 'score',
+            label: '积分'
+          },
+          {
+            type: 'text',
+            key: 'receiveStatus',
+            label: '认领状态'
+          }
+        ],
+        activityTypeList1: [],
+        activityTypeList2: [],
+        status: [
+          {
+            label: 'all',
+            value: '所有'
+          },
+          {
+            label: 'audited',
+            value: '已认领'
+          },
+          {
+            label: 'unAudited',
+            value: '未认领'
+          }
+        ],
+        form: {},     // 活动认领 ---- 添加自选活动
+        receiveList: {
+          total: 10,
+          totalScore: 30
+        },
+        selfPlanColumns: [
+          {
+            type: 'index',
+            label: '序号',
+          },
+          {
+            prop: 'name',
+            label: '活动标题'
+          },
+          {
+            prop: 'des',
+            label: '活动内容'
+          },
+          {
+            prop:'type',
+            label: '活动类型'
+          },
+          {
+            prop: 'actProps',
+            label: '活动属性'
+          },
+          {
+            prop:'startAt',
+            label: '开始时间'
+          },
+          {
+            prop: 'endAt',
+            label: '截止时间'
+          },
+          {
+            prop: 'score',
+            label: '积分'
+          },
+          {
+            prop: 'remark',
+            label: '备注'
+          },
+          {
+            prop:'reviewStatus',
             label: '审核状态'
           },
           {
             type: 'function',
             label: '操作',
+            width: '200',
             functionOpt: [
               {
                 type: 'text',
                 label: '查看',
-                func: this.edit
+                func: this.showSelfDetail
               },
               {
                 type: 'text',
-                label: '上传',
-                func: this.upLoad
+                label: '删除',
+                func: this.deleteSelfPlan
+              },
+              {
+                type: 'text',
+                label: '附件下载',
+                func: this.downloadSelf
               }
             ]
           }
         ],
-        // 自选活动申报弹框数据
-        publishFormColumns: [
+        selfPlanFormColumns: [
           {
             type: 'text',
-            key: 'coding',
-            label: '活动编码'
+            key: 'name',
+            label: '活动标题'
           },
           {
-            type: 'text',
-            key: 'publishIssued',
-            label: '发布单位'
-          },
-          {
-            type: 'select',
-            key: 'culturalCategory',
-            label: '文化类别',
-            options: [
-              {
-                value: 'value1',
-                label: '文化类别1'
-              },
-              {
-                value: 'value2',
-                label: '文化类别2'
-              }
-            ]
-          },
-          {
-            type: 'textarea',
-            key: 'activityName',
-            label: '活动名称'
-          },
-          {
-            type: 'text',
-            key: 'activityContent',
+            type: 'editor',
+            key: 'content',
             label: '活动内容'
+          },
+          {
+            type: 'text',
+            key: 'actProps',
+            label: '活动属性'
+          },
+          {
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
+          },
+          {
+            type: 'datePicker',
+            key: 'endAt',
+            label: '截止时间'
+          },
+          {
+            type: 'text',
+            key: 'score',
+            label: '积分'
+          },
+          {
+            type: 'text',
+            key: 'reviewStatus',
+            label: '审核状态'
+          }
+        ],
+        actPropsOpt: [
+          {
+            value: '所有',
+            label: 'all'
+          },
+          {
+            value: '固选活动',
+            label: ''
+          },
+          {
+            value: '自选活动',
+            label: ''
+          }
+        ],
+        uoploadParams: {},
+        actStatusOpt: [
+          {
+            value: '已完成',
+            label: 'completed'
+          },
+          {
+            value: '审核中',
+            label: 'reviewing'
+          },
+          {
+            value: '未完成',
+            label: 'unCompleted'
+          },
+          {
+            value: '已驳回',
+            label: 'reject'
+          }
+        ],
+        uploadColumns: [
+          {
+            type: 'selection'
+          },
+          {
+            type: 'index',
+            label: '序号'
+          },
+          {
+            prop: 'name',
+            label: '活动标题'
+          },
+          {
+            prop: 'type',
+            label: '活动类型'
+          },
+          {
+            prop: 'props',
+            label: '活动属性'
+          },
+          {
+            prop: 'status',
+            label: '活动状态'
+          },
+          {
+            prop: 'startAt',
+            label: '开始时间'
+          },
+          {
+            prop: 'endAt',
+            label: '截止时间'
+          },
+          {
+            prop: 'targetScore',
+            label: '目标积分'
+          },
+          {
+            prop: 'actualScore',
+            label: '实际积分'
+          },
+          {
+            prop: 'comment',
+            label: '审核意见'
+          }
+        ],
+        uploadFormColumns: [
+          {
+            type: 'text',
+            key: 'name',
+            label: '活动标题'
+          },
+          {
+            type: 'text',
+            key: 'content',
+            label: '活动内容'
+          },
+          {
+            type: 'text',
+            key: 'type',
+            label: '活动类型'
+          },
+          {
+            type: 'text',
+            key: 'props',
+            label: '活动属性'
+          },
+          {
+            type: 'text',
+            key: 'status',
+            label: '活动状态'
+          },
+          {
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
+          },
+          {
+            type: 'datePicker',
+            key: 'endAt',
+            label: '截止时间'
           },
           {
             type: 'text',
             key: 'targetScore',
-            label: '目标分值'
+            label: '目标积分'
           },
           {
             type: 'text',
-            key: 'deadline',
-            label: '截止时间'
+            key: 'actualScore',
+            label: '实际积分'
+          },
+          {
+            type: 'textarea',
+            key: 'comment',
+            label: '审核意见'
           }
         ],
-        // 活动统计表数据格
-        statisticsColumns: [
+        tableData: [],
+        loading: false,
+        uploadActivityVisible: false,
+        ActivityStatusColumns:[
           {
             type: 'index',
             label: '序号'
           },
           {
-            prop: 'coding',
-            label: '活动编码'
+            prop: 'name',
+            label: '活动标题'
           },
           {
-            prop: 'publishIssued',
-            label: '发布单位'
-          },
-          {
-            prop: 'culturalCategory',
-            label: '文化类别'
-          },
-          {
-            prop: 'activityName',
-            label: '活动名称'
-          },
-          {
-            prop: 'executionStation',
-            label: '执行所站'
-          },
-          {
-            prop: 'executionVillageStation',
-            label: '执行村站'
-          },
-          {
-            prop: 'practicePoint',
-            label: '执行实践点'
-          },
-          {
-            prop: 'completeStatus',
-            label: '完成状态'
-          },
-          {
-            prop: 'isSpecialAActivity',
-            label: '是否为特色活动'
-          },
-          {
-            type: 'function',
-            label: '操作',
-            functionOpt: [
-              {
-                type: 'text',
-                label: '查看',
-                func: this.detailForStatistics
-              }
-            ]
-          }
-        ],
-        // 活动统计搜索数据
-        statisticsFormColumns: [
-          {
-            type: 'select',
-            key: 'culturalCategory',
-            label: '文化类别',
-            options: [
-              {
-                value: '文化类别1',
-                key: '文化类别1'
-              },
-              {
-                value: '文化类别2',
-                key: '文化类别2'
-              },
-              {
-                value: '文化类别3',
-                key: '文化类别3'
-              }
-            ]
-          },
-          {
-            type: 'select',
-            key: 'completeStatus',
-            label: '完成状态',
-            options: [
-              {
-                value: '已完成',
-                key: '已完成'
-              },
-              {
-                value: '未完成',
-                key: '未完成'
-              }
-            ]
-          },
-          {
-            type: 'text',
-            key: 'coding',
-            label: '活动编码'
-          },
-          {
-            type: 'select',
-            key: 'practicePoint',
-            label: '选择实践点',
-            options: [
-              {
-                value: '实践点1',
-                key: '实践点1'
-              },
-              {
-                value: '实践点2',
-                key: '实践点2'
-              },
-              {
-                value: '实践点3',
-                key: '实践点3'
-              }
-            ]
-          },
-          {
-            type: 'select',
-            key: 'approvalResult',
-            label: '是否为特色活动',
-            options: [
-              {
-                value: '是',
-                key: 'yes'
-              },
-              {
-                value: '否',
-                key: 'no'
-              }
-            ]
-          }
-        ],
-        // 固选活动未提交表格数据
-        unSubmitActiveColumns: [
-          {
-            type: 'index',
-            label: '序号'
-          },
-          {
-            prop: 'coding',
-            label: '活动编码'
-          },
-          {
-            prop: 'unit',
-            label: '发布单位'
-          },
-          {
-            prop: 'culturalCategory',
-            label: '文化类别'
-          },
-          {
-            prop: 'activityName',
-            label: '活动名称'
-          },
-          {
-            prop: 'activityContent',
+            prop: 'content',
             label: '活动内容'
           },
           {
-            prop: 'deadline',
-            label: '目标分值'
+            prop: 'startAt',
+            label: '开始时间'
           },
           {
-            prop: 'targetScore',
+            prop: 'endAt',
             label: '截止时间'
           },
           {
-            prop: 'status',
-            label: '提交状态'
+            prop: 'score',
+            label: '积分'
           },
           {
             type: 'function',
             label: '操作',
-            functionOpt: [
+            functionOpt:[
               {
                 type: 'text',
-                label: '上传结果',
-                func: this.upLoad
+                label: '查看',
+                func: this.showStatusDetail
               },
               {
                 type: 'text',
@@ -323,371 +575,160 @@
             ]
           }
         ],
-        // 固选活动已提交表格数据
-        submitActiveColumns: [
+        ActivityStatusFormColumns: [
           {
-            type: 'index',
-            label: '序号'
+            type: 'text',
+            key: 'name',
+            label: '活动标题'
           },
           {
-            prop: 'coding',
-            label: '活动编码'
-          },
-          {
-            prop: 'unit',
-            label: '发布单位'
-          },
-          {
-            prop: 'culturalCategory',
-            label: '文化类别'
-          },
-          {
-            prop: 'activityName',
-            label: '活动名称'
-          },
-          {
-            prop: 'activityContent',
+            type: 'text',
+            key: 'content',
             label: '活动内容'
           },
           {
-            prop: 'deadline',
-            label: '目标分值'
+            type: 'datePicker',
+            key: 'startAt',
+            label: '开始时间'
           },
           {
-            prop: 'factLine',
-            label: '实际分值'
-          },
-          {
-            prop: 'targetScore',
+            type: 'datePicker',
+            key: 'endAt',
             label: '截止时间'
           },
           {
-            prop: 'status',
-            label: '审核状态'
-          },
-          {
-            type: 'function',
-            label: '操作',
-            functionOpt: [
-              {
-                type: 'text',
-                label: '查看',
-                func: this.upLoad
-              },
-              {
-                type: 'text',
-                label: '重新提交',
-                func: this.upLoad
-              }
-            ]
+            type: 'text',
+            key: 'score',
+            label: '积分'
           }
         ]
       };
     },
     mounted () {
-      if (this.activeName === 'publish') {
-        if (this.submitName === 'unSubmit') {
-          this.$refs.unSubmitStatistics.tableData = [
-            {
-              coding: '111111',
-              publishIssued: '111111',
-              culturalCategory: 'publish文化类别2222',
-              unit: '12',
-              activityName: '111111',
-              activityContent: '111111',
-              targetScore: '111111',
-              deadline: '111111',
-              status: '审核中'
-            },
-            {
-              coding: '111111',
-              publishIssued: '111111',
-              culturalCategory: '文化类别1',
-              unit: '12',
-              activityName: '111111',
-              activityContent: '111111',
-              targetScore: '111111',
-              deadline: '111111',
-              status: '已通过'
-            },
-            {
-              coding: '111111',
-              publishIssued: '111111',
-              culturalCategory: '文化类别1',
-              unit: '12',
-              activityName: '111111',
-              activityContent: '111111',
-              targetScore: '111111',
-              deadline: '111111',
-              status: '已驳回'
-            }
-          ];
-          this.$refs.unSubmitStatistics.pageable = {
-            total: 3,
-            currentPage: 1,
-            pageSize: 10
-          };
-        }
-        if (this.submitName === 'submit') {
-          this.$refs.submitActiveColumns.tableData = [
-            {
-              coding: '111111',
-              publishIssued: '111111',
-              culturalCategory: '文化类别1',
-              unit: '12',
-              activityName: '111111',
-              activityContent: '111111',
-              targetScore: '111111',
-              deadline: '111111',
-              factLine: '233',
-              status: '已驳回'
-            }
-          ];
-        }
-      }
-    },
-    comments: {
-      CommonTable
+      this.initAct();
     },
     methods: {
+      initAct(){
+        for (let i in Map['culturalCategory']) {
+          this.activityTypeList1.push({label: i,value: Map['culturalCategory'][i]});
+          this.activityTypeList2.push({label: i,value: Map['culturalCategory'][i]});
+        }
+        this.activityTypeList2.unshift({label:'all',  value:'所有'});
+      },
+      switchTab(){
+        if(this.activeName === 'upload') {
+          //  活动上传的接口
+          this.loading = true;
+          this.$http(reqType.GET, `activity/list`)
+            .then(data => {
+              console.log(data);
+              this.loading = false;
+            }).catch(data => {
+              this.loading = false;
+          });
+        }
+      },
+      showDetail(index, row){
+        if(this.$refs.claimDialog) {
+          this.$refs.claimDialog.form = row;
+          this.$refs.claimDialog.title = '查看';
+          this.$refs.claimDialog.dialogVisible = true;
+        }
+      },
+      download(){
+        this.$confirm('确认下载附件？')
+          .then(_ => {
+            this.$alert('需要下载附件的接口', '提示', {
+              dangerouslyUseHTMLString: true
+            });
+            done();
+          })
+          .catch(_ => {
+
+          });
+      },
       /**
-       *  切换tab
+       * 显示自选计划弹框
        * */
-      switchTab () {
-        if (this.activeName === 'stable') {
-          this.$refs.brother && this.$refs.brother.loadTableData();
-          // this.$refs.brotherStableSearch.form = {};
-          // dummy数据
-          if (this.$refs.brother) {
-            this.$refs.brother.tableData = [
-              {
-                publishIssued: '111111',
-                culturalCategory: 'stable文化类别1',
-                activityName: '111111',
-                executionStation: '11111111',
-                executionVillageStation: '11111111',
-                practicePoint: '111111',
-                targetScore: '111111',
-                actualScore: '111111',
-                completeTime: '111111',
-                deadline: '111111',
-                approvalStatus: '111111',
-                approvalResult: '111111'
-              },
-              {
-                publishIssued: '111111',
-                culturalCategory: '文化类别1',
-                activityName: '111111',
-                executionStation: '11111111',
-                executionVillageStation: '11111111',
-                practicePoint: '111111',
-                targetScore: '111111',
-                actualScore: '111111',
-                completeTime: '111111',
-                deadline: '111111',
-                approvalStatus: '111111',
-                approvalResult: '111111'
-              },
-              {
-                publishIssued: '111111',
-                culturalCategory: '文化类别1',
-                activityName: '111111',
-                executionStation: '11111111',
-                executionVillageStation: '11111111',
-                practicePoint: '111111',
-                targetScore: '111111',
-                actualScore: '111111',
-                completeTime: '111111',
-                deadline: '111111',
-                approvalStatus: '111111',
-                approvalResult: '111111'
-              }
-            ];
-            this.$refs.brother.pageable = {
-              total: 3,
-              currentPage: 1,
-              pageSize: 10
-            };
-          }
-        } else if (this.activeName === 'statistics') {
-          this.$refs.brotherStatisticsSearch.form = {};
-          this.$refs.brotherStatistics && this.$refs.brotherStatistics.loadTableData();
-          if (this.$refs.brotherStatistics) {
-            this.$refs.brotherStatistics.tableData = [
-              {
-                coding: '111111',
-                publishIssued: 'ststistics文化类别222',
-                culturalCategory: '111111',
-                activityName: '11111111',
-                executionStation: '11111111',
-                executionVillageStation: '111111',
-                practicePoint: '111111',
-                completeStatus: '111111',
-                isSpecialAActivity: '111111'
-              },
-              {
-                coding: '111111',
-                publishIssued: '12文化类别1',
-                culturalCategory: '111111',
-                activityName: '11111111',
-                executionStation: '11111111',
-                executionVillageStation: '111111',
-                practicePoint: '111111',
-                completeStatus: '111111',
-                isSpecialAActivity: '111111'
-              },
-              {
-                coding: '111111',
-                publishIssued: '12文化类别1',
-                culturalCategory: '111111',
-                activityName: '11111111',
-                executionStation: '11111111',
-                executionVillageStation: '111111',
-                practicePoint: '111111',
-                completeStatus: '111111',
-                isSpecialAActivity: '111111'
-              },
-              {
-                coding: '111111',
-                publishIssued: '12文化类别1',
-                culturalCategory: '111111',
-                activityName: '11111111',
-                executionStation: '11111111',
-                executionVillageStation: '111111',
-                practicePoint: '111111',
-                completeStatus: '111111',
-                isSpecialAActivity: '111111'
-              },
-              {
-                coding: '111111',
-                publishIssued: '12文化类别1',
-                culturalCategory: '111111',
-                activityName: '11111111',
-                executionStation: '11111111',
-                executionVillageStation: '111111',
-                practicePoint: '111111',
-                completeStatus: '111111',
-                isSpecialAActivity: '111111'
-              }
-            ];
-            this.$refs.brotherStatistics.pageable = {
-              total: 5,
-              currentPage: 1,
-              pageSize: 10
-            };
-          }
-        } else if (this.activeName === 'publish') {
-          if (this.submitName === 'unSubmit') {
-            this.$refs.unSubmitStatistics && this.$refs.unSubmitStatistics.loadTableData();
-            if (this.$refs.unSubmitStatistics) {
-              this.$refs.unSubmitStatistics.tableData = [
-                {
-                  coding: '111111',
-                  publishIssued: '111111',
-                  culturalCategory: 'publish文化类别2222',
-                  unit: '12',
-                  activityName: '111111',
-                  activityContent: '111111',
-                  targetScore: '111111',
-                  deadline: '111111',
-                  status: '审核中'
-                }
-              ];
-              this.$refs.unSubmitStatistics.pageable = {
-                total: 1,
-                currentPage: 1,
-                pageSize: 10
-              };
-            }
-          }
+      showSelfPlanModal(){
+        this.dialogTableVisible = true;
+      },
+      /**
+       * 添加自选计划
+       * */
+      addSelfPlan(){
+        this.dialogTableVisible = false;
+        console.log(this.form);
+      },
+      /**
+       * 显示认领弹框
+       * */
+      showReceiveModal(){
+        this.dialogReceiveVisible = true;
+      },
+      /**
+       * 确认认领
+       * */
+      confirmReceive(){
+        this.dialogReceiveVisible = false;
+        // console.log();
+      },
+      /**
+       * 查看自选活动详情
+       * */
+      showSelfDetail(index, row){
+        if(this.$refs.selfPlanDialog) {
+          this.$refs.selfPlanDialog.dialogVisible = true;
+          this.$refs.selfPlanDialog.form = row;
+          this.$refs.selfPlanDialog.title = '查看';
         }
       },
       /**
-       * 编辑
+       * 删除自选活动
        * */
-      edit (index, row) {
-        if (this.$refs.brotherDialog) {
-          this.$refs.brotherDialog.title = '编辑';
-          this.$refs.brotherDialog.dialogVisible = true;
-          this.$refs.brotherDialog.form = row;
+      deleteSelfPlan(){
+
+      },
+      /**
+       * 下载自选活动附件
+       * */
+      downloadSelf(){
+
+      },
+      /**
+       * 查看活动上传详情
+       * */
+      showUploadDetail(index, row){
+        if(this.$refs.uploadDialog) {
+          this.$refs.uploadDialog.form =row;
+          this.$refs.uploadDialog.title = '查看';
+          this.$refs.uploadDialog.dialogVisible = true;
         }
       },
-      /**
-       * 附件下载
-       * */
-      downLoad (index, row) {
-        console.log(index);
-        console.log(row);
-        this.$alert('需要附件下载的接口', '提示', {
-          dangerouslyUseHTMLString: true
-        });
+      formatter(row,column,cellValue){
+          console.log(row);
       },
-      /**
-       * 附件上传
-       * */
-      upLoad () {},
-      /**
-       * 固选活动审核
-       * */
-      approve (index, row) {
-        console.log(index);
-        console.log(row);
+      showStatusDetail(index, row){
+        this.$refs.ActivityStatusDialog.form = row;
+        this.$refs.ActivityStatusDialog.title = '查看';
+        this.$refs.ActivityStatusDialog.dialogVisible = true;
       },
-      /**
-       * 自选活动审核
-       * */
-      approveOpt (index, row) {
-        console.log(index);
-        console.log(row);
-      },
-      /**
-       * 查看活动统计
-       * */
-      detailForStatistics (index, row) {
-        console.log(index);
-        console.log(row);
-      },
-      // 调用兄弟组件的方法
-      traggerBrotherEvent () {
-        if (this.activeName === 'publish') {
-          // this.$refs.brotherDialog.title = '新增';
-          // this.$refs.brotherDialog.form = {};
-          this.$refs.brother && this.$refs.brother.loadTableData();
-        } else if (this.activeName === 'stable') {
-          this.$refs.brotherDialog.title = '新增';
-          this.$refs.brotherDialog.form = {};
-          this.$refs.brother && this.$refs.brother.loadTableData();
-        }
-      },
-      /**
-       * 搜索获取值之后再赋值
-       * */
-      search (formData) {
-        console.log(formData);
-        if (this.$refs.brother) {
-          this.$refs.brother.tableData = formData;
-        }
-      },
-      searchBrother () {
-        if (this.activeName === 'stable') {
-          if (this.$refs.brother && this.$refs.brotherStableSearch) {
-            this.$refs.brother.form = this.$refs.brotherStableSearch.form;
-          }
-        } else if (this.activeName === 'statistics') {
-          if (this.$refs.brotherStatistics && this.$refs.brotherStatisticsSearch) {
-            this.$refs.brotherStatistics.form = this.$refs.brotherStatisticsSearch.form;
-          }
-        } else if (this.activeName === 'unSubmit') {
-          if (this.$refs.unSubmitStatistics && this.$refs.brotherStatisticsSearch) {
-            this.$refs.unSubmitStatistics.form = this.$refs.brotherStatisticsSearch.form;
-          }
-        }
+      downLoad(index, row){
+        this.$confirm('确认下载附件？')
+          .then(_ => {
+            this.$alert('需要下载附件的接口', '提示', {
+              dangerouslyUseHTMLString: true
+            });
+            done();
+          })
+          .catch(_ => {
+
+          });
       }
     },
     watch: {
       activeName: {
         handler (oldVal, curVal) {
-          console.log(oldVal);
           this.switchTab();
         }
       }
@@ -695,6 +736,41 @@
   };
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.base-data{
+  padding: 0 15px 15px;
+  .center{
+    text-align: center;
+  }
+  .content{
+    margin-left:10px;
+  }
+  .red{
+    color:red;
+    margin:0 5px;
+  }
+  .top{
+    margin-top:20px;
+  }
+  .text-right{
+    text-align: right;
+    margin-left:-15px;
+    margin-right:15px;
+  }
+  .text{
+    margin-left:15px;
+    color:#b1b1b1;
+  }
+  .right{
+    text-align: right;
+    padding-right:15px;
+  }
+  .item-wrap{
+    margin-right:20px;
+  }
+  .footer{
+    text-align: center;
+    margin-top:20px;
+  }
+}
 </style>

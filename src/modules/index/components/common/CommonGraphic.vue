@@ -1,26 +1,35 @@
 <template>
-  <div>
+  <div v-if="data">
     <div class="text-right mb-15">
       <el-button type="primary" @click="switchEdit">{{btnText}}</el-button>
     </div>
 
     <div class="gView" v-show="!showEdit">
       <el-row class="h-100">
-        <el-col :span="scaleImg? 24 : 10" class="h-100 xy-center">
-          <div :class="scaleImg? 'imgBig' : 'imgC' " @click="switchBigImg">
+        <!--缩略图-->
+        <el-col :span="10" class="h-100 xy-center" v-show="!scaleImg">
+          <div class="imgC" @click="switchBigImg">
             <el-carousel indicator-position="outside">
-              <el-carousel-item v-for="(slide, index) in imgData" :key="index">
-                <img :src="slide.path" class="img-fluid">
+              <el-carousel-item v-for="(slide, index) in data.img" :key="index">
+                <img :src="slide.url" class="full">
               </el-carousel-item>
             </el-carousel>
           </div>
         </el-col>
+        <el-col :span="14" class="h-100" v-show="!scaleImg">
+          <div class="h-100 xy-center">{{data.des}}</div>
+        </el-col>
 
-        <template v-if="!scaleImg">
-          <el-col :span="14" class="h-100">
-            <div class="h-100 xy-center">{{data.des}}</div>
-          </el-col>
-        </template>
+        <!--大图-->
+        <el-col :span="24" class="h-100 xy-center" v-show="scaleImg">
+          <div class="imgB" @click="switchBigImg">
+            <el-carousel indicator-position="outside">
+              <el-carousel-item v-for="(slide, index) in data.imgB" :key="index">
+                <img :src="slide.url" class="full">
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </el-col>
       </el-row>
     </div>
 
@@ -35,6 +44,7 @@
           :auto-upload="false"
           :limit="imgLimit"
           :on-exceed="handleExceed"
+          :file-list="data.imgB"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
@@ -80,36 +90,13 @@
         btnText: '编辑',
         scaleImg: false,
         showEdit: false,
-        imgList: {
-          img: [],
-          imgB: []
-        },
-        imgUploadList: [
-          {url: ''},
-          {url: ''},
-          {url: ''},
-          {url: ''},
-          {url: ''}
-        ],
-        imgData: [],
-        swiperOption: {},
+         swiperOption: {},
         dialogImageUrl: '',
         dialogVisible: false,
         imgLimit: 5
       };
     },
     created () {
-      if (this.data.jrResourceList) {
-        this.data.jrResourceList.forEach(v => {
-          let _img = {};
-          let _imgB = {};
-          _img.path = v.thumbnail;
-          _imgB.path = v.url;
-          this.imgList.img.push(_img);
-          this.imgList.imgB.push(_imgB);
-        });
-      }
-      this.imgData = this.imgList.img;
       this.init();
     },
     methods: {
@@ -123,35 +110,35 @@
         if (this.showEdit) {
           console.log('点击了保存');
           this.btnText = '编辑';
-
           // 先保存des数据
           this.$http(reqType.PUT, `city/${this.data.id}`, this.data, false)
             .then(data => {
-              this.data = data;
+              this.data.des = data.des
               // 再保存图片
               let formData = new FormData();
               this.$refs.upload.uploadFiles.map(item => item.raw).forEach((sub, index) => {
-                console.log('sub', sub);
                 formData.append('multipartFile', sub);
               });
-
               this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=CITY`, formData, false)
-                  .then(data => {
-                    this.data = data;
+                .then(() => {
+                  this.$message({
+                    message: '保存成功',
+                    type: 'success'
                   });
+                  window.location.reload();
+                });
             });
         } else {
           console.log('点击了编辑');
           this.btnText = '保存';
           this.showEdit = !this.showEdit;
         }
-    },
+      },
       switchBigImg () {
         this.scaleImg = !this.scaleImg;
-        this.imgData = this.scaleImg ? this.imgList.imgB : this.imgList.img;
       },
-      handleRemove (file, fileList) {
-        console.log(file, fileList);
+      handleRemove (file) {
+        console.log(file);
       },
       handlePictureCardPreview (file) {
         this.dialogImageUrl = file.url;
@@ -175,25 +162,25 @@
 </script>
 
 <style lang="less" scoped>
-  .gView{
+  .gView {
     height: 500px;
   }
 
-  .imgC{
+  .imgC {
     width: 400px;
     height: 300px;
   }
 
-  .imgBig{
+  .imgB {
     width: 100%;
     height: 100%;
   }
 
-  .swiper-container{
+  .swiper-container {
     height: 100%;
   }
 
-  .swiper-slide{
+  .swiper-slide {
     background-color: #f1f1f1;
   }
 
@@ -224,6 +211,7 @@
       height: 0;
       overflow: hidden;
       transition: all linear 200ms;
+
       li {
         line-height: 20px;
         font-size: 12px;
@@ -231,19 +219,23 @@
       }
     }
 
-    &-dialog{
-      .el-dialog__header{
+    &-dialog {
+      .el-dialog__header {
         padding-bottom: 0;
       }
-      .el-dialog__body{
+
+      .el-dialog__body {
         padding: 20px;
-        img{
+
+        img {
           display: block;
           width: 100%;
         }
-        ul{
+
+        ul {
           padding-top: 10px;
           padding-left: 20px;
+
           li {
             line-height: 20px;
             font-size: 12px;
@@ -253,16 +245,16 @@
       }
     }
 
-    .img-label{
+    .img-label {
       font-size: 14px;
     }
   }
 
-  .title{
+  .title {
     padding: 10px 0;
   }
 
-  .upload-textarea{
+  .upload-textarea {
     width: 500px;
     height: 140px;
     border-radius: 5px;

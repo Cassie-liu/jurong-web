@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import {baseUrl} from '@/common/constants/config';
   import reqType from '@/api/reqType';
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
@@ -221,8 +222,10 @@
         surveyRefresh: false
       };
     },
-    mounted () {
+    created () {
       this.getSurveylist();
+    },
+    mounted () {
       this.drawChart1();
       this.officeName = this.officeTab && this.officeTab[0].name;
     },
@@ -233,8 +236,7 @@
       getSurveylist () {
         this.$http(reqType.POST, `city/list`, false)
           .then(data => {
-            this.graphic = data[0];
-            this.loading = false;
+            this.graphic = this.initGraphic(data[0]);
           });
       },
       /**
@@ -361,6 +363,26 @@
           this.$refs.organizationDialog.title = '新增';
           this.$refs.organizationDialog.form = {};
           this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
+        }
+      },
+      /**
+       * 处理图文详情的数据
+       */
+      initGraphic (list) {
+        if (list.jrResourceList) {
+          list.img = [];
+          list.imgB = [];
+          list.jrResourceList.forEach((v, i) => {
+            let _img = {};
+            let _imgB = {};
+            _img.url = `${baseUrl}${v.thumbnail}`;
+            _imgB.url = `${baseUrl}${v.url}`;
+            _imgB.id = v.id;
+            _imgB.index = i;
+            list.img.push(_img);
+            list.imgB.push(_imgB);
+          });
+          return list;
         }
       }
     },

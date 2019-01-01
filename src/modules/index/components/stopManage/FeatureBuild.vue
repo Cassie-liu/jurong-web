@@ -106,6 +106,7 @@
           'depName': '政府'
         }], // 模拟人员管理图数据
         showTable: false, // 默认不显示表格，点击切换显示表格
+        organizationColumns: [],
         organizationFormColumns: [
           {
             type: 'text',
@@ -134,12 +135,12 @@
             label: '实践点名称'
           },
           {
-            prop: 'longitude',
-            label: '经度'
+            prop: 'culture',
+            label: '文化类别'
           },
           {
             type: 'function',
-            label: '概况',
+            label: '实践点描述',
             functionOpt: [
               {
                 type: 'text',
@@ -147,6 +148,10 @@
                 func: this.showDetail
               }
             ]
+          },
+          {
+            prop: 'longitude',
+            label: '经度'
           },
           {
             prop: 'latitude',
@@ -171,6 +176,25 @@
         ], // 文明实践点表头数据
         practiceFormColumns: [
           {
+            type: 'select',
+            key: 'culturalCategory',
+            label: '选择文化类别',
+            options: [
+              {
+                value: '文化类别1',
+                key: '文化类别1'
+              },
+              {
+                value: '文化类别2',
+                key: '文化类别2'
+              },
+              {
+                value: '文化类别3',
+                key: '文化类别3'
+              }
+            ] // 新增弹框数据
+          },
+          {
             type: 'text',
             key: 'name',
             label: '实践点名称'
@@ -189,46 +213,7 @@
             type: 'editor',
             key: 'remark',
             label: '概况'
-          }
-        ], // 新增弹框数据
-        organizationColumns: [
-          {
-            type: 'index',
-            label: '序号'
-          },
-          {
-            prop: 'name',
-            label: '姓名'
-          },
-          {
-            prop: 'sex',
-            label: '性别'
-          },
-          {
-            prop: 'duty',
-            label: '职务'
-          },
-          {
-            prop: 'remark',
-            label: '备注'
-          },
-          {
-            type: 'function',
-            label: '操作',
-            functionOpt: [
-              {
-                type: 'text',
-                label: '编辑',
-                func: this.edit
-              },
-              {
-                type: 'text',
-                label: '删除',
-                func: this.delete
-              }
-            ]
-          }
-        ] // 模拟人员管理表格表头数据
+          }]
       };
     },
     methods: {
