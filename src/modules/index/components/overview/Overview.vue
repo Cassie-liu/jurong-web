@@ -10,11 +10,10 @@
             <img :src="!showTable ? '/static/img/button_totable.png' : 'static/img/button_topic.png'" @click="showOrganizationTable">
           </div>
         </div>
-        <div class="back"></div>
         <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
         <div v-show="showTable">
           <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-          <CommonTable ref="organizationTable" api-root="orgCenter" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+          <CommonTable ref="organizationTable" :columns="organizationColumns" :show-pagination="false"></CommonTable>
         </div>
       </el-tab-pane>
       <el-tab-pane label="办公室概况" name="office">
@@ -130,7 +129,7 @@
             label: '性别'
           },
           {
-            prop: 'duty',
+            prop: 'positon',
             label: '职务'
           },
           {
@@ -168,13 +167,23 @@
           },
           {
             type: 'text',
+            key: 'positon',
+            label: '职位'
+          },
+          {
+            type: 'text',
             key: 'duty',
-            label: '职务'
+            label: '行政职务'
           },
           {
             type: 'text',
             key: 'remark',
             label: '备注'
+          },
+          {
+            type: 'text',
+            key: 'level',
+            label: '层级'
           }
         ], // 组织机构弹框内容
         officeTab: [
@@ -240,6 +249,15 @@
           });
       },
       /**
+       * 获取领导机构列表
+       */
+      getOrganizationlist () {
+        this.$http(reqType.POST, `orgPerson/list`, {orgId: this.graphic.id, type: 'ORG_CITY'}, false)
+          .then(data => {
+            this.$refs.organizationTable.tableData = data;
+          });
+      },
+      /**
        * 切换tab
        */
       switchTab (e) {
@@ -250,6 +268,7 @@
             return false;
           case 1: // 领导机构 organization
             this.showTable = false;
+            this.getOrganizationlist();
             return false;
           case 2: // 办公室概况 office
             this.officeTab.forEach((v, i) => {
@@ -264,10 +283,6 @@
         let _flag = this.officeTab[_index].refresh;
         this.officeTab[_index].refresh = !_flag;
       },
-      /**
-       * 查询领导机构表格内容
-       */
-      searchOrganization () {},
       /**
        * 绘制领导机构图
        */
@@ -318,7 +333,7 @@
               animationDurationUpdate: 750
             }
           ]
-        },
+        };
         chart = echarts.init(myChart);
         chart.setOption(option);
       },
@@ -335,7 +350,13 @@
       /**
        * 删除某一个机构人员
        */
-      delete () {},
+      delete (index, row) {
+        this.$http(reqType.DELETE, `orgPerson/${row.id}`, false)
+          .then(data => {
+            this.$alert('删除成功', '提示', {dangerouslyUseHTMLString: true});
+            this.getOrganizationlist();
+          });
+      },
       /**
        * 点击显示table
        */
@@ -358,11 +379,22 @@
       /**
        * 新增和编辑弹框
        */
-      traggerBrotherEvent () {
-        if (this.activeName === 'organization' && this.showTable === true) {
-          this.$refs.organizationDialog.title = '新增';
-          this.$refs.organizationDialog.form = {};
-          this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
+      traggerBrotherEvent (form) {
+        if (!form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CITY';
+          this.$http(reqType.POST, `orgPerson/`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
+        }
+        if (form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CITY';
+          this.$http(reqType.PUT, `orgPerson/${form.id}`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
         }
       },
       /**

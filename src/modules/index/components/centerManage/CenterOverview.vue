@@ -20,7 +20,7 @@
             </div>
             <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
             <div v-show="showTable">
-              <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
+              <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerEvent" :show-btn="true"></CommonDialog>
               <CommonTable ref="organizationTable" api-root="orgPerson" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
             </div>
           </el-tab-pane>
@@ -191,7 +191,7 @@
               {
                 type: 'text',
                 label: '删除',
-                func: this.delete
+                func: this.deleteCenterPerson
               }
             ]
           }
@@ -209,13 +209,23 @@
           },
           {
             type: 'text',
+            key: 'positon',
+            label: '职位'
+          },
+          {
+            type: 'text',
             key: 'duty',
-            label: '职务'
+            label: '行政职务'
           },
           {
             type: 'text',
             key: 'remark',
             label: '备注'
+          },
+          {
+            type: 'text',
+            key: 'level',
+            label: '层级'
           }
         ], // 人员管理弹框内容
         graphic: {
@@ -303,12 +313,12 @@
         ] // 活动发布弹框内容
       };
     },
-    created() {
+    created () {
       this.$http(reqType.POST, `orgCenter/list`, false).then(
         data => {
           this.img = data;
         }
-      )
+      );
     },
     mounted () {
       this.drawChart1();
@@ -324,9 +334,18 @@
        */
       getDetailManagement (item) {
         this.graphic = item;
-        this.graphic.img = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.thumbnail}`}});
-        this.graphic.imgB = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.url}`}});
+        this.graphic.img = item.jrResourceList.map((item) => { return {url: `http://172.16.0.126${item.thumbnail}`}; });
+        this.graphic.imgB = item.jrResourceList.map((item) => { return {url: `http://172.16.0.126${item.url}`}; });
         this.showManagement = true;
+      },
+      /**
+       * 获取领导机构列表
+       */
+      getOrganizationlist () {
+        this.$http(reqType.POST, `orgPerson/list`, {orgId: this.graphic.id, type: 'ORG_CENTER'}, false)
+          .then(data => {
+            this.$refs.organizationTable.tableData = data;
+          });
       },
       /**
        * 查询领导机构表格内容
@@ -349,12 +368,12 @@
           params.type = user.type;
           params.des = _form.des;
           params.name = _form.name;
-          console.log(JSON.parse(sessionStorage.getItem('user')))
+          console.log(JSON.parse(sessionStorage.getItem('user')));
 
           this.$http(reqType.POST, 'point/', params)
             .then(data => {
-              console.log(data)
-              return
+              console.log(data);
+              return;
                 this.tableData = data.content;
                 this.pageable.total = data.totalElements;
                 this.loading = false;
@@ -363,21 +382,39 @@
           this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
         }
       },
+      /**
+      * 新增/编辑人员管理
+     */
+      traggerEvent (form) {
+        if (!form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CENTER';
+          this.$http(reqType.POST, `orgPerson/`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
+        }
+        if (form.id) {
+          form.orgId = this.graphic.id;
+          form.type = 'ORG_CENTER';
+          this.$http(reqType.PUT, `orgPerson/${form.id}`, form, false)
+            .then(data => {
+              this.getOrganizationlist();
+            });
+        }
+      },
+      /**
+       * 删除某一管理人员
+       */
+      deleteCenterPerson (index, row) {
+        this.$http(reqType.DELETE, `orgPerson/${row.id}`, false)
+          .then(data => {
+            this.$alert('删除成功', '提示', {dangerouslyUseHTMLString: true});
+            this.getOrganizationlist();
+          });
+      },
       showOrganizationTable () {
         this.showTable = !this.showTable;
-        // if (this.showTable === true) {
-        //   this.$refs.organizationTable.tableData = [{
-        //     name: '张三',
-        //     sex: '男',
-        //     duty: '办公室主任',
-        //     remark: '负责整个办公室的各项事务'
-        //   }];
-        //   this.$refs.organizationTable.pageable = {
-        //     total: 1,
-        //     currentPage: 1,
-        //     pageSize: 10
-        //   };
-        // }
       },
       /**
        * 查看实践点详情
@@ -473,6 +510,7 @@
             this.surveyRefresh = !this.surveyRefresh;
             return false;
           case 1: // 人员管理 organization
+            this.getOrganizationlist();
             this.showTable = false;
             return false;
           case 2: // 文明实践点 practice

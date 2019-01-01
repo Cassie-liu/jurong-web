@@ -26,7 +26,7 @@
         graphic: {
           img: [],
           text: '镇所管理'
-        }, // 村站详情
+        } // 村站详情
       };
     },
     methods: {
@@ -35,17 +35,17 @@
        */
       getDetailManagement (item) {
         this.graphic = item;
-        this.graphic.img = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.thumbnail}`}});
-        this.graphic.imgB = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.url}`}});
+        this.graphic.img = item.jrResourceList.map((item) => { return { url: `http://172.16.0.126${item.thumbnail}`}; });
+        this.graphic.imgB = item.jrResourceList.map((item) => { return { url: `http://172.16.0.126${item.url}`}; });
         this.showManagement = true;
       }
     },
     mounted () {
       this.$http(reqType.POST, `town/list`).then(
         data => {
-          this.img = data
+          this.img = data;
         }
-      )
+      );
     },
     components: {
       CommonGraphic

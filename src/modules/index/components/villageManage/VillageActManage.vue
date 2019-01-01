@@ -210,7 +210,7 @@
             label: '活动内容'
           },
           {
-            prop:'startAt',
+            prop: 'startAt',
             label: '开始时间'
           },
           {
@@ -231,7 +231,7 @@
             functionOpt: [
               {
                 type: 'text',
-                label:'查看',
+                label: '查看',
                 func: this.showDetail
               },
               {
@@ -313,7 +313,7 @@
             label: '活动内容'
           },
           {
-            prop:'type',
+            prop: 'type',
             label: '活动类型'
           },
           {
@@ -321,7 +321,7 @@
             label: '活动属性'
           },
           {
-            prop:'startAt',
+            prop: 'startAt',
             label: '开始时间'
           },
           {
@@ -337,7 +337,7 @@
             label: '备注'
           },
           {
-            prop:'reviewStatus',
+            prop: 'reviewStatus',
             label: '审核状态'
           },
           {
