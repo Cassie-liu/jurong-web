@@ -98,7 +98,8 @@
         swiperOption: {},
         dialogImageUrl: '',
         dialogVisible: false,
-        imgLimit: 5
+        imgLimit: 5,
+        uploadFiles: []
       };
     },
     created () {
@@ -121,10 +122,14 @@
               this.data.des = data.des;
               // 再保存图片
               let formData = new FormData();
-              this.$refs.upload.uploadFiles.map(item => item.raw).forEach((sub, index) => {
-                formData.append('multipartFile', sub);
-              });
-              this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=${this.type}`, formData, false)
+              formData.append('id', this.data.id);
+              formData.append('type', this.type);
+              if (this.uploadFiles.length > 0) {
+                this.uploadFiles.map(item => item.raw).forEach((sub, index) => {
+                  formData.append('multipartFile', sub);
+                });
+              }
+              this.$http(reqType.POST, `jrResource/fileUpload`, formData, false)
                 .then(() => {
                   this.$message({
                     message: '保存成功',
@@ -143,7 +148,7 @@
         this.scaleImg = !this.scaleImg;
       },
       getFileList (file) {
-        console.log('file', file);
+        this.uploadFiles = file;
       }
     },
     watch: {

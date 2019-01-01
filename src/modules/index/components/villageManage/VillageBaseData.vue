@@ -2,7 +2,7 @@
   <div class="base-data">
       <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
         <div class="xy-center">
-          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item)">
         </div>
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
@@ -10,7 +10,7 @@
         <!--<common-graphic :data="graphic"></common-graphic>-->
         <el-tabs v-model="activeName" @tab-click="switchTab">
           <el-tab-pane label="概况" name="survey">
-            <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
+            <common-graphic :data="graphic" type="country" :refresh="surveyRefresh"></common-graphic>
           </el-tab-pane>
           <el-tab-pane label="人员管理" name="organization">
             <div class="wrap">
@@ -18,18 +18,18 @@
                 <img :src="!showTable ? '/static/img/button_totable.png' : 'static/img/button_topic.png'" @click="showOrganizationTable">
               </div>
             </div>
-            <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
-            <div v-show="showTable">
+            <div v-if="!showTable" id="chartWrap1" class="chart-wrap"></div>
+            <div v-if="showTable">
               <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-              <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+              <CommonTable ref="organizationTable" api-root="orgPerson" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
             </div>
           </el-tab-pane>
           <el-tab-pane label="文明实践点" name="practice">
             <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
+            <CommonTable ref="practiceTable" api-root="point" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
           </el-tab-pane>
           <el-tab-pane label="公告发布" name="public">
-            <CommonTable ref="publishTable" :api-root="'center'" :columns="publishTbaleColumns" @search="searchActivity"></CommonTable>
+            <CommonTable ref="publishTable" api-root="notice" :columns="publishTbaleColumns" @search="searchActivity"></CommonTable>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -66,13 +66,8 @@
         ],
         showManagement: false,
         graphic: {
-          img: [
-            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg', pathB: '2b'},
-            {path: '/static/img/test.jpeg', pathB: '3b'},
-            {path: '/static/img/test.jpeg', pathB: '4b'}
-          ],
-          text: 'asdasd'
+          img: [],
+          text: '村站详情'
         }, // 村站详情
         activeName: 'survey',
         organization: [{
@@ -261,8 +256,7 @@
             ]
           }
         ], // 模拟人员管理表格表头数据
-        publishTbaleColumns: [
-        ], // 活动发布表头数据
+        publishTbaleColumns: [], // 活动发布表头数据
         surveyRefresh: false
       };
     },
@@ -277,7 +271,10 @@
       /**
        * 获取所站概况
        */
-      getDetailManagement (id) {
+      getDetailManagement (item) {
+        this.graphic = item;
+        this.graphic.img = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.thumbnail}`}});
+        this.graphic.imgB = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.url}`}});
         this.showManagement = true;
       },
       /**
@@ -424,7 +421,7 @@
     overflow: hidden;
     flex-wrap: wrap;
     .content {
-      padding: 15px 0 5px 15px;;
+      padding: 15px 0 5px 15px;
       width: 20%;
       img {
         cursor: pointer;

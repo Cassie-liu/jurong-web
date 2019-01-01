@@ -2,7 +2,7 @@
   <div class="overview">
     <el-tabs v-model="activeName" @tab-click="switchTab">
       <el-tab-pane label="概况" name="survey">
-        <common-graphic :data="graphic" type="orgCenter" :refresh="surveyRefresh"></common-graphic>
+        <common-graphic :data="graphic" type="city" :refresh="surveyRefresh"></common-graphic>
       </el-tab-pane>
       <el-tab-pane label="领导机构" name="organization">
         <div class="wrap">
