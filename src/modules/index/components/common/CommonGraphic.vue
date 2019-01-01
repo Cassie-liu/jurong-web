@@ -83,14 +83,15 @@
       },
       refresh: {
         type: Boolean
-      }
+      },
+      type: String
     },
     data () {
       return {
         btnText: '编辑',
         scaleImg: false,
         showEdit: false,
-         swiperOption: {},
+        swiperOption: {},
         dialogImageUrl: '',
         dialogVisible: false,
         imgLimit: 5
@@ -111,21 +112,21 @@
           console.log('点击了保存');
           this.btnText = '编辑';
           // 先保存des数据
-          this.$http(reqType.PUT, `city/${this.data.id}`, this.data, false)
+          this.$http(reqType.PUT, `${this.type}/${this.data.id}`, this.data, false)
             .then(data => {
-              this.data.des = data.des
+              this.data.des = data.des;
               // 再保存图片
               let formData = new FormData();
               this.$refs.upload.uploadFiles.map(item => item.raw).forEach((sub, index) => {
                 formData.append('multipartFile', sub);
               });
-              this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=CITY`, formData, false)
+              this.$http(reqType.POST, `jrResource/fileUpload?id=${this.data.id}&type=${this.type}`, formData, false)
                 .then(() => {
                   this.$message({
                     message: '保存成功',
                     type: 'success'
                   });
-                  window.location.reload();
+                  // window.location.reload();
                 });
             });
         } else {

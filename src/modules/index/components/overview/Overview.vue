@@ -2,7 +2,7 @@
   <div class="overview">
     <el-tabs v-model="activeName" @tab-click="switchTab">
       <el-tab-pane label="概况" name="survey">
-        <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
+        <common-graphic :data="graphic" type="orgCenter" :refresh="surveyRefresh"></common-graphic>
       </el-tab-pane>
       <el-tab-pane label="领导机构" name="organization">
         <div class="wrap">
@@ -14,7 +14,7 @@
         <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
         <div v-show="showTable">
           <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-          <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+          <CommonTable ref="organizationTable" api-root="orgCenter" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
         </div>
       </el-tab-pane>
       <el-tab-pane label="办公室概况" name="office">

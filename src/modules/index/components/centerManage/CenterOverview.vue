@@ -3,14 +3,14 @@
     <div class="base-data">
       <div v-show="!showManagement" class="content" v-for="(item, index) in img" :key="index">
         <div class="xy-center">
-          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item.id)">
+          <img :src="item.path" class="img-fluid" @click="getDetailManagement(item)">
         </div>
         <div class="text-center mt-15">{{item.name}}</div>
       </div>
       <div v-show="showManagement" class="content-wrap">
         <el-tabs v-model="activeName" @tab-click="switchTab">
           <el-tab-pane label="概况" name="survey">
-            <common-graphic :data="graphic" :refresh="surveyRefresh"></common-graphic>
+            <common-graphic :data="graphic" type="orgCenter" :refresh="surveyRefresh"></common-graphic>
           </el-tab-pane>
           <el-tab-pane label="人员管理" name="organization">
             <div class="wrap">
@@ -21,16 +21,12 @@
             <div v-show="!showTable" id="chartWrap1" class="chart-wrap"></div>
             <div v-show="showTable">
               <CommonDialog ref="organizationDialog" :form-columns="organizationFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-              <CommonTable ref="organizationTable" :api-root="'center'" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
+              <CommonTable ref="organizationTable" api-root="orgPerson" :columns="organizationColumns" @search="searchOrganization"></CommonTable>
             </div>
           </el-tab-pane>
           <el-tab-pane label="文明实践点" name="practice">
             <CommonDialog ref="practiceDialog" :form-columns="practiceFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="practiceTable" :api-root="'center'" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
-          </el-tab-pane>
-          <el-tab-pane label="发布公告" name="public">
-            <CommonDialog ref="publishDialog" :form-columns="publishFormColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-            <CommonTable ref="publishTable" :api-root="'center'" :columns="publishTableColumns" @search="searchActivity" :show-btn="true"></CommonTable>
+            <CommonTable ref="practiceTable" api-root="point" :columns="practiceTbaleColumns" @search="searchOrganization"></CommonTable>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -42,6 +38,7 @@
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonGraphic from '../common/CommonGraphic';
+  import reqType from '@/api/reqType';
   const echarts = require('echarts/lib/echarts');
   require('echarts/lib/chart/bar');
   require('echarts/lib/chart/pie');
@@ -55,13 +52,7 @@
     data () {
       return {
         activeName: 'survey',
-        img: [
-          {id: 1, path: '/static/img/center/img_lilunxuanjiang.png', name: '理论宣讲'},
-          {id: 2, path: '/static/img/center/img_jiaoyushijian.png', name: '教育实践'},
-          {id: 3, path: '/static/img/center/img_wenhuafuwu.png', name: '文体服务'},
-          {id: 4, path: '/static/img/center/img_kejikepu.png', name: '科技科普'},
-          {id: 5, path: '/static/img/center/img_jianshentiyu.png', name: '健康普及'}
-        ],
+        img: [],
         showTable: false, // 默认不显示表格，点击切换显示表格
         showManagement: false,
         organization: [{
@@ -228,12 +219,7 @@
           }
         ], // 人员管理弹框内容
         graphic: {
-          img: [
-            {path: '/static/img/test.jpeg', pathB: '/static/img/test.jpeg'},
-            {path: '/static/img/test.jpeg', pathB: '2b'},
-            {path: '/static/img/test.jpeg', pathB: '3b'},
-            {path: '/static/img/test.jpeg', pathB: '4b'}
-          ],
+          img: [],
           text: 'asdasd'
         }, // 镇所详情
         practiceFormColumns: [
@@ -312,6 +298,13 @@
         ] // 活动发布弹框内容
       };
     },
+    created() {
+      this.$http(reqType.POST, `orgCenter/list`, false).then(
+        data => {
+          this.img = data;
+        }
+      )
+    },
     mounted () {
       this.drawChart1();
     },
@@ -324,7 +317,10 @@
       /**
        * 获取所站概况
        */
-      getDetailManagement (id) {
+      getDetailManagement (item) {
+        this.graphic = item;
+        this.graphic.img = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.thumbnail}`}});
+        this.graphic.imgB = item.jrResourceList.map( (item) => { return { url: `http://172.16.0.126${item.url}`}});
         this.showManagement = true;
       },
       /**
