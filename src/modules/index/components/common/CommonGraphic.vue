@@ -35,7 +35,7 @@
 
     <div class="full" v-show="showEdit">
       <div class="title">选择图片</div>
-      <div class="upload-img upload-imgs">
+      <!--<div class="upload-img upload-imgs">
         <el-upload
           ref="upload"
           multiple
@@ -58,7 +58,8 @@
 
           <li>图片的宽或高至少有一个为450px以上（建议上传图片为正方形）</li>
         </ul>
-      </div>
+      </div>-->
+      <file-upload :imgList="data.imgB" @getFile="getFileList"></file-upload>
 
       <div class="title">编辑内容</div>
       <div>
@@ -72,10 +73,13 @@
 
 <script>
   import reqType from '@/api/reqType';
+  import FileUpload from '@/common/components/FileUpload';
 
   export default {
     name: 'graphicView',
-    components: {},
+    components: {
+      FileUpload
+    },
     props: {
       data: {
         type: Object,
@@ -137,19 +141,8 @@
       switchBigImg () {
         this.scaleImg = !this.scaleImg;
       },
-      handleRemove (file) {
-        console.log(file);
-      },
-      handlePictureCardPreview (file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      handleExceed () {
-        let _this = this;
-        this.$message({
-          message: `最多可以上传${_this.imgLimit}张图片`,
-          type: 'warning'
-        });
+      getFileList (file) {
+        console.log('file', file);
       }
     },
     watch: {

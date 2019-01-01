@@ -42,6 +42,7 @@
   import CommonTable from '../common/CommonTable';
   import CommonDialog from '../common/CommonDialog';
   import CommonGraphic from '../common/CommonGraphic';
+  import reqType from '../../../../api/reqType';
   const echarts = require('echarts/lib/echarts');
   require('echarts/lib/chart/bar');
   require('echarts/lib/chart/pie');
@@ -253,8 +254,13 @@
             label: '纬度'
           },
           {
+            type: 'text',
+            key: 'type',
+            label: '文化类别'
+          },
+          {
             type: 'editor',
-            key: 'remark',
+            key: 'des',
             label: '概况'
           }
         ], // 新增弹框数据
@@ -336,9 +342,29 @@
        * 新增和编辑弹框
        */
       traggerBrotherEvent () {
-        if (this.activeName === 'practice' && this.showTable === true) {
-          this.$refs.organizationDialog.title = '新增';
-          this.$refs.organizationDialog.form = {};
+        // 新增文明实践点
+        if (this.activeName === 'practice') {
+          this.$refs.practiceDialog.title = '新增';
+          // this.$refs.organizationDialog.form = {};
+          let _form = this.$refs.practiceDialog.form;
+          let user = JSON.parse(sessionStorage.getItem('user'));
+          let params = {};
+          params.orgId = user.orgCenter.id;
+          params.orgType = user.orgCenter.type;
+          params.type = user.type;
+          params.des = _form.des;
+          params.name = _form.name;
+          console.log(JSON.parse(sessionStorage.getItem('user')))
+
+          this.$http(reqType.POST, 'point/', params)
+            .then(data => {
+              console.log(data)
+              return
+                this.tableData = data.content;
+                this.pageable.total = data.totalElements;
+                this.loading = false;
+              }
+            );
           this.$refs.organizationTable && this.$refs.organizationTable.loadTableData();
         }
       },
