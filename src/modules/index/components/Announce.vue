@@ -2,9 +2,9 @@
   <div class="announce p-15">
     <CommonSearch :columns="searchColumns" @search="search" :inline="true" ref="searchForm"
                   :title="'搜索'"></CommonSearch>
-    <CommonTable :api-root="'center'" :columns="columns" ref="announceTable"></CommonTable>
+    <CommonTable api-root="notice" :columns="columns" ref="announceTable"></CommonTable>
     <el-dialog
-      title="新增"
+      title="查看"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose">
@@ -22,17 +22,17 @@
 
         <div class="view-item">
           <div class="view-item__title">发布时间</div>
-          <div class="view-item__content">{{viewForm.releaseTime}}</div>
+          <div class="view-item__content">{{viewForm.createdAt}}</div>
         </div>
 
         <div class="view-item">
           <div class="view-item__title">发布单位</div>
-          <div class="view-item__content">{{viewForm.issued}}</div>
+          <div class="view-item__content">{{viewForm.creator}}</div>
         </div>
 
         <div class="view-item">
           <div class="view-item__title">发布人</div>
-          <div class="view-item__content">{{viewForm.publisher}}</div>
+          <div class="view-item__content">{{viewForm.creator}}</div>
         </div>
 
         <div class="view-item">
@@ -55,7 +55,7 @@
   import CommonSearch from './common/CommonSearch';
   import CommonTable from './common/CommonTable';
   import CommonDialog from './common/CommonDialog';
-
+  import map from './Map';
   export default {
     name: 'Announce',
 
@@ -66,42 +66,21 @@
             type: 'select',
             key: 'culturalCategory',
             label: '选择分中心',
-            options: [
-              {
-                value: '文化类别1',
-                key: '文化类别1'
-              },
-              {
-                value: '文化类别2',
-                key: '文化类别2'
-              },
-              {
-                value: '文化类别3',
-                key: '文化类别3'
-              }
-            ]
+            options: []
           }
         ],
         columns: [
           {
-            type: 'index',
-            label: '序号'
+            prop: 'title',
+            label: '标题'
           },
           {
-            prop: 'coding',
-            label: '编码'
+            prop: 'createdAt',
+            label: '发布时间'
           },
           {
-            prop: 'publishTime',
+            prop: 'creator',
             label: '发布单位'
-          },
-          {
-            prop: 'culturalCategory',
-            label: '文化类别'
-          },
-          {
-            prop: 'content',
-            label: '内容简介'
           },
           {
             type: 'function',
@@ -141,30 +120,6 @@
     mounted () {
       if (this.$refs.announceTable) {
         this.$refs.announceTable.tableData = [
-          {
-            coding: '1111111111',
-            publishTime: '1111111111',
-            culturalCategory: '1111111111',
-            content: '1111111111'
-          },
-          {
-            coding: '1111111111',
-            publishTime: '1111111111',
-            culturalCategory: '1111111111',
-            content: '1111111111'
-          },
-          {
-            coding: '1111111111',
-            publishTime: '1111111111',
-            culturalCategory: '1111111111',
-            content: '1111111111'
-          },
-          {
-            coding: '1111111111',
-            publishTime: '1111111111',
-            culturalCategory: '1111111111',
-            content: '1111111111'
-          }
         ];
         this.$refs.announceTable.pageable = {
           total: 4,
@@ -172,6 +127,7 @@
           pageSize: 10
         };
       }
+      this.searchColumns[0].options = Object.keys(map.culturalCategory).map(item => { return { key: item, value: map.culturalCategory[item] }})
     },
 
     methods: {
@@ -191,11 +147,14 @@
       /***
        *  下载
        */
-      downLoad () {
-        if (this.viewForm && this.viewForm.downLoadUrl) {
-          window.open(this.viewForm.downLoadUrl, '_blank');
+      downLoad (index, row) {
+        if (row && row.url) {
+          window.open(row.url, '_blank');
         } else {
-
+          this.$message({
+            type: 'error',
+            message: '暂无附件可下载'
+          })
         }
       },
       handleClose () {}

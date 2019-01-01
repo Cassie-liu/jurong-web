@@ -1,13 +1,14 @@
 <template>
     <div class="base-data">
       <CommonDialog ref="publishDialog" :form-columns="formColumns" @submit="traggerBrotherEvent" :show-btn="true"></CommonDialog>
-      <commonTable  :api-root="'center'" :columns="columns" ref="brother"></commonTable>
+      <commonTable api-root="notice" :columns="columns" ref="brother"></commonTable>
     </div>
 </template>
 
 <script>
   import CommonDialog from '../common/CommonDialog';
   import CommonTable from '../common/CommonTable';
+  import map from '../Map';
     export default {
         name: 'CenterBuild',
         props: [],
@@ -15,27 +16,23 @@
           return {
             columns: [
               {
-                type: 'index',
-                label: '序号'
+                prop: 'title',
+                label: '标题'
               },
               {
-                prop: 'coding',
-                label: '编码'
-              },
-              {
-                prop: 'publishTime',
+                prop: 'createdAt',
                 label: '发布时间'
               },
               {
-                prop: 'publishUnit',
+                prop: 'creator',
                 label: '发布单位'
               },
               {
-                prop: 'culturalCategory',
+                prop: 'type',
                 label: '文化类别'
               },
               {
-                prop: 'introduction',
+                prop: 'content',
                 label: '内容简介'
               },
               {
@@ -63,27 +60,18 @@
             formColumns: [
               {
                 type: 'text',
-                key: 'coding',
-                label: '编码'
+                key: 'title',
+                label: '标题'
               },
               {
                 type: 'select',
-                key: 'culturalCategory',
+                key: 'type',
                 label: '文化类别',
-                options: [
-                  {
-                    value: 'value1',
-                    label: '文化类别1'
-                  },
-                  {
-                    value: 'value2',
-                    label: '文化类别2'
-                  }
-                ]
+                options: []
               },
               {
                 type: 'text',
-                key: 'introduction',
+                key: 'content',
                 label: '内容简介'
               }
             ]
@@ -92,33 +80,13 @@
         mounted () {
           // dummy数据
           this.$refs.brother.tableData = [
-            {
-              coding: '11111',
-              publishTime: '11111',
-              publishUnit: '11111',
-              culturalCategory: '文化类别1',
-              introduction: '11111'
-            },
-            {
-              coding: '11111',
-              publishTime: '11111',
-              publishUnit: '11111',
-              culturalCategory: '文化类别1',
-              introduction: '11111'
-            },
-            {
-              coding: '11111',
-              publishTime: '11111',
-              publishUnit: '11111',
-              culturalCategory: '文化类别1',
-              introduction: '11111'
-            }
           ];
           this.$refs.brother.pageable = {
             total: 3,
             currentPage: 1,
             pageSize: 10
-          }
+          };
+          this.formColumns[1].options = Object.keys(map.culturalCategory).map(item => { return { key: item, value: map.culturalCategory[item] }});
         },
         components: {
           CommonDialog,

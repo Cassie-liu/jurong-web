@@ -28,6 +28,11 @@ module.exports = [
         title: '分中心活动管理',
         url: 'activity-management',
         requiredPermissions: []
+      },
+      {
+        title: '发布公告',
+        url: 'publish-announce',
+        requiredPermissions: []
       }
     ]
   },
